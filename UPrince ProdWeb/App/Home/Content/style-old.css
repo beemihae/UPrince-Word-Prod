@@ -1,0 +1,421 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot?-efx04x');
+	src:url('../fonts/icomoon.eot?#iefix-efx04x') format('embedded-opentype'),
+		url('../fonts/icomoon.ttf?-efx04x') format('truetype'),
+		url('../fonts/icomoon.woff?-efx04x') format('woff'),
+		url('../fonts/icomoon.svg?-efx04x#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon_ConfigurationItemRecord:before {
+	content: "\e600";
+}
+.icon-icon_EndProjectReport:before {
+	content: "\e601";
+}
+.icon-icon_EndStageReport:before {
+	content: "\e602";
+}
+.icon-icon_ExceptionReport:before {
+	content: "\e603";
+}
+.icon-icon_HighlightReport:before {
+	content: "\e604";
+}
+.icon-icon_IssueRegister .path1:before {
+	content: "\e605";
+	color: rgb(0, 0, 0);
+}
+.icon-icon_IssueRegister .path2:before {
+	content: "\e606";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_IssueRegister .path3:before {
+	content: "\e607";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_IssueRegister .path4:before {
+	content: "\e608";
+	margin-left: -1em;
+	color: rgb(64, 64, 66);
+}
+.icon-icon_IssueRegister .path5:before {
+	content: "\e609";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_LessonsReport .path1:before {
+	content: "\e60a";
+	color: rgb(0, 0, 0);
+}
+.icon-icon_LessonsReport .path2:before {
+	content: "\e60b";
+	margin-left: -1em;
+	color: rgba(0, 0, 0, 0.300000011920929);
+}
+.icon-icon_LessonsReport .path3:before {
+	content: "\e60c";
+	margin-left: -1em;
+	color: rgba(0, 0, 0, 0.5);
+}
+.icon-icon_LessonsReport .path4:before {
+	content: "\e60d";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_LessonsReport .path5:before {
+	content: "\e60e";
+	margin-left: -1em;
+	color: rgba(64, 64, 66, 0.5);
+}
+.icon-icon_QualityRegister:before {
+	content: "\e60f";
+}
+.icon-icon_RiskRegister:before {
+	content: "\e610";
+}
+.icon-icon_BenefitsReviewPlan .path1:before {
+	content: "\e611";
+	color: rgb(0, 0, 0);
+}
+.icon-icon_BenefitsReviewPlan .path2:before {
+	content: "\e612";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_BenefitsReviewPlan .path3:before {
+	content: "\e613";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_BenefitsReviewPlan .path4:before {
+	content: "\e614";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_BenefitsReviewPlan .path5:before {
+	content: "\e615";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_BenefitsReviewPlan .path6:before {
+	content: "\e616";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_BenefitsReviewPlan .path7:before {
+	content: "\e617";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_BenefitsReviewPlan .path8:before {
+	content: "\e618";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_BenefitsReviewPlan .path9:before {
+	content: "\e619";
+	margin-left: -1em;
+	color: rgb(64, 64, 66);
+}
+.icon-icon_CommunicationManagementStrategy:before {
+	content: "\e61a";
+}
+.icon-icon_ConfigurationManagementStrategy:before {
+	content: "\e61b";
+}
+.icon-icon_DailyLog:before {
+	content: "\e61c";
+}
+.icon-icon_ExceptionPlan .path1:before {
+	content: "\e61d";
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ExceptionPlan .path2:before {
+	content: "\e61e";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ExceptionPlan .path3:before {
+	content: "\e61f";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ExceptionPlan .path4:before {
+	content: "\e620";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_ExceptionPlan .path5:before {
+	content: "\e621";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ExceptionPlan .path6:before {
+	content: "\e622";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_ExceptionPlan .path7:before {
+	content: "\e623";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ExceptionPlan .path8:before {
+	content: "\e624";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_LessonsLog .path1:before {
+	content: "\e625";
+	color: rgb(0, 0, 0);
+}
+.icon-icon_LessonsLog .path2:before {
+	content: "\e626";
+	margin-left: -1em;
+	color: rgba(64, 64, 66, 0.5);
+}
+.icon-icon_LessonsLog .path3:before {
+	content: "\e627";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_ProjectInitiationDocumentation:before {
+	content: "\e628";
+}
+.icon-icon_ProjectMandate:before {
+	content: "\e629";
+}
+.icon-icon_ProjectPlan .path1:before {
+	content: "\e62a";
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ProjectPlan .path2:before {
+	content: "\e62b";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ProjectPlan .path3:before {
+	content: "\e62c";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_ProjectPlan .path4:before {
+	content: "\e62d";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ProjectPlan .path5:before {
+	content: "\e62e";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_ProjectPlan .path6:before {
+	content: "\e62f";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ProjectPlan .path7:before {
+	content: "\e630";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_ProjectPlan .path8:before {
+	content: "\e631";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_ProjectProductDescription:before {
+	content: "\e632";
+}
+.icon-icon_QualityManagementStrategy:before {
+	content: "\e633";
+}
+.icon-icon_RiskManagementStrategy .path1:before {
+	content: "\e634";
+	color: rgb(0, 0, 0);
+}
+.icon-icon_RiskManagementStrategy .path2:before {
+	content: "\e635";
+	margin-left: -1em;
+	color: rgb(64, 64, 66);
+}
+.icon-icon_RiskManagementStrategy .path3:before {
+	content: "\e636";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_RiskManagementStrategy .path4:before {
+	content: "\e637";
+	margin-left: -1em;
+	color: rgba(0, 0, 0, 0.300000011920929);
+}
+.icon-icon_StagePlan .path1:before {
+	content: "\e638";
+	color: rgb(35, 31, 32);
+}
+.icon-icon_StagePlan .path2:before {
+	content: "\e639";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_StagePlan .path3:before {
+	content: "\e63a";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_StagePlan .path4:before {
+	content: "\e63b";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_StagePlan .path5:before {
+	content: "\e63c";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_StagePlan .path6:before {
+	content: "\e63d";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_StagePlan .path7:before {
+	content: "\e63e";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_StagePlan .path8:before {
+	content: "\e63f";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_TeamPlan .path1:before {
+	content: "\e640";
+	color: rgb(35, 31, 32);
+}
+.icon-icon_TeamPlan .path2:before {
+	content: "\e641";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_TeamPlan .path3:before {
+	content: "\e642";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_TeamPlan .path4:before {
+	content: "\e643";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_TeamPlan .path5:before {
+	content: "\e644";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_TeamPlan .path6:before {
+	content: "\e645";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_TeamPlan .path7:before {
+	content: "\e646";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_WorkPackage .path1:before {
+	content: "\e647";
+	color: rgb(35, 31, 32);
+}
+.icon-icon_WorkPackage .path2:before {
+	content: "\e648";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_WorkPackage .path3:before {
+	content: "\e649";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_WorkPackage .path4:before {
+	content: "\e64a";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_WorkPackage .path5:before {
+	content: "\e64b";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_WorkPackage .path6:before {
+	content: "\e64c";
+	margin-left: -1em;
+	color: rgb(146, 145, 145);
+}
+.icon-icon_WorkPackage .path7:before {
+	content: "\e64d";
+	margin-left: -1em;
+	color: rgb(35, 31, 32);
+}
+.icon-icon_WorkPackage .path8:before {
+	content: "\e64e";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_BusinessCase:before {
+	content: "\e64f";
+}
+.icon-icon_CheckpointReport:before {
+	content: "\e650";
+}
+.icon-icon_IssueReport .path1:before {
+	content: "\e651";
+	color: rgb(0, 0, 0);
+}
+.icon-icon_IssueReport .path2:before {
+	content: "\e652";
+	margin-left: -1em;
+	color: rgba(0, 0, 0, 0.300000011920929);
+}
+.icon-icon_IssueReport .path3:before {
+	content: "\e653";
+	margin-left: -1em;
+	color: rgba(0, 0, 0, 0.5);
+}
+.icon-icon_IssueReport .path4:before {
+	content: "\e654";
+	margin-left: -1em;
+	color: rgb(64, 64, 66);
+}
+.icon-icon_IssueReport .path5:before {
+	content: "\e655";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+.icon-icon_ProductDescription:before {
+	content: "\e656";
+}
+.icon-icon_ProductStatusAccount:before {
+	content: "\e657";
+}
+.icon-icon_ProjectBrief:before {
+	content: "\e658";
+}

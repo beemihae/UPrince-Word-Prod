@@ -1,0 +1,263 @@
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ assembly name="$(SolutionDir)CodeTemplates\Komon\Komon.TextTemplates.dll" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.ComponentModel" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.CodeDom.Compiler" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Linq" #><#+
+
+// Define other methods and classes here
+public string MakeObservable(string x, string nameSpace)
+{
+	var dicArgMatch = new Regex("Array<(.*?)>").Match(x);
+	if (dicArgMatch.Success)
+	{
+		x = "KnockoutObservableArray<" + dicArgMatch.Groups[1] + ">";	
+	}
+	else
+	{
+	    if (!x.Contains(nameSpace))
+		x = "KnockoutObservable<" + x + ">";	
+	}
+	
+	// Ugly hack to fix enums
+	if (!(x.Contains("Status") || x.Contains("PopulationType")))
+	{
+		x = x.Replace(nameSpace, nameSpace + ".Observables");
+	}	
+	return x;
+}
+
+// Define other methods and classes here
+public string ReplaceAll(string x, Dictionary<string, string> replaceDic)
+{
+	if (x == "Task")
+	{
+		x = x.Replace("Task", "<void>");
+	}
+	else
+	{
+		x = x.Replace("Task", "");
+	}
+
+	// Replace dictionaries
+	var dicArgMatch = new Regex("System\\.Collections\\.Generic\\.Dictionary<(.*?)>").Match(x);
+	if (dicArgMatch.Success)
+		x = "<Array<KomonFramework.Tuple<" + dicArgMatch.Groups[1] + ">>>";
+
+
+	x = x.Replace("Komon.Framework","Komon.Contract");
+	x = x.Replace("Komon.Komon.","Komon.");
+
+	foreach (var element in replaceDic)
+	{
+		x = x.Replace(element.Key, element.Value);
+	}
+
+	if (x == "void")
+		x = x.Replace("void", "<void>");
+
+	return x;
+}
+
+public void PrintTsClients(string[] interfaces,string[] custom,string[] enumFiles, string nameSpace)
+{
+	var typeMap = new Dictionary<string,string>
+	{
+		{"Guid","string"},
+		{"<Guid>","<string>"},
+		{"Guid?","string"},
+		{"DateTime?","Date"},
+		{"DateTime","Date"},
+		{"TimeSpan","TimeRanges"},
+		{"int","number"},
+		{"int?","number"},
+		{"double","number"},
+		{"double?","number"},
+		{"byte[]","string"},
+		{"bool","boolean"},
+		{"List","Array"},
+		{"DisposableEnumerable","Array"},
+		{"ReadOnlyCollection","Array"},
+	
+	};
+	
+	
+   var types =   (from t in   custom.SelectMany(xn => Komon.TextTemplates.GetClasses(xn))					
+						select new
+                        {
+                            Name = t.Name,
+                            Properties = t.Properties
+                                            .Select(x=> new
+                                            {
+                                                Name = x.Name,
+												Type = ReplaceAll(x.Type, typeMap),
+                                            })
+						});
+
+ var enums = (from f in enumFiles.SelectMany(xn => Komon.TextTemplates.GetEnums(xn))
+			 select new
+			 {
+				Name = f.Name,
+				Members = f.Members
+			 }).ToList();
+
+
+var ifs = (from ints in interfaces.SelectMany(xn => Komon.TextTemplates.GetInterfaces(xn))
+		  select new
+		  {
+			Name = ints.Name,
+			Methods  = (from m in ints.Methods
+                         select new
+                         {
+                             Name = m.Name.Replace("Komon.Komon.","Komon."),
+                             Return = m.Return,  
+                             Params = string.Join(",",m.Parameters.Select(x=>string.Format("{1}:{0}", ReplaceAll(x.Type, typeMap),x.Name))).Replace("Komon.Komon.","Komon."),
+                             ParamNames = string.Join(",", m.Parameters.Select(x => string.Format("{0}",x.Name))).Replace("Komon.Komon.","Komon."),
+                             ParamTypes = string.Join(",", m.Parameters.Select(x => string.Format("{0}", x.Type))).Replace("Komon.Komon.","Komon."),
+							 ParamSerial =  m.Parameters.Select((x,i) => string.Format("ps.push({{ Key: \"{0}\", Value: {0} }});", x.Name,x.Type)),
+                         })
+						 .Select(x=>new
+						 {
+						    Name = x.Name,
+                            Return = ReplaceAll(x.Return, typeMap), 
+                            Params = x.Params,
+                            ParamNames = x.ParamNames,
+                            ParamTypes = x.ParamTypes,
+							 ParamSerial = x.ParamSerial,
+                         })
+						 .ToList()
+		}).ToList();
+
+
+#>
+/// <reference path="typings/jasnyBootstrap.d.ts" />
+/// <reference path="typings/customKnockout.d.ts" />
+/// <reference path="typings/knockout.mapping.d.ts" />
+/// <reference path="typings/knockout.d.ts" />
+/// <reference path="typings/nativeLibExtension.d.ts" />
+/// <reference path="typings/jquery.d.ts" />
+/// <reference path="typings/knockoutLibExtension.d.ts" />
+
+module <#= nameSpace#>.Observables {
+<#+
+    foreach(var i in types)
+	{
+#>
+   export interface I<#=i.Name #> {
+<#+		foreach(var p in i.Properties.Where(x=>!x.Type.Contains("Tuple")))
+		{
+
+		var optType = p.Type.EndsWith( "?") ? "?" : "";
+
+		var type = MakeObservable(p.Type.Trim('?'), nameSpace);
+		// Ugly hack - Enums should be named with status
+		var repType = type.Contains("Status") || type.Contains("PopulationType") ? type : type.Replace(nameSpace + ".Observables.", nameSpace + ".Observables.I");
+		var name = p.Name + optType;
+#>
+        <#= name #>: <#=repType#>;
+<#+
+	    }	
+#>
+    }
+<#+
+	}
+#>
+}
+
+
+module <#= nameSpace#> {
+<#+
+    foreach(var i in types)
+	{
+#>
+    export interface I<#=i.Name #> {
+<#+		foreach(var p in i.Properties.Where(x=>!x.Type.Contains("Tuple")))
+		{
+
+		var type = p.Type.Trim('?');
+		// Ugly hack - Enums should be named with status
+		var repType = type.Contains("Status") || type.Contains("PopulationType") ? type : type.Replace(nameSpace + ".", nameSpace + ".I");
+		var name = p.Name + "?";
+#>
+        <#= name #>: <#=repType#>;
+<#+
+	    }	
+#>
+    }
+	export class <#=i.Name #> extends Komon.Contract.Base.JsonObjectBase<<#=nameSpace #>.Observables.I<#=i.Name #>> {
+<#+		foreach(var p in i.Properties.Where(x=>!x.Type.Contains("Tuple")))
+		{
+		var name = p.Name;
+#>
+        <#= name #>: <#=p.Type.Trim('?')#>;
+<#+
+	    }	
+#>
+    }
+<#+
+	}
+	foreach(var i in enums)
+	{
+#>
+    export enum <#=i.Name #> {
+<#+		foreach(var p in i.Members)
+		{
+#>
+        <#=p#>,
+<#+
+		}
+#>
+    }
+<#+
+	}
+	foreach(var i in ifs)
+	{
+#>
+   export class <#=i.Name.Substring(1) #> {  
+	    _client: KomonFramework.Client = new KomonFramework.Client(KomonFramework.Config.WebApiBaseAddress, "<#=i.Name.Substring(1) #>");
+
+<#+		foreach(var m in i.Methods)
+		{
+			var returnValue = m.Return;
+			if (!returnValue.Contains("Array"))
+				returnValue = returnValue.Replace("<","").Replace(">","");
+			else
+				returnValue = returnValue.Substring(1,returnValue.Length-2);
+
+			var returnIValue = MakeObservable(returnValue, nameSpace).Replace(nameSpace + ".Observables.", nameSpace + ".Observables.I");
+#>
+
+		<#+ Write(m.Name); #>(<#+ Write(m.Params.Replace(nameSpace + ".", nameSpace + ".I")); #>) : KomonFramework.Promise<Komon.Contract.Base.KomonResult<<#=returnValue#>,<#=returnIValue#>>>
+        { 
+		    var ps = Array<KomonFramework.ServerArgument>();
+<#+
+			foreach(var ser in m.ParamSerial)
+			{
+#>
+            <#=ser#>
+<#+
+			}
+#>		    
+			return this._client.PostServer<<#=returnValue#>,<#=returnIValue#>>("<#=m.Name#>",ps);
+	
+		}
+<#+
+		}
+#>
+    }
+<#+
+	}
+#>
+}
+<#+
+}
+#>
+<#+
+	
+#>

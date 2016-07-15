@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
+<OfficeApp  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+	<Id>b71f5320-e754-44b5-a9b2-4a176b666bfd</Id>
+	<Version>1.1.0.0</Version>
+	<ProviderName>UPrince.bvba</ProviderName>
+	<DefaultLocale>en-US</DefaultLocale>
+	<DisplayName DefaultValue="UPrince Word" />
+	<Description DefaultValue="The easiest way to edit PRINCE2 Product Descriptions in Word"/>
+	<IconUrl DefaultValue="https://uprincewordprod.azurewebsites.net/Images/ico_uprince_32.jpg" />
+	<!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
+      To use this property, convert this manifest to version 1.1 by adding an API set in the Activation tab of the manifest editor.-->
+	<HighResolutionIconUrl DefaultValue="http://uprincewordprod.azurewebsites.net/Images/ico_uprince_64.jpg" />
+	<SupportUrl DefaultValue="https://sway.com/NNzEd5KE8iA9lonG" />
+	<AppDomains>
+		<AppDomain>https://uprincewordprod.azurewebsites.net</AppDomain>
+	</AppDomains>
+	<Hosts>
+		<Host Name = "Document"/>
+	</Hosts>
+
+	<DefaultSettings>
+		<SourceLocation DefaultValue="https://uprincewordprod/App/Home/Home.html"></SourceLocation>
+	</DefaultSettings>
+	<Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>

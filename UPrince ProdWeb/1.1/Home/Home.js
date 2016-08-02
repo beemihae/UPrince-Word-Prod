@@ -5,8 +5,9 @@
     var projectId;
     var ProductDescriptionId;
     var host = 'https://uprincecoreprodapi.azurewebsites.net';
-    var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></a> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
+    var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
     var myWindow;
+    var previous = 0;
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
@@ -55,8 +56,8 @@
                 localStorage.setItem('projectName', projectName);
                 //window.location.href = "product-description-page.html"
                 document.getElementById("project-page").innerHTML = "";
-                var productDescriptionPageWord = '<div class="content-main"> <div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div id="link-project-page" class="header-sub header-glyph full-height"><p class="fake-link" title="UPrince.Projects"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></p></div> <div class="header-sub h1-div"> <h1 id="projectName" class="roboto-light" style="font-weight: 700"></h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div> </div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"> <div class="col-sm-12 row-projects bg-ash alignleft"> <span class="icon-icon_ProductDescription"> </span><strong>Product Descriptions</strong> <button id="saveBt" class="saveButton">Publish</button> </div> <!-- filter --><!-- menu starts --> <div class="panel-group col-md-12 no-padding"> <div id="listContainer"> <ul id="expList" class="nav nav-pills nav-stacked collapsibleList"></ul></div> </div> </section> </div> </div>';
-                var productDescriptionPageOnline = '<div class="content-main"> <div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div id="link-project-page" class="header-sub header-glyph full-height"><p class="fake-link" title="UPrince.Projects"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></p></div> <div class="header-sub h1-div"> <h1 id="projectName" class="roboto-light" style="font-weight: 700"></h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div> </div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"> <div class="col-sm-12 row-projects bg-ash alignleft"> <span class="icon-icon_ProductDescription"> </span><strong>Product Descriptions</strong> </div> <!-- filter --><!-- menu starts --> <div class="panel-group col-md-12 no-padding"> <div id="listContainer"> <ul id="expList" class="nav nav-pills nav-stacked collapsibleList"></ul></div> </div> </section> </div> </div>';
+                var productDescriptionPageWord = '<div class="content-main"> <div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div id="link-project-page" class="header-sub header-glyph full-height"><p class="fake-link" title="UPrince.Projects"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></p></div> <div class="header-sub h1-div"> <h1 id="projectName" class="roboto-light" style="font-weight: 700"></h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div> </div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"> <div class="col-sm-12 row-projects bg-ash alignleft"> <span class="icon-icon_ProductDescription"> </span><strong>Product Descriptions</strong> <button id="saveBt" class="saveButton">Publish</button> </div> <!-- filter --><!-- menu starts --> <div class="panel-group col-md-12 no-padding"> <div id="listContainer"> <ul id="expList" class="nav nav-pills nav-stacked collapsibleList" style = "margin-top :2px" ></ul></div> </div> </section> </div> </div>';
+                var productDescriptionPageOnline = '<div class="content-main"> <div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div id="link-project-page" class="header-sub header-glyph full-height"><p class="fake-link" title="UPrince.Projects"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></p></div> <div class="header-sub h1-div"> <h1 id="projectName" class="roboto-light" style="font-weight: 700"></h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div> </div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"> <div class="col-sm-12 row-projects bg-ash alignleft"> <span class="icon-icon_ProductDescription"> </span><strong>Product Descriptions</strong> </div> <!-- filter --><!-- menu starts --> <div class="panel-group col-md-12 no-padding"> <div id="listContainer"> <ul id="expList" class="nav nav-pills nav-stacked collapsibleList" style = "margin-top :2px"></ul></div> </div> </section> </div> </div>';
                 $('#product-description-page').append(productDescriptionPageWord);
                 $(document).find('#saveBt').prop('disabled', false);
 
@@ -84,7 +85,7 @@
                     getProductDescription();
                     app.showNotification('Desktop version');
                 }*/
-
+                setHeader();
             });
 
             //after selecting all the text, it adapts the prod descrp on the server
@@ -112,14 +113,36 @@
                 logOut();
             });
 
+            $(document).on('input', '#projectSearch', function () {
+                var x = document.getElementById("projectSearch").value;
+                var projectSearch;
+                var update;
+                if (x.length > 2) {
+                    projectSearch = x;
+                } else { projectSearch = ""; };
+                //document.getElementById("name").innerHTML = projectSearch
+                if ((previous == 1) && (x.length == 2)) { };
+                document.getElementById("listProjects").innerHTML = "";
+                loadListProjects(projectSearch);
+                previous = x.length;
+            });
+
+            /*window.setInterval(function () {
+                app.showNotification(localStorage.getItem("uId"));
+            }, 5000);
+            */
             $(document).on('click', "#btnSignIn", function () {
-                if ((navigator.userAgent.indexOf('iPad') != -1) /*|| !(Office.context.requirements.isSetSupported('HtmlCoercion'))*/) {
-                    var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fapp.html", "");
+                if ((navigator.userAgent.indexOf('iPad') != -1) /*|| !(Office.context.requirements.isSetSupported('HtmlCoercion'))*/) { //iPad
+                    var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fios.html", "");
+                    //window.location.href = "https://uprince-dev.pronovix.net/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fios.html"
+
                     //app.showNotification(navigator.userAgent);
                     //var child = window.open("http://www.w3schools.com/jsref/prop_nav_useragent.asp");
                     var timer = setInterval(checkChild, 500);
                 } else {
-                    window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
+                    window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
+                    //var child = window.open("https://uprince-dev.pronovix.net/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fapp.html", "");
+
                     //app.showNotification(navigator.userAgent);
                 }
                 function checkChild() {
@@ -139,6 +162,18 @@
         });
     };
 
+    function checkChild() {
+        if (localStorage.getItem("loggedIn") == 'true') {
+            //$("#closed").append('closed');
+            clearInterval(timer);
+
+            document.getElementById("login").innerHTML = "";
+            document.body.style.backgroundColor = "white";
+            $("#project-page").append(projectPage);
+            loadListProjects();
+            //app.showNotification(navigator.userAgent);
+        }
+    }
 
     //perform this function on the pop-up screen
     function accessUser() {
@@ -164,7 +199,7 @@
               localStorage.setItem("email", email);
               //window.location.href = "project-page.html"
               $("#project-page").append(projectPage);
-              loadListProjects();
+              loadListProjects("");
               var userId = str.user.uid;
               localStorage.setItem("uId", userId);
               localStorage.setItem('loggedIn', 'true')
@@ -195,8 +230,10 @@
           .done(function (str) {
               if (str.success) {
                   //app.showNotification("success");
-                  window.location.href = "https://document.uprince.com/1.1/home/home.html"
-                  localStorage.setItem("loggedIn", 'false')
+                  window.location.href = "https://uprincewordprod.azurewebsites.net/1.1/home/home.html"
+                  localStorage.setItem("loggedIn", 'false');
+                  localStorage.setItem("email", '');
+                  localStorage.setItem("uId", '');
               }
               else app.showNotification("Log out failed, please try again.");
           })
@@ -206,6 +243,70 @@
         });
     }
 
+    function setHeader() {
+        Word.run(function (context) {
+
+            // Create a proxy object for the sections collection.
+            var sections = context.document.sections;
+
+            // Queue a commmand to load the text property for all of the sections.
+            context.load(sections, 'text');
+
+            // Synchronize the document state by executing the queued commands, 
+            // and return a promise to indicate task completion.
+            return context.sync()
+                .then(function () {
+
+                    // Insert content into the header.
+                    var headerSection = sections.items[0].getHeader('primary');
+                    headerSection.clear();
+
+                    // Insert content into the footer.
+                    var footerSection = sections.items[0].getFooter('primary');
+                    footerSection.clear();
+
+                    // Synchronize the document state by executing the queued commands, 
+                    // and return a promise to indicate task completion.
+                    return context.sync().then(function () {
+                        showMessage('Success! Removed Header and Footer.');
+                    });
+                });
+        })
+        // Run a batch operation against the Word object model.
+        Word.run(function (context) {
+
+            // Create a proxy object for the sections collection.
+            var sections = context.document.sections;
+
+            // Queue a commmand to load the text property for all of the sections.
+            context.load(sections, 'text');
+
+            // Synchronize the document state by executing the queued commands, 
+            // and return a promise to indicate task completion.
+            return context.sync().then(function () {
+
+                // Insert content into the header.
+                var headerSection = sections.items[0].getHeader('primary');
+                headerSection.insertText('UPrince', Word.InsertLocation.end);
+
+                // Insert content into the footer.
+                var footerSection = sections.items[0].getFooter('primary');
+                footerSection.insertText('All rights reserved.', Word.InsertLocation.end);
+
+                // Synchronize the document state by executing the queued commands, 
+                // and return a promise to indicate task completion.
+                return context.sync().then(function () {
+                    //showMessage('Success! Added Header and Footer. Select the arrow button to move on.');
+                });
+            });
+        })
+        .catch(function (error) {
+            console.log('Error: ' + JSON.stringify(error));
+            if (error instanceof OfficeExtension.Error) {
+                console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+            }
+        });
+    }
 
     function getToken() {
         var url = window.location.href;
@@ -217,7 +318,7 @@
 
 
     //load projects in to projectpage from server
-    function loadListProjects() {
+    function loadListProjects(projectSearch) {
         var email = localStorage.getItem('email')
         var dataEmail = {
             "customer": "",
@@ -227,7 +328,7 @@
                 "title": false
             },
             "isRecycled": false,
-            "orderField": "id",
+            "orderField": "title",
             "sortOrder": "ASC",
             "status": {
                 "Active": false,
@@ -235,7 +336,7 @@
                 "Closed": false,
                 "New": false
             },
-            "title": "",
+            "title": projectSearch,
             "toleranceStatus": {
                 "All": true,
                 "OutofTolerance": false,
@@ -251,6 +352,7 @@
             data: JSON.stringify(dataEmail),
         })
           .done(function (str) {
+              document.getElementById("listProjects").innerHTML = "";
               var test = str;
               var length = Object.keys(str).length;
               $("#listProjects").append('<ul id="listProjects" class="nav nav-pills nav-stacked">');
@@ -291,9 +393,10 @@
         var id = [];
         for (var i = 0; i < length; i++) {
             if (str[i].ParentId == null) {
-                var dummy = '<li id="' + str[i].Id + '"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a> ';
+                //var dummy = '<li id="' + str[i].Id + '"style = "height: 38px; padding-left: 5px;text-indent: 5px;"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a> ';
+                var dummy = '<li id="' + str[i].Id + '"style = " padding-left: 5px;text-indent: 5px;"><a href="javascript: void(0);" class="p-l-30" >' + str[i].Title + '</a> ';
                 if (str[i].HasChildren) {
-                    dummy = dummy + '<ul id="L' + str[i].Id + '" class="nav nav-pills nav-stacked"></li>'
+                    dummy = dummy + '<ul id="L' + str[i].Id + '"style = " padding-left: 5px;text-indent: 5px;" class="nav nav-pills nav-stacked"></li>'
                 } else {
                     dummy = dummy + '</li>'
 
@@ -306,11 +409,11 @@
         while (count < length) {
             for (var i = 0; i < length; i++) {
                 if ((id.indexOf("" + str[i].Id) == -1) && (id.indexOf("" + str[i].ParentId) != -1)) {
-                    var dummy = '<li id="' + str[i].Id + '"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a>';
+                    var dummy = '<li id="' + str[i].Id + '" "style = "height: 35px"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a>';
                     //var dummy = '<li id="' + str[i].Id + '"><span  class="p-l-30 fake-link">' + str[i].Title + '</span>';
 
                     if (str[i].HasChildren) {
-                        dummy = dummy + '<ul id="L' + str[i].Id + '" class="nav nav-pills nav-stacked"></li>'
+                        dummy = dummy + '<ul id="L' + str[i].Id + '" class="nav nav-pills nav-stacked" "style = "height: 35px"></li>'
                     } else {
                         dummy = dummy + '</li>'
 

@@ -144,6 +144,7 @@
     <Content Include="1.1\App.css" />
     <Content Include="1.1\App.js" />
     <Content Include="1.1\Home\App.html" />
+    <Content Include="1.1\Home\FunctionFile.html" />
     <Content Include="1.1\Home\Home.css" />
     <Content Include="1.1\Home\Home.html" />
     <Content Include="1.1\Home\Home.js" />

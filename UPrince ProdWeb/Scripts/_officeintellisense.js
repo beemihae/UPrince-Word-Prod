@@ -4,7 +4,7 @@ var Office = new function() {
     this._appContext = 2;
     this._showAll = true;
     this._setContext = {
-        
+        TABLEBINDINGS: "1.1"
     };
 }
 

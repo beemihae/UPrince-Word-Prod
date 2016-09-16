@@ -283,7 +283,7 @@
             url: url,
             dataType: "json",
             contentType: "application/x-www-form-urlencoded",
-            headers: { "Authorization": authorization },
+            headers: { "Authorization": authorization },    
             data: { uid: uId }
         })
           .done(function (str) {

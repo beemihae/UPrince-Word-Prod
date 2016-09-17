@@ -6,7 +6,7 @@
   <Id>b71f5320-e754-42b5-a9b2-4a176b666bfd</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change -->
-  <Version>2.0.0.0</Version>
+  <Version>3.0.0.0</Version>
   <ProviderName>UPrince bvba</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="UPrince: Manage PRINCE2 Products" />
@@ -15,13 +15,9 @@
   <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
       To use this property, convert this manifest to version 1.1 by adding an API set in the Activation tab of the manifest editor.-->
   <HighResolutionIconUrl DefaultValue="http://document.uprince.com/Images/ico_uprince_64.jpg" />
-<!--Todo: Add requirement sets and remove  commenting of high res icon -->
-  <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
-          To use this property, convert this manifest to version 1.1 by adding an API set in the Activation tab of the manifest editor.-->
-  <!--<HighResolutionIconUrl DefaultValue="https://i.imgur.com/MPuvMiq.png" />-->
-
-  <!--Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list -->
+  <SupportUrl DefaultValue="https://sway.com/NNzEd5KE8iA9lonG" />
   <AppDomains>
+    <AppDomain>https://document.uprince.com</AppDomain>
     <AppDomain>https://document.uprince.com</AppDomain>
     <AppDomain>https://plaza.uprince.com/oauth2/authorize</AppDomain>
     <AppDomain>https://plaza.uprince.com/user/login</AppDomain>
@@ -35,9 +31,9 @@
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://document.uprince.com/1.1/Home/Home.html"></SourceLocation>
+    <SourceLocation DefaultValue="https://document.uprince.com/1.1/home/home.html" />
   </DefaultSettings>
-   <!--EndTaskpaneMode integration -->
+  <!--EndTaskpaneMode integration -->
 
   <Permissions>ReadWriteDocument</Permissions>
 
@@ -166,7 +162,7 @@
         <bt:Url id="residUnitConverterUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
-        <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
+        <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://sway.com/NNzEd5KE8iA9lonG">
         </bt:Url>
       </bt:Urls>
       <bt:ShortStrings>
@@ -191,15 +187,15 @@
          <bt:String id="residLabel7" DefaultValue="Logout">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
-        <bt:String id="UPrince.GetStarted.Title" DefaultValue="UPrince loaded succssfully">
+        <bt:String id="UPrince.GetStarted.Title" DefaultValue="UPrince Loaded Successfully">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
+        <bt:String id="residToolTip" DefaultValue="Proceed">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the INSERT tab on the Ribbon then click Login">
+        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the Insert and login">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

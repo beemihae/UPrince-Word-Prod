@@ -111,7 +111,7 @@
                     <SourceLocation resid="residUnitConverterUrl" />
                   </Action>
                 </Control>
-                <Control xsi:type="Button" id="Button4Id1">
+                <Control xsi:type="Button" id="Button6Id1">
                   <!--Label for your button. resid must point to a ShortString resource -->
                   <Label resid="residLabel6" />
                   <Supertip>
@@ -128,6 +128,25 @@
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                  <Action xsi:type="ExecuteFunction">
                     <FunctionName>publish</FunctionName>
+                  </Action>
+                </Control>
+              <Control xsi:type="Button" id="Button7Id1">
+                  <!--Label for your button. resid must point to a ShortString resource -->
+                  <Label resid="residLabel7" />
+                  <Supertip>
+                    <!--ToolTip title. resid must point to a ShortString resource -->
+                    <Title resid="residLabel" />
+                    <!--ToolTip description. resid must point to a LongString resource -->
+                    <Description resid="residToolTip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Contoso.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="Contoso.TaskpaneButton.Icon.32" />
+                    <bt:Image size="80" resid="Contoso.TaskpaneButton.Icon.80" />
+                  </Icon>
+                  <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
+                 <Action xsi:type="ExecuteFunction">
+                    <FunctionName>logOut</FunctionName>
                   </Action>
                 </Control>
               </Group>
@@ -169,6 +188,9 @@
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
         <bt:String id="residLabel6" DefaultValue="Publish">
+          <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
+        </bt:String>
+         <bt:String id="residLabel7" DefaultValue="Logout">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
         <bt:String id="Contoso.GetStarted.Title" DefaultValue="Citation Sample Loaded Successfully">

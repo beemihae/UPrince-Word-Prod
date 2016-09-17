@@ -23,9 +23,11 @@
 
   <!--Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list -->
   <AppDomains>
-    <AppDomain>AppDomain1</AppDomain>
-    <AppDomain>AppDomain2</AppDomain>
-    <AppDomain>AppDomain3</AppDomain>
+    <AppDomain>https://document.uprince.com</AppDomain>
+    <AppDomain>https://document.uprince.com</AppDomain>
+    <AppDomain>https://plaza.uprince.com/oauth2/authorize</AppDomain>
+    <AppDomain>https://plaza.uprince.com/user/login</AppDomain>
+    <AppDomain>https://www.linkedin.com/uas/oauth/authorize</AppDomain>
   </AppDomains>
   <!--EndBasicSettings-->
 
@@ -109,6 +111,25 @@
                     <SourceLocation resid="residUnitConverterUrl" />
                   </Action>
                 </Control>
+                <Control xsi:type="Button" id="Button4Id1">
+                  <!--Label for your button. resid must point to a ShortString resource -->
+                  <Label resid="residLabel6" />
+                  <Supertip>
+                    <!--ToolTip title. resid must point to a ShortString resource -->
+                    <Title resid="residLabel" />
+                    <!--ToolTip description. resid must point to a LongString resource -->
+                    <Description resid="residToolTip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Contoso.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="Contoso.TaskpaneButton.Icon.32" />
+                    <bt:Image size="80" resid="Contoso.TaskpaneButton.Icon.80" />
+                  </Icon>
+                  <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
+                 <Action xsi:type="ExecuteFunction">
+                    <FunctionName>publish</FunctionName>
+                  </Action>
+                </Control>
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -123,8 +144,7 @@
         <bt:Image id="Contoso.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://notusedinthissample">
-          <bt:Override Locale="ja-jp" Value="https://notusedinthissample" />
+        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
         </bt:Url>
         <bt:Url id="residUnitConverterUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
         </bt:Url>
@@ -146,6 +166,9 @@
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
         <bt:String id="residLabel5" DefaultValue="Another Command">
+          <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
+        </bt:String>
+        <bt:String id="residLabel6" DefaultValue="Publish">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
         <bt:String id="Contoso.GetStarted.Title" DefaultValue="Citation Sample Loaded Successfully">

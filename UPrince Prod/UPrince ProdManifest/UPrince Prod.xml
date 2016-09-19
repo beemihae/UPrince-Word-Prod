@@ -6,17 +6,16 @@
   <Id>b71f5320-e754-42b5-a9b2-4a176b666bfd</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change -->
-  <Version>1.0.0.0</Version>
-  <ProviderName>Contoso</ProviderName>
+  <Version>3.0.0.0</Version>
+  <ProviderName>UPrince bvbva</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various placed of the Office UI such as the add-ins dialog -->
-  <DisplayName DefaultValue="Citations" />
-  <Description DefaultValue="Citations Example"/>
+  <DisplayName DefaultValue="UPrince: Manage PRINCE2 Products" />
+  <Description DefaultValue="The easiest way to edit PRINCE2 Product Descriptions in Word"/>
 
   <!--Icon for your add-in. Used on installation screens and the add-ins dialog -->
-  <IconUrl DefaultValue="https://i.imgur.com/LltG56v.png" />
-
-  <!--Todo: Add requirement sets and remove  commenting of high res icon -->
+ <IconUrl DefaultValue="https://document.uprince.com/Images/ico_uprince_32.jpg" />
+ <!--Todo: Add requirement sets and remove  commenting of high res icon -->
   <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
           To use this property, convert this manifest to version 1.1 by adding an API set in the Activation tab of the manifest editor.-->
   <!--<HighResolutionIconUrl DefaultValue="https://i.imgur.com/MPuvMiq.png" />-->
@@ -37,7 +36,7 @@
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://addinwithfabric.azurewebsites.net/index.html" />
+    <SourceLocation DefaultValue="https://document.uprince.com/1.1/Home/home.html" />
   </DefaultSettings>
   <!--EndTaskpaneMode integration -->
 
@@ -58,14 +57,14 @@
             Ensure you have build 16.0.6769 or above for GetStarted section to work-->
           <GetStarted>
             <!--Title of the Getting Started callout. resid points to a ShortString resource -->
-            <Title resid="Contoso.GetStarted.Title"/>
+            <Title resid="UPrince.GetStarted.Title"/>
 
             <!--Description of the Getting Started callout. resid points to a LongString resource -->
-            <Description resid="Contoso.GetStarted.Description"/>
+            <Description resid="UPrince.GetStarted.Description"/>
 
             <!--Not used right now but you need to provide a valid resource. We will add code in the future to consume this URL. 
 							resid points to a Url resource -->
-            <LearnMoreUrl resid="Contoso.GetStarted.LearnMoreUrl"/>
+            <LearnMoreUrl resid="UPrince.GetStarted.LearnMoreUrl"/>
           </GetStarted>
 
           <!--Function file is an html page that includes the javascript where functions for ExecuteAction will be called. 
@@ -80,15 +79,15 @@
             <!-- Documentation includes all the IDs currently tested to work -->
             <OfficeTab id="TabReferences">
               <!--Group. Ensure you provide a unique id. Recommendation for any IDs is to namespace using your companyname-->
-              <Group id="Contoso.Citations.Group1Id1">
+              <Group id="UPrince.Citations.Group1Id1">
                 <!--Label for your group. resid must point to a ShortString resource -->
                 <Label resid="residLabel4" />
                 <!--Icons. Required sizes 16,31,80, optional 20, 24, 40, 48, 64. Strongly recommended to provide all sizes for great UX -->
                 <!--Use PNG icons and remember that all URLs on the resources section must use HTTPS -->
                 <Icon>
-                  <bt:Image size="16" resid="Contoso.TaskpaneButton.Icon.16" />
-                  <bt:Image size="32" resid="Contoso.TaskpaneButton.Icon.32" />
-                  <bt:Image size="80" resid="Contoso.TaskpaneButton.Icon.80" />
+                  <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
+                  <bt:Image size="32" resid="UPrince.Login.Icon.32" />
+                  <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
                 </Icon>
                 <!--Control. It can be of type "Button" or "Menu" -->
                 <Control xsi:type="Button" id="Button3Id1">
@@ -101,9 +100,9 @@
                     <Description resid="residToolTip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="Contoso.TaskpaneButton.Icon.16" />
-                    <bt:Image size="32" resid="Contoso.TaskpaneButton.Icon.32" />
-                    <bt:Image size="80" resid="Contoso.TaskpaneButton.Icon.80" />
+                    <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="UPrince.Login.Icon.32" />
+                    <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
                   </Icon>
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ShowTaskpane">
@@ -121,13 +120,32 @@
                     <Description resid="residToolTip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="Contoso.TaskpaneButton.Icon.16" />
-                    <bt:Image size="32" resid="Contoso.TaskpaneButton.Icon.32" />
-                    <bt:Image size="80" resid="Contoso.TaskpaneButton.Icon.80" />
+                    <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="UPrince.Publish.Icon.32" />
+                    <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
                   </Icon>
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
-                 <Action xsi:type="ExecuteFunction">
+                  <Action xsi:type="ExecuteFunction">
                     <FunctionName>publish</FunctionName>
+                  </Action>
+                </Control>
+              <Control xsi:type="Button" id="Button7Id1">
+                  <!--Label for your button. resid must point to a ShortString resource -->
+                  <Label resid="residLabel7" />
+                  <Supertip>
+                    <!--ToolTip title. resid must point to a ShortString resource -->
+                    <Title resid="residLabel" />
+                    <!--ToolTip description. resid must point to a LongString resource -->
+                    <Description resid="residToolTip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="UPrince.Logout.Icon.32" />
+                    <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
+                  </Icon>
+                  <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>logOut</FunctionName>
                   </Action>
                 </Control>
               </Group>
@@ -138,10 +156,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Contoso.TaskpaneButton.Icon.16" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_16.png" />
-        <bt:Image id="Contoso.TaskpaneButton.Icon.32" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_32.png" />
-        <bt:Image id="Contoso.TaskpaneButton.Icon.80" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_80.png" />
-        <bt:Image id="Contoso.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
+        <bt:Image id="UPrince.TaskpaneButton.Icon.16" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_16.png" />
+        <bt:Image id="UPrince.TaskpaneButton.Icon.32" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_32.png" />
+        <bt:Image id="UPrince.TaskpaneButton.Icon.80" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_80.png" />
+        <bt:Image id="UPrince.Login.Icon.32" DefaultValue="https://document.uprince.com/Images/halflings-161-log-in3x.png" />
+        <bt:Image id="UPrince.Publish.Icon.32" DefaultValue="https://document.uprince.com/Images/halflings-170-export3x.png" />
+        <bt:Image id="UPrince.Logout.Icon.32" DefaultValue="https://document.uprince.com/Images/halflings-163-log-out3x.png" />
+        <bt:Image id="UPrince.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
         <bt:Url id="residDesktopFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
@@ -149,7 +170,7 @@
         <bt:Url id="residUnitConverterUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
-        <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
+        <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
         </bt:Url>
       </bt:Urls>
       <bt:ShortStrings>
@@ -171,7 +192,10 @@
         <bt:String id="residLabel6" DefaultValue="Publish">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
-        <bt:String id="Contoso.GetStarted.Title" DefaultValue="Citation Sample Loaded Successfully">
+        <bt:String id="residLabel7" DefaultValue="Logout">
+          <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
+        </bt:String>
+        <bt:String id="UPrince.GetStarted.Title" DefaultValue="UPrince Loaded Successfully">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:ShortStrings>
@@ -179,7 +203,7 @@
         <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="Contoso.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
+        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

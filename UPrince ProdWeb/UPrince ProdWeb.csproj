@@ -248,6 +248,10 @@
     <Content Include="fonts\New folder\icomoon.ttf" />
     <Content Include="fonts\New folder\icomoon.woff" />
     <Content Include="GenericError.html" />
+    <Content Include="Images\halflings-161-log-in3x.png" />
+    <Content Include="Images\halflings-163-log-out%403x.png" />
+    <Content Include="Images\halflings-170-export%403x.png" />
+    <Content Include="Images\halflings-30-repeat%403x.png" />
     <Content Include="Images\ico_uprince_32.jpg" />
     <Content Include="Images\ico_uprince_64.jpg" />
     <Content Include="Images\Thumbs.db" />

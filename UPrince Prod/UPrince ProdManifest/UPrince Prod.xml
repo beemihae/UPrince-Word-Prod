@@ -23,7 +23,6 @@
   <!--Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list -->
   <AppDomains>
     <AppDomain>https://document.uprince.com</AppDomain>
-    <AppDomain>https://document.uprince.com</AppDomain>
     <AppDomain>https://plaza.uprince.com/oauth2/authorize</AppDomain>
     <AppDomain>https://plaza.uprince.com/user/login</AppDomain>
     <AppDomain>https://www.linkedin.com/uas/oauth/authorize</AppDomain>
@@ -70,14 +69,14 @@
           <!--Function file is an html page that includes the javascript where functions for ExecuteAction will be called. 
             Think of the FunctionFile as the "code behind" ExecuteFunction 
             This sample doesn't use this file, just adding the element for reference-->
-          <FunctionFile resid="residDesktopFuncUrl" />
+          <FunctionFile resid="UPrinceFuncUrl" />
 
           <!--PrimaryCommandSurface==Main Office Ribbon-->
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
 
             <!--Use OfficeTab to extend an existing Tab. Use CustomTab to create a new tab -->
             <!-- Documentation includes all the IDs currently tested to work -->
-            <OfficeTab id="TabReferences">
+            <OfficeTab id="TabHome">
               <!--Group. Ensure you provide a unique id. Recommendation for any IDs is to namespace using your companyname-->
               <Group id="UPrince.Citations.Group1Id1">
                 <!--Label for your group. resid must point to a ShortString resource -->
@@ -107,7 +106,7 @@
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ShowTaskpane">
                     <!--Provide a url resource id for the location that will be displayed on the taskpane -->
-                    <SourceLocation resid="residUnitConverterUrl" />
+                    <SourceLocation resid="UPrince.WordUrl" />
                   </Action>
                 </Control>
                 <Control xsi:type="Button" id="Button4Id1">
@@ -165,9 +164,9 @@
         <bt:Image id="UPrince.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
+        <bt:Url id="UPrinceFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
         </bt:Url>
-        <bt:Url id="residUnitConverterUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
+        <bt:Url id="UPrince.WordUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
         <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
@@ -203,7 +202,7 @@
         <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
+        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the HOME tab on the Ribbon then click Login">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

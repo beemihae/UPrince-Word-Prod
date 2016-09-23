@@ -745,12 +745,33 @@
               .append(layout, header, purpose, purposeJson, composition, compositionJson, derivation,
                 derivationJson, format, formatJson, devSkills, devSkillsJson, qualityCriteria, tableQC.concat("</table>"), responsibilities, tableResponsibility);
             // insert HTML into Word document
-            Office.context.document.setSelectedDataAsync(div.html(), {
+           /* Office.context.document.setSelectedDataAsync(div.html(), {
                 coercionType: "html"
-            }, testForSuccess);
+            }, testForSuccess);*/
             /*var div = $("<div>")
                    .append(str.Title);
             Office.context.document.setSelectedDataAsync(div.html(), { coercionType: "html" }, testForSuccess)*/
+            // Run a batch operation against the Word object model.
+            Word.run(function (context) {
+
+                // Create a proxy object for the document body.
+                var body = context.document.body;
+
+                // Queue a commmand to insert HTML in to the beginning of the body.
+                body.insertHtml(div.html(), Word.InsertLocation.replace);
+
+                // Synchronize the document state by executing the queued commands,
+                // and return a promise to indicate task completion.
+                return context.sync().then(function () {
+                    console.log('HTML added to the beginning of the document body.');
+                });
+            })
+            .catch(function (error) {
+                console.log('Error: ' + JSON.stringify(error));
+                if (error instanceof OfficeExtension.Error) {
+                    console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+                }
+            });
         })
         .error(function (jqXHR, textStatus, errorThrown) {
             app.showNotification('fail')

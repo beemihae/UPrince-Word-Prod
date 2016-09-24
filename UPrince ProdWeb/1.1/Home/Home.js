@@ -19,7 +19,7 @@
 
             //after log in go to project page, clicking sign in button
             /*$(document).on("click", "#btnSignIn", function () {
-                //app.showNotification(JSON.stringify(bowser, null, '    '));
+                ////app.showNotification(JSON.stringify(bowser, null, '    '));
                 var x = document.getElementById("email");
                 var email = x.elements[0].value;
                 if (email.length != 0) {
@@ -31,7 +31,7 @@
                     loadListProjects();
                 }
                 else {
-                    app.showNotification('Please enter login');
+                    //app.showNotification('Please enter login');
                 }
             });*/
 
@@ -79,13 +79,13 @@
                 getProductDescription();
                 /*if (Microsoft.Office.WebExtension.context.document instanceof OSF.DDA.ExcelWebAppDocument) {
                     getProductDescription();
-                    app.showNotification('Publish is not supported by office online.');
+                    //app.showNotification('Publish is not supported by office online.');
                     $(document).find('#saveBt').prop('disabled', true);
                 }
     
                 else (Microsoft.Office.WebExtension.context.document instanceof OSF.DDA.ExcelDocument) {
                     getProductDescription();
-                    app.showNotification('Desktop version');
+                    //app.showNotification('Desktop version');
                 }*/
                 //setHeader();
             });
@@ -97,7 +97,7 @@
                     saveJson();
                 }
                 else {
-                    app.showNotification('You can only "Publish" with Office Desktop (PC/MAC).')
+                    //app.showNotification('You can only "Publish" with Office Desktop (PC/MAC).')
                 }
             });
 
@@ -195,14 +195,13 @@
                     var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fios.html", "");
                     //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fios.html"
 
-                    //app.showNotification(navigator.userAgent);
+                    ////app.showNotification(navigator.userAgent);
                     //var child = window.open("http://www.w3schools.com/jsref/prop_nav_useragent.asp");
                     var timer = setInterval(checkChild, 500);
                 } else {
                     window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
-                    //var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fapp.html", "");
-
-                    //app.showNotification(navigator.userAgent);
+                   
+                    ////app.showNotification(navigator.userAgent);
                 }
                 function checkChild() {
                     if (localStorage.getItem("loggedIn") == 'true') {
@@ -213,7 +212,7 @@
                         document.body.style.backgroundColor = "white";
                         $("#project-page").append(projectPage);
                         loadListProjects();
-                        //app.showNotification(navigator.userAgent);
+                        ////app.showNotification(navigator.userAgent);
                     }
                 }
 
@@ -230,7 +229,7 @@
             document.body.style.backgroundColor = "white";
             $("#project-page").append(projectPage);
             loadListProjects();
-            //app.showNotification(navigator.userAgent);
+            ////app.showNotification(navigator.userAgent);
         }
     }
 
@@ -265,7 +264,7 @@
               self.close();
           })
          .fail(function (jqXHR, textStatus, errorType) {
-             //app.showNotification(textStatus + ' ' + errorType);
+             ////app.showNotification(textStatus + ' ' + errorType);
              //myWindow.close();
              //self.close();
          });
@@ -288,16 +287,16 @@
         })
           .done(function (str) {
               if (str.success) {
-                  //app.showNotification("success");
+                  ////app.showNotification("success");
                   window.location.href = "https://document.uprince.com/1.1/home/home.html"
                   localStorage.setItem("loggedIn", 'false');
                   localStorage.setItem("email", '');
                   localStorage.setItem("uId", '');
               }
-              else app.showNotification("Log out failed, please try again.");
+              //else //app.showNotification("Log out failed, please try again.");
           })
         .fail(function (jqXHR, textStatus, errorType) {
-            app.showNotification('Log out failed. Please check your internet connection and try again.')
+            ////app.showNotification('Log out failed. Please check your internet connection and try again.')
             //alert(textStatus + ' ' + errorType);
         });
     }
@@ -701,8 +700,9 @@
                   "</td><td>", tolerance, "</td><td>", method,
                   "</td><td>", skills).concat("</td></tr>"));
                 qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-
             }
+
+            localStorage.setItem("qualityCriteriaId", JSON.stringify(qualityCriteriaId));
 
             //Qualityresponsibility
             var responsibilities = "<h1>Quality Responsibilities</h1>"
@@ -774,7 +774,7 @@
             });
         })
         .error(function (jqXHR, textStatus, errorThrown) {
-            app.showNotification('fail')
+           // //app.showNotification('fail')
         });
     };
 
@@ -801,7 +801,7 @@
                    html.indexOf(">Format and Presentation") == -1 &&
                    html.indexOf(">Development Skills Required") == -1 &&
                    html.indexOf(">Quality Criteria") == -1) {
-                    app.showNotification("Please select all (ctrl+a) the text before publishing.")
+                    ////app.showNotification("Please select all (ctrl+a) the text before publishing.")
                     $(document).find('#saveBt').prop('disabled', false);
                 }
                 else {
@@ -829,7 +829,7 @@
                         },
 
                         error: function () {
-                            app.showNotification('Error');
+                            //app.showNotification('Error');
                         }
                     });
 
@@ -848,7 +848,7 @@
 
                         },
                         error: function () {
-                            app.showNotification('Error');
+                            //app.showNotification('Error');
                         }
                     });
 
@@ -867,7 +867,7 @@
 
                         },
                         error: function () {
-                            app.showNotification('Error');
+                            //app.showNotification('Error');
                         }
                     });
 
@@ -885,7 +885,7 @@
 
                         },
                         error: function () {
-                            app.showNotification('Error');
+                            //app.showNotification('Error');
                         }
                     });
 
@@ -903,13 +903,14 @@
 
                         },
                         error: function () {
-                            app.showNotification('Error');
+                            //app.showNotification('Error');
                         }
                     });
                     var qualityCriteria = extractDevSkills(html);
                     if (qualityCriteria.length == 0) {
                         $(document).find('#saveBt').prop('disabled', false);
                     }
+                    var qualityCriteriaId = JSON.parse(localStorage.getItem("qualityCriteriaId"));
                     for (var i = 0; i < qualityCriteriaId.length; i++) {
                         var urlId = host + "/api/productdescription/DeleteQualityCriteria?criteriaId=" + qualityCriteriaId[i];
                         $.ajax({
@@ -919,7 +920,7 @@
 
                             },
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         });
                     }
@@ -940,7 +941,7 @@
 
                             },
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         }).done(function (str) {
                             if (i == qualityCriteria.length) {
@@ -977,7 +978,7 @@
                          for (var i = 0; i < str.QualityCriteria.length; i++) {
                              qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
                          }
-                         app.showNotification('success')
+                         //app.showNotification('success')
                      })
                      ;
                      */
@@ -996,12 +997,12 @@
 
                         },
                         error: function () {
-                            app.showNotification('Error');
+                            //app.showNotification('Error');
                         }
                     });
 
-                    //app.showNotification(devSkills);
-                    //app.showNotification(responsibilities[0]);
+                    ////app.showNotification(devSkills);
+                    ////app.showNotification(responsibilities[0]);
                 }
 
             });
@@ -1092,7 +1093,7 @@
                 var approver = str.substring(flag3, flag4);
                 respons[2] = approver;
             } else respons[2] = '';
-            //app.showNotification(reviewer);
+            ////app.showNotification(reviewer);
             return respons;
         } else {
             respons[0] = '';
@@ -1104,7 +1105,7 @@
 
     //extract Development Skills and returns a matrix
     function extractDevSkills(str) {
-        //app.showNotification('initialized devskills')
+        ////app.showNotification('initialized devskills')
         if (str.indexOf('>Quality Skills Required') != -1) {
             var start = str.indexOf('>Quality Skills Required');
             var flag1 = str.indexOf('>Quality Skills Required');
@@ -1155,7 +1156,7 @@
     //test for completion of request
     function testForSuccess(asyncResult) {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-            //app.showNotification('Error', asyncResult.error.message);
+            ////app.showNotification('Error', asyncResult.error.message);
         }
     };
 

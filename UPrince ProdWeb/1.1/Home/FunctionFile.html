@@ -1,12 +1,11 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!--During development turn off caching
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-    <meta http-equiv="pragma" content="no-cache" />-->
+    <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
     <title></title>
@@ -29,12 +28,7 @@
         var host = 'https://uprincecoreprodapi.azurewebsites.net';
 
         function publish(event) {
-            if (Office.context.requirements.isSetSupported('HtmlCoercion')) {
-                saveJson();
-            }
-            else {
-                //app.showNotification('You can only "Publish" with Office Desktop (PC/MAC).')
-            }
+            saveJson();
             event.completed();
         }
 
@@ -42,20 +36,16 @@
             logOut()
             event.completed();
         }
+        var qualityCriteriaId;
+        var projectId;
+        var ProductDescriptionId;
+        var host = 'https://uprincecoreprodapi.azurewebsites.net';
+        var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
+        var myWindow;
+        var previous = 0;
 
-       
-        function checkChild() {
-            if (localStorage.getItem("loggedIn") == 'true') {
-                //$("#closed").append('closed');
-                clearInterval(timer);
 
-                document.getElementById("login").innerHTML = "";
-                document.body.style.backgroundColor = "white";
-                $("#project-page").append(projectPage);
-                loadListProjects();
-                //app.showNotification(navigator.userAgent);
-            }
-        }
+
 
         //perform this function on the pop-up screen
         function accessUser() {
@@ -88,7 +78,7 @@
                   self.close();
               })
              .fail(function (jqXHR, textStatus, errorType) {
-                 //app.showNotification(textStatus + ' ' + errorType);
+                 ////app.showNotification(textStatus + ' ' + errorType);
                  //myWindow.close();
                  //self.close();
              });
@@ -111,16 +101,16 @@
             })
               .done(function (str) {
                   if (str.success) {
-                      //app.showNotification("success");
+                      ////app.showNotification("success");
                       window.location.href = "https://document.uprince.com/1.1/home/home.html"
                       localStorage.setItem("loggedIn", 'false');
                       localStorage.setItem("email", '');
                       localStorage.setItem("uId", '');
                   }
-                  else app.showNotification("Log out failed, please try again.");
+                  //else //app.showNotification("Log out failed, please try again.");
               })
             .fail(function (jqXHR, textStatus, errorType) {
-                app.showNotification('Log out failed. Please check your internet connection and try again.')
+                ////app.showNotification('Log out failed. Please check your internet connection and try again.')
                 //alert(textStatus + ' ' + errorType);
             });
         }
@@ -524,8 +514,9 @@
                       "</td><td>", tolerance, "</td><td>", method,
                       "</td><td>", skills).concat("</td></tr>"));
                     qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-
                 }
+
+                localStorage.setItem("qualityCriteriaId", JSON.stringify(qualityCriteriaId));
 
                 //Qualityresponsibility
                 var responsibilities = "<h1>Quality Responsibilities</h1>"
@@ -597,7 +588,7 @@
                 });
             })
             .error(function (jqXHR, textStatus, errorThrown) {
-                app.showNotification('fail')
+                // //app.showNotification('fail')
             });
         };
 
@@ -624,7 +615,7 @@
                        html.indexOf(">Format and Presentation") == -1 &&
                        html.indexOf(">Development Skills Required") == -1 &&
                        html.indexOf(">Quality Criteria") == -1) {
-                        app.showNotification("Please select all (ctrl+a) the text before publishing.")
+                        ////app.showNotification("Please select all (ctrl+a) the text before publishing.")
                         $(document).find('#saveBt').prop('disabled', false);
                     }
                     else {
@@ -652,7 +643,7 @@
                             },
 
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         });
 
@@ -671,7 +662,7 @@
 
                             },
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         });
 
@@ -690,7 +681,7 @@
 
                             },
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         });
 
@@ -708,7 +699,7 @@
 
                             },
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         });
 
@@ -726,13 +717,31 @@
 
                             },
                             error: function () {
-                                app.showNotification('Error');
+                                //app.showNotification('Error');
                             }
                         });
+                        var responsibilities = extractResponsibilities(html);
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostQualityResponsibility",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionId": ID,
+                                "Producer": responsibilities[0],
+                                "Reviewer": responsibilities[1],
+                                "Approver": responsibilities[2]
+                            },
+                            success: function () {
+
+                            },
+                            error: function () {
+                                //app.showNotification('Error');
+                            }
+                        });
+                        
                         var qualityCriteria = extractDevSkills(html);
-                        if (qualityCriteria.length == 0) {
-                            $(document).find('#saveBt').prop('disabled', false);
-                        }
+                        var qualityCriteriaId = JSON.parse(localStorage.getItem("qualityCriteriaId"));
+
                         for (var i = 0; i < qualityCriteriaId.length; i++) {
                             var urlId = host + "/api/productdescription/DeleteQualityCriteria?criteriaId=" + qualityCriteriaId[i];
                             $.ajax({
@@ -742,7 +751,7 @@
 
                                 },
                                 error: function () {
-                                    app.showNotification('Error');
+                                    //app.showNotification('Error');
                                 }
                             });
                         }
@@ -763,7 +772,7 @@
 
                                 },
                                 error: function () {
-                                    app.showNotification('Error');
+                                    //app.showNotification('Error');
                                 }
                             }).done(function (str) {
                                 if (i == qualityCriteria.length) {
@@ -787,44 +796,11 @@
                             });
 
                         }
-                        /* $.ajax({
-                             type: 'GET',
-                             url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
-                             dataType: "json",
-                             jsonp: false,
-                             xhrFields: {
-                                 withCredentials: false
-                             }
-                         }).done(function (str) {
-                             qualityCriteriaId = [str.QualityCriteria.length];
-                             for (var i = 0; i < str.QualityCriteria.length; i++) {
-                                 qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-                             }
-                             app.showNotification('success')
-                         })
-                         ;
-                         */
-                        var responsibilities = extractResponsibilities(html);
-                        $.ajax({
-                            type: "POST",
-                            url: host + "/api/productdescription/PostQualityResponsibility",
-                            dataType: "json",
-                            data: {
-                                "ProductDescriptionId": ID,
-                                "Producer": responsibilities[0],
-                                "Reviewer": responsibilities[1],
-                                "Approver": responsibilities[2]
-                            },
-                            success: function () {
+                        
+                       
 
-                            },
-                            error: function () {
-                                app.showNotification('Error');
-                            }
-                        });
-
-                        //app.showNotification(devSkills);
-                        //app.showNotification(responsibilities[0]);
+                        ////app.showNotification(devSkills);
+                        ////app.showNotification(responsibilities[0]);
                     }
 
                 });
@@ -915,7 +891,7 @@
                     var approver = str.substring(flag3, flag4);
                     respons[2] = approver;
                 } else respons[2] = '';
-                //app.showNotification(reviewer);
+                ////app.showNotification(reviewer);
                 return respons;
             } else {
                 respons[0] = '';
@@ -927,7 +903,7 @@
 
         //extract Development Skills and returns a matrix
         function extractDevSkills(str) {
-            //app.showNotification('initialized devskills')
+            ////app.showNotification('initialized devskills')
             if (str.indexOf('>Quality Skills Required') != -1) {
                 var start = str.indexOf('>Quality Skills Required');
                 var flag1 = str.indexOf('>Quality Skills Required');
@@ -978,7 +954,7 @@
         //test for completion of request
         function testForSuccess(asyncResult) {
             if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-                //app.showNotification('Error', asyncResult.error.message);
+                ////app.showNotification('Error', asyncResult.error.message);
             }
         };
 

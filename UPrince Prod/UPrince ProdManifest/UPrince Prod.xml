@@ -14,8 +14,8 @@
   <Description DefaultValue="The easiest way to edit PRINCE2 Product Descriptions in Word"/>
 
   <!--Icon for your add-in. Used on installation screens and the add-ins dialog -->
- <IconUrl DefaultValue="https://document.uprince.com/Images/ico_uprince_32.jpg" />
- <!--Todo: Add requirement sets and remove  commenting of high res icon -->
+  <IconUrl DefaultValue="https://document.uprince.com/Images/ico_uprince_32.jpg" />
+  <!--Todo: Add requirement sets and remove  commenting of high res icon -->
   <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
           To use this property, convert this manifest to version 1.1 by adding an API set in the Activation tab of the manifest editor.-->
   <!--<HighResolutionIconUrl DefaultValue="https://i.imgur.com/MPuvMiq.png" />-->
@@ -69,7 +69,7 @@
           <!--Function file is an html page that includes the javascript where functions for ExecuteAction will be called. 
             Think of the FunctionFile as the "code behind" ExecuteFunction 
             This sample doesn't use this file, just adding the element for reference-->
-          <FunctionFile resid="UPrinceFuncUrl" />
+          <FunctionFile resid="residDesktopFuncUrl" />
 
           <!--PrimaryCommandSurface==Main Office Ribbon-->
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
@@ -106,7 +106,7 @@
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ShowTaskpane">
                     <!--Provide a url resource id for the location that will be displayed on the taskpane -->
-                    <SourceLocation resid="UPrince.WordUrl" />
+                    <SourceLocation resid="residUnitConverterUrl" />
                   </Action>
                 </Control>
                 <Control xsi:type="Button" id="Button4Id1">
@@ -128,7 +128,7 @@
                     <FunctionName>publish</FunctionName>
                   </Action>
                 </Control>
-              <Control xsi:type="Button" id="Button7Id1">
+                <Control xsi:type="Button" id="Button7Id1">
                   <!--Label for your button. resid must point to a ShortString resource -->
                   <Label resid="residLabel7" />
                   <Supertip>
@@ -164,9 +164,9 @@
         <bt:Image id="UPrince.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="UPrinceFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
+        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
         </bt:Url>
-        <bt:Url id="UPrince.WordUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
+        <bt:Url id="residUnitConverterUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
         <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
@@ -202,7 +202,7 @@
         <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the HOME tab on the Ribbon then click Login">
+        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

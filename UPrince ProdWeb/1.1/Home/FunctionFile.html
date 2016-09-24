@@ -44,6 +44,56 @@
         }
 
        
+        function checkChild() {
+            if (localStorage.getItem("loggedIn") == 'true') {
+                //$("#closed").append('closed');
+                clearInterval(timer);
+
+                document.getElementById("login").innerHTML = "";
+                document.body.style.backgroundColor = "white";
+                $("#project-page").append(projectPage);
+                loadListProjects();
+                //app.showNotification(navigator.userAgent);
+            }
+        }
+
+        //perform this function on the pop-up screen
+        function accessUser() {
+            //var code = $_GET('access_token');
+            var code = getToken();
+            localStorage.setItem('accessToken', code)
+            $("#status").append('');
+            var url = "https://plaza.uprince.com/api/system/connect"
+            var authorization = "Bearer " + code;
+
+            //JQuery
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: "json",
+                //contentType: "application/json; charset=utf-8",
+                headers: { "Authorization": authorization }
+            })
+              .done(function (str) {
+                  document.getElementById("login").innerHTML = "";
+                  document.body.style.backgroundColor = "white";
+                  var email = str.user.mail;
+                  localStorage.setItem("email", email);
+                  //window.location.href = "project-page.html"
+                  $("#project-page").append(projectPage);
+                  loadListProjects("");
+                  var userId = str.user.uid;
+                  localStorage.setItem("uId", userId);
+                  localStorage.setItem('loggedIn', 'true')
+                  self.close();
+              })
+             .fail(function (jqXHR, textStatus, errorType) {
+                 //app.showNotification(textStatus + ' ' + errorType);
+                 //myWindow.close();
+                 //self.close();
+             });
+        };
+
         function logOut() {
             var code = localStorage.getItem('accessToken');
             var uId = localStorage.getItem('uId');
@@ -67,10 +117,10 @@
                       localStorage.setItem("email", '');
                       localStorage.setItem("uId", '');
                   }
-                 // else app.showNotification("Log out failed, please try again.");
+                  else app.showNotification("Log out failed, please try again.");
               })
             .fail(function (jqXHR, textStatus, errorType) {
-                //app.showNotification('Log out failed. Please check your internet connection and try again.')
+                app.showNotification('Log out failed. Please check your internet connection and try again.')
                 //alert(textStatus + ' ' + errorType);
             });
         }
@@ -84,7 +134,7 @@
                 // Queue a commmand to load the text property for all of the sections.
                 context.load(sections, 'text');
 
-                // Synchronize the document state by executing the queued commands,
+                // Synchronize the document state by executing the queued commands, 
                 // and return a promise to indicate task completion.
                 return context.sync()
                     .then(function () {
@@ -97,7 +147,7 @@
                         var footerSection = sections.items[0].getFooter('primary');
                         footerSection.clear();
 
-                        // Synchronize the document state by executing the queued commands,
+                        // Synchronize the document state by executing the queued commands, 
                         // and return a promise to indicate task completion.
                         return context.sync().then(function () {
                             showMessage('Success! Removed Header and Footer.');
@@ -113,7 +163,7 @@
                 // Queue a commmand to load the text property for all of the sections.
                 context.load(sections, 'text');
 
-                // Synchronize the document state by executing the queued commands,
+                // Synchronize the document state by executing the queued commands, 
                 // and return a promise to indicate task completion.
                 return context.sync().then(function () {
 
@@ -125,7 +175,7 @@
                     var footerSection = sections.items[0].getFooter('primary');
                     footerSection.insertText('All rights reserved.', Word.InsertLocation.end);
 
-                    // Synchronize the document state by executing the queued commands,
+                    // Synchronize the document state by executing the queued commands, 
                     // and return a promise to indicate task completion.
                     return context.sync().then(function () {
                         //showMessage('Success! Added Header and Footer. Select the arrow button to move on.');
@@ -206,13 +256,13 @@
             //var projectId = '22050'; //to test just this page
             getProductDescriptionList("");
             /*var urlProject = host + '/api/ProductDescription/GetAllProductDescription?projectId=' + projectId;
-
+    
             $.ajax({
                 type: 'GET',
                 url: urlProject,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-
+    
             })
               .done(function (str) {
                   organizeList(str);
@@ -456,7 +506,7 @@
                 qualityCriteriaId = [str.QualityCriteria.length];
                 for (var i = 0; i < str.QualityCriteria.length; i++) {
                     var criteria; var tolerance; var method; var skills;
-                    //programm if functions
+                    //programm if functions 
                     if (str.QualityCriteria[i].Criteria == null) {
                         criteria = "";
                     } else criteria = str.QualityCriteria[i].Criteria;
@@ -518,240 +568,271 @@
                   .append(layout, header, purpose, purposeJson, composition, compositionJson, derivation,
                     derivationJson, format, formatJson, devSkills, devSkillsJson, qualityCriteria, tableQC.concat("</table>"), responsibilities, tableResponsibility);
                 // insert HTML into Word document
-                Office.context.document.setSelectedDataAsync(div.html(), {
-                    coercionType: "html"
-                }, testForSuccess);
+                /* Office.context.document.setSelectedDataAsync(div.html(), {
+                     coercionType: "html"
+                 }, testForSuccess);*/
                 /*var div = $("<div>")
                        .append(str.Title);
                 Office.context.document.setSelectedDataAsync(div.html(), { coercionType: "html" }, testForSuccess)*/
+                // Run a batch operation against the Word object model.
+                Word.run(function (context) {
+
+                    // Create a proxy object for the document body.
+                    var body = context.document.body;
+
+                    // Queue a commmand to insert HTML in to the beginning of the body.
+                    body.insertHtml(div.html(), Word.InsertLocation.replace);
+
+                    // Synchronize the document state by executing the queued commands,
+                    // and return a promise to indicate task completion.
+                    return context.sync().then(function () {
+                        console.log('HTML added to the beginning of the document body.');
+                    });
+                })
+                .catch(function (error) {
+                    console.log('Error: ' + JSON.stringify(error));
+                    if (error instanceof OfficeExtension.Error) {
+                        console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+                    }
+                });
             })
             .error(function (jqXHR, textStatus, errorThrown) {
-                //app.showNotification('fail')
+                app.showNotification('fail')
             });
         };
 
         //adapt the JSON file with the latest info
         function saveJson() {
-            Office.context.document.getSelectedDataAsync(Office.CoercionType.Html,
-              function (result) {
-                  if (result.status === Office.AsyncResultStatus.Succeeded) {
-                      //$(document).find('#saveBt').prop('disabled', true);
-                      var ID = localStorage.getItem('productDescriptionId');
-                      var html = result.value;
-                      html = html.replace(/\s\s+/g, ' ');
-                      if (html.indexOf(">Puprose") == -1 &&
-                         html.indexOf(">Composition") == -1 &&
-                         html.indexOf(">Derivation") == -1 &&
-                         html.indexOf(">Format and Presentation") == -1 &&
-                         html.indexOf(">Development Skills Required") == -1 &&
-                         html.indexOf(">Quality Criteria") == -1) {
-                          //app.showNotification("Please select all (ctrl+a) the text before publishing.")
-                          //$(document).find('#saveBt').prop('disabled', false);
-                      }
-                      else {
-                          var border = html.indexOf("<div style='bord")
-                          while (border !== -1) {
-                              var endBorder = html.indexOf(">", border);
-                              html = html.substring(0, border) + html.substring(endBorder + 1);
-                              border = html.indexOf("<div style='bord");
-                          }
-                          //still has to clean out, the differents vars, was for testing
-                          var title = extractTitle(html);
-                          var purpose = extractChapter(html, ">Purpose", ">Composition");
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostRTValue",
-                              dataType: "json",
-                              data: {
-                                  "ProductDescriptionIndex": "1",
-                                  "ProductDescriptionId": ID,
-                                  "ProductDescriptionProperty": purpose
-                              },
-                              success: function () {
+            Word.run(function (ctx) {
+
+                // Create a proxy object for the document body.
+                var body = ctx.document.body;
+
+                // Queue a commmand to get the HTML contents of the body.
+                var bodyHTML = body.getHtml();
+
+                // Synchronize the document state by executing the queued-up commands, 
+                // and return a promise to indicate task completion.
+                return ctx.sync().then(function () {
+                    var html = bodyHTML.value;
+                    $(document).find('#saveBt').prop('disabled', true);
+                    var ID = localStorage.getItem('productDescriptionId');
+                    html = html.replace(/\s\s+/g, ' ');
+                    if (html.indexOf(">Puprose") == -1 &&
+                       html.indexOf(">Composition") == -1 &&
+                       html.indexOf(">Derivation") == -1 &&
+                       html.indexOf(">Format and Presentation") == -1 &&
+                       html.indexOf(">Development Skills Required") == -1 &&
+                       html.indexOf(">Quality Criteria") == -1) {
+                        app.showNotification("Please select all (ctrl+a) the text before publishing.")
+                        $(document).find('#saveBt').prop('disabled', false);
+                    }
+                    else {
+                        var border = html.indexOf("<div style='bord")
+                        while (border !== -1) {
+                            var endBorder = html.indexOf(">", border);
+                            html = html.substring(0, border) + html.substring(endBorder + 1);
+                            border = html.indexOf("<div style='bord");
+                        }
+                        //still has to clean out, the differents vars, was for testing
+                        var title = extractTitle(html);
+                        var purpose = extractChapter(html, ">Purpose", ">Composition");
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostRTValue",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionIndex": "1",
+                                "ProductDescriptionId": ID,
+                                "ProductDescriptionProperty": purpose
+                            },
+                            success: function () {
 
 
-                              },
+                            },
 
-                              error: function () {
-                                 // app.showNotification('Error');
-                              }
-                          });
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
 
-                          var composition = extractChapter(html, ">Composition", ">Derivation");
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostRTValue",
-                              dataType: "json",
-                              data: {
-                                  "ProductDescriptionIndex": "2",
-                                  "ProductDescriptionId": ID,
-                                  "ProductDescriptionProperty": composition
-                              },
-                              success: function () {
-
-
-                              },
-                              error: function () {
-                                 // app.showNotification('Error');
-                              }
-                          });
-
-                          var derivation = extractChapter(html, ">Derivation", ">Format and Presentation");
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostRTValue",
-                              dataType: "json",
-                              data: {
-                                  "ProductDescriptionIndex": "3",
-                                  "ProductDescriptionId": ID,
-                                  "ProductDescriptionProperty": derivation
-                              },
-                              success: function () {
+                        var composition = extractChapter(html, ">Composition", ">Derivation");
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostRTValue",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionIndex": "2",
+                                "ProductDescriptionId": ID,
+                                "ProductDescriptionProperty": composition
+                            },
+                            success: function () {
 
 
-                              },
-                              error: function () {
-                                  //app.showNotification('Error');
-                              }
-                          });
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
 
-                          var formatPresentation = extractChapter(html, ">Format and Presentation", ">Development Skills Required");
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostRTValue",
-                              dataType: "json",
-                              data: {
-                                  "ProductDescriptionIndex": "4",
-                                  "ProductDescriptionId": ID,
-                                  "ProductDescriptionProperty": formatPresentation
-                              },
-                              success: function () {
+                        var derivation = extractChapter(html, ">Derivation", ">Format and Presentation");
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostRTValue",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionIndex": "3",
+                                "ProductDescriptionId": ID,
+                                "ProductDescriptionProperty": derivation
+                            },
+                            success: function () {
 
-                              },
-                              error: function () {
-                                  //app.showNotification('Error');
-                              }
-                          });
 
-                          var devSkills = extractChapter(html, ">Development Skills Required", ">Quality Criteria");
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostRTValue",
-                              dataType: "json",
-                              data: {
-                                  "ProductDescriptionIndex": "5",
-                                  "ProductDescriptionId": ID,
-                                  "ProductDescriptionProperty": devSkills
-                              },
-                              success: function () {
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
 
-                              },
-                              error: function () {
-                                  //app.showNotification('Error');
-                              }
-                          });
-                          var qualityCriteria = extractDevSkills(html);
-                          if (qualityCriteria.length == 0) {
-                              $(document).find('#saveBt').prop('disabled', false);
-                          }
-                          for (var i = 0; i < qualityCriteriaId.length; i++) {
-                              var urlId = host + "/api/productdescription/DeleteQualityCriteria?criteriaId=" + qualityCriteriaId[i];
-                              $.ajax({
-                                  type: "DELETE",
-                                  url: urlId,
-                                  success: function () {
+                        var formatPresentation = extractChapter(html, ">Format and Presentation", ">Development Skills Required");
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostRTValue",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionIndex": "4",
+                                "ProductDescriptionId": ID,
+                                "ProductDescriptionProperty": formatPresentation
+                            },
+                            success: function () {
 
-                                  },
-                                  error: function () {
-                                   //   app.showNotification('Error');
-                                  }
-                              });
-                          }
-                          for (var i = 0; i < qualityCriteria.length; i++) {
-                              $.ajax({
-                                  type: "POST",
-                                  url: host + "/api/productdescription/PostQualityCriteria",
-                                  dataType: "json",
-                                  data: {
-                                      "QualityCriteriaId": null,
-                                      "ProductDescriptionId": ID,
-                                      "Criteria": qualityCriteria[i][0],
-                                      "Tolerance": qualityCriteria[i][1],
-                                      "Method": qualityCriteria[i][2],
-                                      "Skills": qualityCriteria[i][3]
-                                  },
-                                  success: function () {
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
 
-                                  },
-                                  error: function () {
-                                    //  app.showNotification('Error');
-                                  }
-                              }).done(function (str) {
-                                  if (i == qualityCriteria.length) {
-                                      $.ajax({
-                                          type: 'GET',
-                                          url: host + "/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
-                                          dataType: "json",
-                                          jsonp: false,
-                                          xhrFields: {
-                                              withCredentials: false
-                                          }
-                                      }).done(function (str) {
-                                          qualityCriteriaId = [str.QualityCriteria.length];
-                                          for (var i = 0; i < str.QualityCriteria.length; i++) {
-                                              qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-                                          }
-                                          $(document).find('#saveBt').prop('disabled', false);
-                                      })
-                                      ;
-                                  }
-                              });
+                        var devSkills = extractChapter(html, ">Development Skills Required", ">Quality Criteria");
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostRTValue",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionIndex": "5",
+                                "ProductDescriptionId": ID,
+                                "ProductDescriptionProperty": devSkills
+                            },
+                            success: function () {
 
-                          }
-                          /* $.ajax({
-                               type: 'GET',
-                               url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
-                               dataType: "json",
-                               jsonp: false,
-                               xhrFields: {
-                                   withCredentials: false
-                               }
-                           }).done(function (str) {
-                               qualityCriteriaId = [str.QualityCriteria.length];
-                               for (var i = 0; i < str.QualityCriteria.length; i++) {
-                                   qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-                               }
-                               app.showNotification('success')
-                           })
-                           ;
-                           */
-                          var responsibilities = extractResponsibilities(html);
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostQualityResponsibility",
-                              dataType: "json",
-                              data: {
-                                  "ProductDescriptionId": ID,
-                                  "Producer": responsibilities[0],
-                                  "Reviewer": responsibilities[1],
-                                  "Approver": responsibilities[2]
-                              },
-                              success: function () {
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
+                        var qualityCriteria = extractDevSkills(html);
+                        if (qualityCriteria.length == 0) {
+                            $(document).find('#saveBt').prop('disabled', false);
+                        }
+                        for (var i = 0; i < qualityCriteriaId.length; i++) {
+                            var urlId = host + "/api/productdescription/DeleteQualityCriteria?criteriaId=" + qualityCriteriaId[i];
+                            $.ajax({
+                                type: "DELETE",
+                                url: urlId,
+                                success: function () {
 
-                              },
-                              error: function () {
-                                 // app.showNotification('Error');
-                              }
-                          });
+                                },
+                                error: function () {
+                                    app.showNotification('Error');
+                                }
+                            });
+                        }
+                        for (var i = 0; i < qualityCriteria.length; i++) {
+                            $.ajax({
+                                type: "POST",
+                                url: host + "/api/productdescription/PostQualityCriteria",
+                                dataType: "json",
+                                data: {
+                                    "QualityCriteriaId": null,
+                                    "ProductDescriptionId": ID,
+                                    "Criteria": qualityCriteria[i][0],
+                                    "Tolerance": qualityCriteria[i][1],
+                                    "Method": qualityCriteria[i][2],
+                                    "Skills": qualityCriteria[i][3]
+                                },
+                                success: function () {
 
-                          //app.showNotification(devSkills);
-                          //app.showNotification(responsibilities[0]);
-                      }
-                  } else {
-                     //  app.showNotification('Error:', result.error.message);
-                  }
-              }
-            )
+                                },
+                                error: function () {
+                                    app.showNotification('Error');
+                                }
+                            }).done(function (str) {
+                                if (i == qualityCriteria.length) {
+                                    $.ajax({
+                                        type: 'GET',
+                                        url: host + "/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
+                                        dataType: "json",
+                                        jsonp: false,
+                                        xhrFields: {
+                                            withCredentials: false
+                                        }
+                                    }).done(function (str) {
+                                        qualityCriteriaId = [str.QualityCriteria.length];
+                                        for (var i = 0; i < str.QualityCriteria.length; i++) {
+                                            qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
+                                        }
+                                        $(document).find('#saveBt').prop('disabled', false);
+                                    })
+                                    ;
+                                }
+                            });
+
+                        }
+                        /* $.ajax({
+                             type: 'GET',
+                             url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
+                             dataType: "json",
+                             jsonp: false,
+                             xhrFields: {
+                                 withCredentials: false
+                             }
+                         }).done(function (str) {
+                             qualityCriteriaId = [str.QualityCriteria.length];
+                             for (var i = 0; i < str.QualityCriteria.length; i++) {
+                                 qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
+                             }
+                             app.showNotification('success')
+                         })
+                         ;
+                         */
+                        var responsibilities = extractResponsibilities(html);
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostQualityResponsibility",
+                            dataType: "json",
+                            data: {
+                                "ProductDescriptionId": ID,
+                                "Producer": responsibilities[0],
+                                "Reviewer": responsibilities[1],
+                                "Approver": responsibilities[2]
+                            },
+                            success: function () {
+
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
+
+                        //app.showNotification(devSkills);
+                        //app.showNotification(responsibilities[0]);
+                    }
+
+                });
+            })
+    .catch(function (error) {
+        console.log("Error: " + JSON.stringify(error));
+    });
+
         };
 
         //extract title from the document
@@ -781,7 +862,7 @@
             }
         };
 
-        //extract responsibilities and returns a list
+        //extract responsibilities and returns a list 
         function extractResponsibilities(str) {
             var respons = [3];
             // in some lay-outs they use 3 white spaces

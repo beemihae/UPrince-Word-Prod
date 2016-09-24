@@ -283,7 +283,7 @@
             url: url,
             dataType: "json",
             contentType: "application/x-www-form-urlencoded",
-            headers: { "Authorization": authorization },    
+            headers: { "Authorization": authorization },
             data: { uid: uId }
         })
           .done(function (str) {
@@ -745,9 +745,9 @@
               .append(layout, header, purpose, purposeJson, composition, compositionJson, derivation,
                 derivationJson, format, formatJson, devSkills, devSkillsJson, qualityCriteria, tableQC.concat("</table>"), responsibilities, tableResponsibility);
             // insert HTML into Word document
-           /* Office.context.document.setSelectedDataAsync(div.html(), {
-                coercionType: "html"
-            }, testForSuccess);*/
+            /* Office.context.document.setSelectedDataAsync(div.html(), {
+                 coercionType: "html"
+             }, testForSuccess);*/
             /*var div = $("<div>")
                    .append(str.Title);
             Office.context.document.setSelectedDataAsync(div.html(), { coercionType: "html" }, testForSuccess)*/
@@ -780,226 +780,236 @@
 
     //adapt the JSON file with the latest info
     function saveJson() {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.Html,
-          function (result) {
-              if (result.status === Office.AsyncResultStatus.Succeeded) {
-                  $(document).find('#saveBt').prop('disabled', true);
-                  var ID = localStorage.getItem('productDescriptionId');
-                  var html = result.value;
-                  html = html.replace(/\s\s+/g, ' ');
-                  if (html.indexOf(">Puprose") == -1 &&
-                     html.indexOf(">Composition") == -1 &&
-                     html.indexOf(">Derivation") == -1 &&
-                     html.indexOf(">Format and Presentation") == -1 &&
-                     html.indexOf(">Development Skills Required") == -1 &&
-                     html.indexOf(">Quality Criteria") == -1) {
-                      app.showNotification("Please select all (ctrl+a) the text before publishing.")
-                      $(document).find('#saveBt').prop('disabled', false);
-                  }
-                  else {
-                      var border = html.indexOf("<div style='bord")
-                      while (border !== -1) {
-                          var endBorder = html.indexOf(">", border);
-                          html = html.substring(0, border) + html.substring(endBorder + 1);
-                          border = html.indexOf("<div style='bord");
-                      }
-                      //still has to clean out, the differents vars, was for testing
-                      var title = extractTitle(html);
-                      var purpose = extractChapter(html, ">Purpose", ">Composition");
-                      $.ajax({
-                          type: "POST",
-                          url: host + "/api/productdescription/PostRTValue",
-                          dataType: "json",
-                          data: {
-                              "ProductDescriptionIndex": "1",
-                              "ProductDescriptionId": ID,
-                              "ProductDescriptionProperty": purpose
-                          },
-                          success: function () {
+        Word.run(function (ctx) {
+
+            // Create a proxy object for the document body.
+            var body = ctx.document.body;
+
+            // Queue a commmand to get the HTML contents of the body.
+            var bodyHTML = body.getHtml();
+
+            // Synchronize the document state by executing the queued-up commands, 
+            // and return a promise to indicate task completion.
+            return ctx.sync().then(function () {
+                var html = bodyHTML.value;
+                $(document).find('#saveBt').prop('disabled', true);
+                var ID = localStorage.getItem('productDescriptionId');
+                html = html.replace(/\s\s+/g, ' ');
+                if (html.indexOf(">Puprose") == -1 &&
+                   html.indexOf(">Composition") == -1 &&
+                   html.indexOf(">Derivation") == -1 &&
+                   html.indexOf(">Format and Presentation") == -1 &&
+                   html.indexOf(">Development Skills Required") == -1 &&
+                   html.indexOf(">Quality Criteria") == -1) {
+                    app.showNotification("Please select all (ctrl+a) the text before publishing.")
+                    $(document).find('#saveBt').prop('disabled', false);
+                }
+                else {
+                    var border = html.indexOf("<div style='bord")
+                    while (border !== -1) {
+                        var endBorder = html.indexOf(">", border);
+                        html = html.substring(0, border) + html.substring(endBorder + 1);
+                        border = html.indexOf("<div style='bord");
+                    }
+                    //still has to clean out, the differents vars, was for testing
+                    var title = extractTitle(html);
+                    var purpose = extractChapter(html, ">Purpose", ">Composition");
+                    $.ajax({
+                        type: "POST",
+                        url: host + "/api/productdescription/PostRTValue",
+                        dataType: "json",
+                        data: {
+                            "ProductDescriptionIndex": "1",
+                            "ProductDescriptionId": ID,
+                            "ProductDescriptionProperty": purpose
+                        },
+                        success: function () {
 
 
-                          },
+                        },
 
-                          error: function () {
-                              app.showNotification('Error');
-                          }
-                      });
+                        error: function () {
+                            app.showNotification('Error');
+                        }
+                    });
 
-                      var composition = extractChapter(html, ">Composition", ">Derivation");
-                      $.ajax({
-                          type: "POST",
-                          url: host + "/api/productdescription/PostRTValue",
-                          dataType: "json",
-                          data: {
-                              "ProductDescriptionIndex": "2",
-                              "ProductDescriptionId": ID,
-                              "ProductDescriptionProperty": composition
-                          },
-                          success: function () {
-
-
-                          },
-                          error: function () {
-                              app.showNotification('Error');
-                          }
-                      });
-
-                      var derivation = extractChapter(html, ">Derivation", ">Format and Presentation");
-                      $.ajax({
-                          type: "POST",
-                          url: host + "/api/productdescription/PostRTValue",
-                          dataType: "json",
-                          data: {
-                              "ProductDescriptionIndex": "3",
-                              "ProductDescriptionId": ID,
-                              "ProductDescriptionProperty": derivation
-                          },
-                          success: function () {
+                    var composition = extractChapter(html, ">Composition", ">Derivation");
+                    $.ajax({
+                        type: "POST",
+                        url: host + "/api/productdescription/PostRTValue",
+                        dataType: "json",
+                        data: {
+                            "ProductDescriptionIndex": "2",
+                            "ProductDescriptionId": ID,
+                            "ProductDescriptionProperty": composition
+                        },
+                        success: function () {
 
 
-                          },
-                          error: function () {
-                              app.showNotification('Error');
-                          }
-                      });
+                        },
+                        error: function () {
+                            app.showNotification('Error');
+                        }
+                    });
 
-                      var formatPresentation = extractChapter(html, ">Format and Presentation", ">Development Skills Required");
-                      $.ajax({
-                          type: "POST",
-                          url: host + "/api/productdescription/PostRTValue",
-                          dataType: "json",
-                          data: {
-                              "ProductDescriptionIndex": "4",
-                              "ProductDescriptionId": ID,
-                              "ProductDescriptionProperty": formatPresentation
-                          },
-                          success: function () {
+                    var derivation = extractChapter(html, ">Derivation", ">Format and Presentation");
+                    $.ajax({
+                        type: "POST",
+                        url: host + "/api/productdescription/PostRTValue",
+                        dataType: "json",
+                        data: {
+                            "ProductDescriptionIndex": "3",
+                            "ProductDescriptionId": ID,
+                            "ProductDescriptionProperty": derivation
+                        },
+                        success: function () {
 
-                          },
-                          error: function () {
-                              app.showNotification('Error');
-                          }
-                      });
 
-                      var devSkills = extractChapter(html, ">Development Skills Required", ">Quality Criteria");
-                      $.ajax({
-                          type: "POST",
-                          url: host + "/api/productdescription/PostRTValue",
-                          dataType: "json",
-                          data: {
-                              "ProductDescriptionIndex": "5",
-                              "ProductDescriptionId": ID,
-                              "ProductDescriptionProperty": devSkills
-                          },
-                          success: function () {
+                        },
+                        error: function () {
+                            app.showNotification('Error');
+                        }
+                    });
 
-                          },
-                          error: function () {
-                              app.showNotification('Error');
-                          }
-                      });
-                      var qualityCriteria = extractDevSkills(html);
-                      if (qualityCriteria.length == 0) {
-                          $(document).find('#saveBt').prop('disabled', false);
-                      }
-                      for (var i = 0; i < qualityCriteriaId.length; i++) {
-                          var urlId = host + "/api/productdescription/DeleteQualityCriteria?criteriaId=" + qualityCriteriaId[i];
-                          $.ajax({
-                              type: "DELETE",
-                              url: urlId,
-                              success: function () {
+                    var formatPresentation = extractChapter(html, ">Format and Presentation", ">Development Skills Required");
+                    $.ajax({
+                        type: "POST",
+                        url: host + "/api/productdescription/PostRTValue",
+                        dataType: "json",
+                        data: {
+                            "ProductDescriptionIndex": "4",
+                            "ProductDescriptionId": ID,
+                            "ProductDescriptionProperty": formatPresentation
+                        },
+                        success: function () {
 
-                              },
-                              error: function () {
-                                  app.showNotification('Error');
-                              }
-                          });
-                      }
-                      for (var i = 0; i < qualityCriteria.length; i++) {
-                          $.ajax({
-                              type: "POST",
-                              url: host + "/api/productdescription/PostQualityCriteria",
-                              dataType: "json",
-                              data: {
-                                  "QualityCriteriaId": null,
-                                  "ProductDescriptionId": ID,
-                                  "Criteria": qualityCriteria[i][0],
-                                  "Tolerance": qualityCriteria[i][1],
-                                  "Method": qualityCriteria[i][2],
-                                  "Skills": qualityCriteria[i][3]
-                              },
-                              success: function () {
+                        },
+                        error: function () {
+                            app.showNotification('Error');
+                        }
+                    });
 
-                              },
-                              error: function () {
-                                  app.showNotification('Error');
-                              }
-                          }).done(function (str) {
-                              if (i == qualityCriteria.length) {
-                                  $.ajax({
-                                      type: 'GET',
-                                      url: host + "/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
-                                      dataType: "json",
-                                      jsonp: false,
-                                      xhrFields: {
-                                          withCredentials: false
-                                      }
-                                  }).done(function (str) {
-                                      qualityCriteriaId = [str.QualityCriteria.length];
-                                      for (var i = 0; i < str.QualityCriteria.length; i++) {
-                                          qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-                                      }
-                                      $(document).find('#saveBt').prop('disabled', false);
-                                  })
-                                  ;
-                              }
-                          });
+                    var devSkills = extractChapter(html, ">Development Skills Required", ">Quality Criteria");
+                    $.ajax({
+                        type: "POST",
+                        url: host + "/api/productdescription/PostRTValue",
+                        dataType: "json",
+                        data: {
+                            "ProductDescriptionIndex": "5",
+                            "ProductDescriptionId": ID,
+                            "ProductDescriptionProperty": devSkills
+                        },
+                        success: function () {
 
-                      }
-                      /* $.ajax({
-                           type: 'GET',
-                           url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
-                           dataType: "json",
-                           jsonp: false,
-                           xhrFields: {
-                               withCredentials: false
-                           }
-                       }).done(function (str) {
-                           qualityCriteriaId = [str.QualityCriteria.length];
-                           for (var i = 0; i < str.QualityCriteria.length; i++) {
-                               qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
-                           }
-                           app.showNotification('success')
-                       })
-                       ;
-                       */
-                      var responsibilities = extractResponsibilities(html);
-                      $.ajax({
-                          type: "POST",
-                          url: host + "/api/productdescription/PostQualityResponsibility",
-                          dataType: "json",
-                          data: {
-                              "ProductDescriptionId": ID,
-                              "Producer": responsibilities[0],
-                              "Reviewer": responsibilities[1],
-                              "Approver": responsibilities[2]
-                          },
-                          success: function () {
+                        },
+                        error: function () {
+                            app.showNotification('Error');
+                        }
+                    });
+                    var qualityCriteria = extractDevSkills(html);
+                    if (qualityCriteria.length == 0) {
+                        $(document).find('#saveBt').prop('disabled', false);
+                    }
+                    for (var i = 0; i < qualityCriteriaId.length; i++) {
+                        var urlId = host + "/api/productdescription/DeleteQualityCriteria?criteriaId=" + qualityCriteriaId[i];
+                        $.ajax({
+                            type: "DELETE",
+                            url: urlId,
+                            success: function () {
 
-                          },
-                          error: function () {
-                              app.showNotification('Error');
-                          }
-                      });
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        });
+                    }
+                    for (var i = 0; i < qualityCriteria.length; i++) {
+                        $.ajax({
+                            type: "POST",
+                            url: host + "/api/productdescription/PostQualityCriteria",
+                            dataType: "json",
+                            data: {
+                                "QualityCriteriaId": null,
+                                "ProductDescriptionId": ID,
+                                "Criteria": qualityCriteria[i][0],
+                                "Tolerance": qualityCriteria[i][1],
+                                "Method": qualityCriteria[i][2],
+                                "Skills": qualityCriteria[i][3]
+                            },
+                            success: function () {
 
-                      //app.showNotification(devSkills);
-                      //app.showNotification(responsibilities[0]);
-                  }
-              } else {
-                  app.showNotification('Error:', result.error.message);
-              }
-          }
-        )
+                            },
+                            error: function () {
+                                app.showNotification('Error');
+                            }
+                        }).done(function (str) {
+                            if (i == qualityCriteria.length) {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: host + "/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
+                                    dataType: "json",
+                                    jsonp: false,
+                                    xhrFields: {
+                                        withCredentials: false
+                                    }
+                                }).done(function (str) {
+                                    qualityCriteriaId = [str.QualityCriteria.length];
+                                    for (var i = 0; i < str.QualityCriteria.length; i++) {
+                                        qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
+                                    }
+                                    $(document).find('#saveBt').prop('disabled', false);
+                                })
+                                ;
+                            }
+                        });
+
+                    }
+                    /* $.ajax({
+                         type: 'GET',
+                         url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
+                         dataType: "json",
+                         jsonp: false,
+                         xhrFields: {
+                             withCredentials: false
+                         }
+                     }).done(function (str) {
+                         qualityCriteriaId = [str.QualityCriteria.length];
+                         for (var i = 0; i < str.QualityCriteria.length; i++) {
+                             qualityCriteriaId[i] = str.QualityCriteria[i].QualityCriteriaId;
+                         }
+                         app.showNotification('success')
+                     })
+                     ;
+                     */
+                    var responsibilities = extractResponsibilities(html);
+                    $.ajax({
+                        type: "POST",
+                        url: host + "/api/productdescription/PostQualityResponsibility",
+                        dataType: "json",
+                        data: {
+                            "ProductDescriptionId": ID,
+                            "Producer": responsibilities[0],
+                            "Reviewer": responsibilities[1],
+                            "Approver": responsibilities[2]
+                        },
+                        success: function () {
+
+                        },
+                        error: function () {
+                            app.showNotification('Error');
+                        }
+                    });
+
+                    //app.showNotification(devSkills);
+                    //app.showNotification(responsibilities[0]);
+                }
+
+            });
+        })
+.catch(function (error) {
+    console.log("Error: " + JSON.stringify(error));
+});
+
     };
 
     //extract title from the document

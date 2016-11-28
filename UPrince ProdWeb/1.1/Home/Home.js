@@ -339,11 +339,9 @@
                     var timer = setInterval(checkChild, 500);
                 } else {
                     //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
-                    //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprince-word.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
+                    window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fpmstudioofficedev.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
 
-                    ////app.showNotification(navigator.userAgent);
-                    //loadListProjects('');
-                    dummyLogin();
+                    //dummyLogin();
                 }
 
             });
@@ -419,7 +417,7 @@
             if (str.success) {
                 ////app.showNotification("success");
                 //window.location.href = "https://document.uprince.com/1.1/home/home.html"
-                window.location.href = 'https://localhost:44301/1.1/home/home.html';
+                window.location.href = 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html';
 
                 localStorage.setItem("loggedIn", 'false');
                 localStorage.setItem("email", '');

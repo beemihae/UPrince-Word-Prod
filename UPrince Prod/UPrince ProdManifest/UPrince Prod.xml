@@ -14,14 +14,14 @@
   <Description DefaultValue="The easiest way to edit PRINCE2 Product Descriptions in Word"/>
 
   <!--Icon for your add-in. Used on installation screens and the add-ins dialog -->
-  <IconUrl DefaultValue="https://localhost:44301/Images/ico_uprince_32.jpg" />
+  <IconUrl DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/ico_uprince_32.jpg" />
   <AppDomains>
     <AppDomain>https://document.uprince.com</AppDomain>
     <AppDomain>https://plaza.uprince.com/oauth2/authorize</AppDomain>
     <AppDomain>https://plaza.uprince.com/user/login</AppDomain>
     <AppDomain>https://www.linkedin.com/uas/oauth/authorize</AppDomain>
     <AppDomain>https://uprince-word.azurewebsites.net</AppDomain>
-    <AppDomain>https://localhost:44301</AppDomain>
+    <AppDomain>https://pmstudioofficedev.azurewebsites.net</AppDomain>
   </AppDomains>
   <!--Todo: Add requirement sets and remove  commenting of high res icon -->
   <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
@@ -37,7 +37,7 @@
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:44301/1.1/Home/Home.html" />
+    <SourceLocation DefaultValue="https://pmstudioofficedev.azurewebsites.net/1.1/Home/Home.html" />
   </DefaultSettings>
   <!--EndTaskpaneMode integration -->
 

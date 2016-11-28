@@ -3,25 +3,23 @@
   <!-- BeginBasicSettings: Add-in metadata, used for all versions of Office unless override provided -->
 
   <!--IMPORTANT! Id must be unique for your add-in, if you clone this manifest ensure that you change this id to your own GUID -->
-  <Id>b71f5320-e754-42b5-a9b2-4a176b666bfe</Id>
+  <Id>ed757a00-4e53-44c5-9711-946e0ed1b766</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change -->
-  <Version>3.0.0.0</Version>
-  <ProviderName>UPrince bvbva</ProviderName>
+  <Version>4.0.0.0</Version>
+  <ProviderName>PMStudio Online</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various placed of the Office UI such as the add-ins dialog -->
-  <DisplayName DefaultValue="UPrince: Manage PRINCE2 Products" />
+  <DisplayName DefaultValue="PMStudio Online: Manage PRINCE2 Products" />
   <Description DefaultValue="The easiest way to edit PRINCE2 Product Descriptions in Word"/>
 
   <!--Icon for your add-in. Used on installation screens and the add-ins dialog -->
   <IconUrl DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/ico_uprince_32.jpg" />
   <AppDomains>
-    <AppDomain>https://document.uprince.com</AppDomain>
+    <AppDomain>https://pmstudioofficedev.azurewebsites.net</AppDomain>
     <AppDomain>https://plaza.uprince.com/oauth2/authorize</AppDomain>
     <AppDomain>https://plaza.uprince.com/user/login</AppDomain>
     <AppDomain>https://www.linkedin.com/uas/oauth/authorize</AppDomain>
-    <AppDomain>https://uprince-word.azurewebsites.net</AppDomain>
-    <AppDomain>https://pmstudioofficedev.azurewebsites.net</AppDomain>
   </AppDomains>
   <!--Todo: Add requirement sets and remove  commenting of high res icon -->
   <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
@@ -160,15 +158,15 @@
         <bt:Image id="UPrince.TaskpaneButton.Icon.16" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_16.png" />
         <bt:Image id="UPrince.TaskpaneButton.Icon.32" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_32.png" />
         <bt:Image id="UPrince.TaskpaneButton.Icon.80" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_80.png" />
-        <bt:Image id="UPrince.Login.Icon.32" DefaultValue="https://document.uprince.com/Images/halflings-161-log-in3x.png" />
-        <bt:Image id="UPrince.Publish.Icon.32" DefaultValue="https://document.uprince.com/Images/halflings-170-export3x.png" />
-        <bt:Image id="UPrince.Logout.Icon.32" DefaultValue="https://document.uprince.com/Images/halflings-163-log-out3x.png" />
+        <bt:Image id="UPrince.Login.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-161-log-in3x.png" />
+        <bt:Image id="UPrince.Publish.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-170-export3x.png" />
+        <bt:Image id="UPrince.Logout.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-163-log-out3x.png" />
         <bt:Image id="UPrince.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://document.uprince.com/1.1/Home/functionfile.html">
+        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://pmstudioofficedev.azurewebsites.net/1.1/Home/functionfile.html">
         </bt:Url>
-        <bt:Url id="residUnitConverterUrl" DefaultValue="https://document.uprince.com/1.1/Home/home.html">
+        <bt:Url id="residUnitConverterUrl" DefaultValue="https://pmstudioofficedev.azurewebsites.net/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
         <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">

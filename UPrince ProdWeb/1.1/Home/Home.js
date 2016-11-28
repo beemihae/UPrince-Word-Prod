@@ -331,7 +331,8 @@
 
             $(document).on('click', "#btnSignIn", function () {
                 if ((navigator.userAgent.indexOf('iPad') != -1) /*|| !(Office.context.requirements.isSetSupported('HtmlCoercion'))*/) { //iPad
-                    var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fios.html", "");
+                    // var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fios.html", "");
+                    var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fpmstudioofficedev.azurewebsites.net%2F1.1%2Fhome%2Fios.html", "");                   
                     //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fios.html"
 
                     ////app.showNotification(navigator.userAgent);

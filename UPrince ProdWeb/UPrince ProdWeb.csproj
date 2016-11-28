@@ -291,8 +291,8 @@
     <Content Include="Content\assets\font-awesome\scss\_variables.scss" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <None Include="Properties\PublishProfiles\uprince-word - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\uprince-word - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\PMStudioOfficeDev - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\PMStudioOfficeDev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\uprinceWordprod - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\uprinceWordprod - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />

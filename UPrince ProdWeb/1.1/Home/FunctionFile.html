@@ -17,7 +17,7 @@
     <script>
         // The initialize function must be run each time a new page is loaded
         (function () {
-            var host = 'https://uprincecoreprodapi.azurewebsites.net';
+            var host = 'https://pmstudiocoredevapi.azurewebsites.net';
 
             Office.initialize = function (reason) {
                 //app.initialize();
@@ -25,7 +25,7 @@
             };
         })();
         //Notice function needs to be in global namespace
-        var host = 'https://uprincecoreprodapi.azurewebsites.net';
+        var host = 'https://pmstudiocoredevapi.azurewebsites.net';
 
         function publish(event) {
             saveJson();
@@ -39,7 +39,7 @@
         var qualityCriteriaId;
         var projectId;
         var ProductDescriptionId;
-        var host = 'https://uprincecoreprodapi.azurewebsites.net';
+        var host = 'https://pmstudiocoredevapi.azurewebsites.net';
         var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
         var myWindow;
         var previous = 0;
@@ -102,7 +102,7 @@
               .done(function (str) {
                   if (str.success) {
                       ////app.showNotification("success");
-                      window.location.href = "https://document.uprince.com/1.1/home/home.html"
+                      window.location.href = "https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html"
                       localStorage.setItem("loggedIn", 'false');
                       localStorage.setItem("email", '');
                       localStorage.setItem("uId", '');

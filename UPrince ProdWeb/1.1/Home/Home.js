@@ -6,7 +6,7 @@
     var projectId;
     var ProductDescriptionId;
     //var host = 'https://uprincecoreprodapi.azurewebsites.net';
-    var host = 'https://uprincecoredevapi.azurewebsites.net';
+    var host = 'https://pmstudiocoredevapi.azurewebsites.net';
     var projectCanvas = {};
 
     var projectPage = '<div class="main-wrapper">' +

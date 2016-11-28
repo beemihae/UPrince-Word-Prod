@@ -112,13 +112,13 @@
                                     '<input class="form-control" id="productSearch">' +
                                     '<span class="glyphicon form-control-filter glyphicon-filter" aria-hidden="true"></span>' +
                                 '</div>' +
-                                '<div class="col-sm-12 row-projects bg-ash alignleft">' +
-                                    '<span class="glyphicons sun"></span>' +
-                                    '<strong id="canvasTab">Project Canvas</strong>' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft" id="canvasTab" style="cursor:pointer; border-top:1px solid #ccc;border-bottom:1px solid #ccc;">' +
+                                    '<span class="glyphicons sun" style="font-size:0.99em; margin-right:5px;"></span>' +
+                                    '<strong>Project Canvas</strong>' +
                                     '<button id="saveBtnCanvas" class="saveButton" disabled>Publish</button>' +
                                 '</div>' +
-                                '<div class="col-sm-12 row-projects bg-ash alignleft">' +
-                                    '<span class="icon-icon_ProductDescription"></span>' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft" style="border-bottom:1px solid #ccc;">' +
+                                    '<span class="icon-icon_ProductDescription" style="margin-right:5px;"></span>' +
                                     '<strong>Product Descriptions</strong>' +
                                     '<button id="saveBt" class="saveButton">Publish</button>' +
                                 '</div>' +
@@ -340,9 +340,9 @@
                     var timer = setInterval(checkChild, 500);
                 } else {
                     //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
-                    window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fpmstudioofficedev.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
+                    // window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fpmstudioofficedev.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
 
-                    //dummyLogin();
+                    dummyLogin();
                 }
 
             });
@@ -861,18 +861,17 @@
         };
     }
 
-    function getTeamMembersFilter(projectId) {
+    function getTeamMembersFilter(projectId, roleId) {
         return {
-            sortOrder: 'ASC',
-            sortField: 'firstname',
             projectId: projectId,
-            firstName: ''
+            roleId: roleId
         };
     }
 
     // async service calls to get project canvas document data
     function getProjectCanvas() {
         var projectId = localStorage.getItem('projectId');
+        projectCanvas.teamMembers = {};
 
         $.when(
             $.ajax(getDataObject('/api/ProjectBrief/GetProjectDefinition', projectId)).done(function (data) {
@@ -896,8 +895,35 @@
             $.ajax(getPostDataObject('/api/RiskRegister/GetRiskRegister', getRisksFilter(projectId))).done(function (data) {
                 projectCanvas.risks = data;
             }),
-            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMemberList', getTeamMembersFilter(projectId))).done(function (data) {
-                projectCanvas.teamMembers = data;
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 1))).done(function (data) {
+                projectCanvas.teamMembers.executives = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 2))).done(function (data) {
+                projectCanvas.teamMembers.seniorUsers = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 3))).done(function (data) {
+                projectCanvas.teamMembers.seniorSuppliers = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 4))).done(function (data) {
+                projectCanvas.teamMembers.projectManager = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 5))).done(function (data) {
+                projectCanvas.teamMembers.teamManagers = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 6))).done(function (data) {
+                projectCanvas.teamMembers.projectAssurance = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 7))).done(function (data) {
+                projectCanvas.teamMembers.changeAuthority = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 8))).done(function (data) {
+                projectCanvas.teamMembers.projectSupport = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 9))).done(function (data) {
+                projectCanvas.teamMembers.teamMembers = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMembersInRole', getTeamMembersFilter(projectId, 10))).done(function (data) {
+                projectCanvas.teamMembers.corporate = data;
             })
         ).then(function () {
             $.ajax(getPlanDataObject('/api/Plan/GetPlan', projectCanvas.projectCharter.projectPlan)).done(function (projectPlanData) {
@@ -927,7 +953,7 @@
             requirements.forEach(function (requirement) {
                 table +=
                 '<tr>' +
-                    '<td id="requirement-' + requirement.id + '">' + requirement.acceptanceCriteria + '</td>' +
+                    '<td id="requirement-' + requirement.projectProductDescriptionAcceptanceId + '">' + requirement.acceptanceCriteria + '</td>' +
                     '<td>' + requirement.qualityTolerance + '</td>' +
                     '<td>' + requirement.acceptanceMethod + '</td>' +
                     '<td>' + requirement.acceptanceResponsibilities + '</td>' +
@@ -1038,6 +1064,71 @@
         return table;
     }
 
+    function getMemberRow(type, heading, isPadding) {
+        var members = projectCanvas.teamMembers[type];
+        var padding = isPadding ? ' style="padding-left:15px"' : '';
+
+        var row =
+        '<tr>' +
+            '<td' + padding + '>' + '<b>' + heading + '</b></td>' +
+            '<td>';
+        
+        if (members) {
+            members.forEach(function (member, index) {
+                row += member.firstName + ' ' + member.lastName;
+
+                if ((index + 1) !== members.length) {
+                    row += ', ';
+                }
+            });
+        }
+            
+        row += '</td>';
+        row += '</tr>';
+
+        return row;
+    }
+
+    function getTeamMembersTable(teamMembers) {
+        var table =
+        '<table id="team-members-table">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th>Role</th>' +
+                    '<th>Responsible Members</th>' +
+                '</tr>' +
+            '</thead>';
+
+        // project manager
+        table += getMemberRow('projectManager', 'Project Manager');
+
+        // project board (main)
+        table += '<tr><td colspan="2"><b>Project Board</b></td></tr>';
+
+        // executive
+        table += getMemberRow('executives', 'Executive', true);
+        
+        // senior Users
+        table += getMemberRow('seniorUsers', 'Senior Users', true);
+
+        // senior suppliers
+        table += getMemberRow('seniorSuppliers', 'Senior Suppliers', true);
+        
+        // project assurance
+        table += getMemberRow('projectAssurance', 'Project Assurance');
+        
+        // corporate
+        table += getMemberRow('corporate', 'Corporate and Program');
+
+        // team members
+        table += getMemberRow('teamMembers', 'Team Members');               
+
+        // end of table
+        table += '</table>';
+
+        return table;
+    }
+
     function setProjectCanvas(projectCanvas) {
         var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
         var header = '<p class=MsoTitle>Project Canvas</p>';
@@ -1091,8 +1182,8 @@
         var usersOtherParties = '<h2 id="users-and-other-title">7.1 Users and Other Interested</h2>';
         var usersOtherPartiesJson = projectCanvas.projectDefinition.usersOtherParties;
 
-        var pmts = '<h2 id="pmts-title">7.2 PMTS</h2>';
-        var pmtsJson = '';
+        var teamMembers = '<h2 id="pmts-title">7.2 PMTS</h2>';
+        var teamMembersTable = getTeamMembersTable(projectCanvas.teamMembers);
 
         var risks = '<h1 id="risks-title">8. Risks</h1>';
         var risksJson = getRisksTable(projectCanvas.risks);
@@ -1123,7 +1214,7 @@
                 schedule, scheduleJson,
                 stakeholders,
                 usersOtherParties, usersOtherPartiesJson,
-                pmts, pmtsJson,
+                teamMembers, teamMembersTable,
                 risks, risksJson,
                 assumptions, assumptionsJson,
                 endOfDocument
@@ -1346,6 +1437,7 @@
         var projectScope = extractChapter(html, '>3.2 Project Scope', '>3.3 Quality Expectations');
         var usersOtherParties = extractChapter(html, '>7.1 Users and Other Interested', '>7.2 PMTS');
         var assumptions = extractChapter(html, '>9. Assumptions', '>End of Document...');
+        // var assumptions = extractChapter(html, '>9. Assumptions', '');
 
         $.ajax(getFieldPostObject(url, 1, worldContext));
         $.ajax(getFieldPostObject(url, 9, businessContext));
@@ -1730,7 +1822,7 @@
                     }
                     /* $.ajax({
                          type: 'GET',
-                         url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
+                         url: "http://pmstudiocoredevapi.azurewebsites.net/api/productdescription?id=" + localStorage.getItem('productDescriptionId'),
                          dataType: "json",
                          jsonp: false,
                          xhrFields: {

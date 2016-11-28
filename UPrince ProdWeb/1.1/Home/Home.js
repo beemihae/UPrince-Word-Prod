@@ -1,11 +1,39 @@
 /// <reference path="../App.js" />
+/// <reference path="Home.js" />
 (function () {
     "use strict";
     var qualityCriteriaId;
     var projectId;
     var ProductDescriptionId;
-    var host = 'https://uprincecoreprodapi.azurewebsites.net';
-    var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
+    //var host = 'https://uprincecoreprodapi.azurewebsites.net';
+    var host = 'https://uprincecoredevapi.azurewebsites.net';
+    var projectCanvas = {};
+
+    var projectPage = '<div class="main-wrapper">' +
+                        '<header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top">' +
+                            '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height">' +
+                                '<div class="header-sub header-glyph full-height">' +
+                                    '<p title="UPrince.Projects">' +
+                                        '<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>' +
+                                    '</p>' +
+                                '</div>' +
+                                '<div class="header-sub h1-div">' +
+                                    '<h1 class="roboto-light">Projects</h1>' +
+                                '</div>' +
+                                '<div class="header-sub" style="position:absolute;right:15px">' +
+                                    '<p class="fake-link" id="logOut" style="font-size:12px;font-weight:100;vertical-align:middle">Log Out</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</header>' +
+                        '<section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding">' +
+                            '<div class="col-sm-12 row-projects">' +
+                                '<input class=form-control id=projectSearch>' +
+                                '<span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span>' +
+                            '</div>' +
+                            '<div id="listProjects" class="nav nav-pills nav-stacked"></div>' +
+                        '</section>' +
+                    '</div>';
+
     var myWindow;
     var previous = 0;
     // The initialize function must be run each time a new page is loaded
@@ -14,8 +42,7 @@
             app.initialize();
             localStorage.setItem("loggedIn", 'false');
 
-            accessUser()
-
+            accessUser();
 
             //after log in go to project page, clicking sign in button
             /*$(document).on("click", "#btnSignIn", function () {
@@ -51,32 +78,132 @@
             $(document).on('click', "#listProjects li", function () {
                 var projectId = $(this).attr("id");
                 localStorage.setItem("projectId", projectId);
+
                 var projectName = document.getElementById(projectId).innerHTML;
                 //alert(projectName);
-                var regex = /(<([^>]+)>)/ig
+                var regex = /(<([^>]+)>)/ig;
+
                 projectName = projectName.replace(regex, "");
                 localStorage.setItem('projectName', projectName);
+
                 //window.location.href = "product-description-page.html"
                 document.getElementById("project-page").innerHTML = "";
-                var productDescriptionPageWord = '<div class="content-main"> <div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div id="link-project-page" class="header-sub header-glyph full-height"><p class="fake-link" title="UPrince.Projects"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></p></div> <div class="header-sub h1-div"> <h1 id="projectName" class="roboto-light" style="font-weight: 700"></h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div> </div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=productSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div class="col-sm-12 row-projects bg-ash alignleft"> <span class="icon-icon_ProductDescription"> </span><strong>Product Descriptions</strong> <button id="saveBt" class="saveButton">Publish</button> </div> <!-- filter --><!-- menu starts --> <div class="panel-group col-md-12 no-padding"> <div id="listContainer"> <ul id="expList" class="nav nav-pills nav-stacked collapsibleList" style = "margin-top :2px" ></ul></div> </div> </section> </div> </div>';
-                var productDescriptionPageOnline = '<div class="content-main"> <div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div id="link-project-page" class="header-sub header-glyph full-height"><p class="fake-link" title="UPrince.Projects"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></p></div> <div class="header-sub h1-div"> <h1 id="projectName" class="roboto-light" style="font-weight: 700"></h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div> </div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=productSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div class="col-sm-12 row-projects bg-ash alignleft"> <span class="icon-icon_ProductDescription"> </span><strong>Product Descriptions</strong> </div> <!-- filter --><!-- menu starts --> <div class="panel-group col-md-12 no-padding"> <div id="listContainer"> <ul id="expList" class="nav nav-pills nav-stacked collapsibleList" style = "margin-top :2px"></ul></div> </div> </section> </div> </div>';
+
+                var productDescriptionPageWord =
+                    '<div class="content-main">' +
+                        '<div class="main-wrapper">' +
+                            '<header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top">' +
+                                '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height">' +
+                                    '<div id="link-project-page" class="header-sub header-glyph full-height">' +
+                                        '<p class="fake-link" title="UPrince.Projects">' +
+                                            '<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>' +
+                                        '</p>' +
+                                   '</div>' +
+                                   '<div class="header-sub h1-div">' +
+                                        '<h1 id="projectName" class="roboto-light" style="font-weight:700"></h1>' +
+                                   '</div>' +
+                                   '<div class="header-sub" style="position:absolute;right:15px">' +
+                                        '<p class="fake-link" id="logOut" style="font-size:12px;font-weight:100;vertical-align:middle">Log Out</p>' +
+                                   '</div>' +
+                                '</div>' +
+                            '</header>' +
+                            '<section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding">' +
+                                '<div class="col-sm-12 row-projects">' +
+                                    '<input class="form-control" id="productSearch">' +
+                                    '<span class="glyphicon form-control-filter glyphicon-filter" aria-hidden="true"></span>' +
+                                '</div>' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft">' +
+                                    '<span class="glyphicons sun"></span>' +
+                                    '<strong id="canvasTab">Project Canvas</strong>' +
+                                    '<button id="saveBtnCanvas" class="saveButton" disabled>Publish</button>' +
+                                '</div>' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft">' +
+                                    '<span class="icon-icon_ProductDescription"></span>' +
+                                    '<strong>Product Descriptions</strong>' +
+                                    '<button id="saveBt" class="saveButton">Publish</button>' +
+                                '</div>' +
+                                '<!-- filter -->' +
+                                '<!-- menu starts -->' +
+                                '<div class="panel-group col-md-12 no-padding">' +
+                                    '<div id="listContainer">' +
+                                        '<ul id="expList" class="nav nav-pills nav-stacked collapsibleList" style="margin-top:2px"></ul>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</section>' +
+                        '</div>' +
+                    '</div>';
+
+                var productDescriptionPageOnline =
+                    '<div class="content-main">' +
+                        '<div class="main-wrapper">' +
+                            '<header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top">' +
+                                '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height">' +
+                                    '<div id="link-project-page" class="header-sub header-glyph full-height">' +
+                                        '<p class="fake-link" title="UPrince.Projects">' +
+                                            '<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>' +
+                                        '</p>' +
+                                    '</div>' +
+                                    '<div class="header-sub h1-div">' +
+                                        '<h1 id="projectName" class="roboto-light" style="font-weight:700"></h1>' +
+                                    '</div>' +
+                                    '<div class="header-sub" style="position:absolute;right:15px">' +
+                                        '<p class="fake-link" id="logOut" style="font-size:12px;font-weight:100;vertical-align:middle">Log Out</p>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</header>' +
+                            '<section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding">' +
+                                '<div class="col-sm-12 row-projects">' +
+                                    '<input class="form-control" id="productSearch">' +
+                                    '<span class="glyphicon form-control-filter glyphicon-filter" aria-hidden="true"></span>' +
+                                '</div>' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft">' +
+                                    '<span class="glyphicons sun"></span>' +
+                                    '<strong>Project Canvas</strong>' +
+                                '</div>' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft">' +
+                                    '<span class="icon-icon_ProductDescription"></span>' +
+                                    '<strong>Product Descriptions</strong>' +
+                                '</div>' +
+                                '<!-- filter -->' +
+                                '<!-- menu starts -->' +
+                                '<div class="panel-group col-md-12 no-padding">' +
+                                    '<div id="listContainer">' +
+                                        '<ul id="expList" class="nav nav-pills nav-stacked collapsibleList" style="margin-top:2px"></ul>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</section>' +
+                        '</div>' +
+                    '</div>';
+
                 $('#product-description-page').append(productDescriptionPageWord);
                 $(document).find('#saveBt').prop('disabled', false);
 
-                loadList()
+                $("#projectName").html(projectName);
+                loadList();
+            });
 
+            $(document).on('click', '#canvasTab', function (e) {
+                e.stopPropagation();
 
+                var div = $('div');
+
+                $('#saveBtnCanvas').attr('disabled', false);
+                getProjectCanvas();
             });
 
             //click a product description, and opens a prod description
             $(document).on("click", 'ul li', function (e) {
                 e.stopPropagation();
                 localStorage.setItem('productDescriptionId', $(this).attr('id'));
+
                 var div = $("<div>");
+
                 Office.context.document.setSelectedDataAsync(div.html(), {
                     coercionType: "html"
                 }, testForSuccess);
+
                 getProductDescription();
+
                 /*if (Microsoft.Office.WebExtension.context.document instanceof OSF.DDA.ExcelWebAppDocument) {
                     getProductDescription();
                     //app.showNotification('Publish is not supported by office online.');
@@ -86,8 +213,18 @@
                 else (Microsoft.Office.WebExtension.context.document instanceof OSF.DDA.ExcelDocument) {
                     getProductDescription();
                     //app.showNotification('Desktop version');
+
                 }*/
                 //setHeader();
+            });
+
+            // save project canvas
+            $(document).on("click", "#saveBtnCanvas", function (e) {
+                if (Office.context.requirements.isSetSupported('HtmlCoercion')) {
+                    saveProjectCanvas();
+                } else {
+                    //app.showNotification('You can only "Publish" with Office Desktop (PC/MAC).')
+                }
             });
 
             //after selecting all the text, it adapts the prod descrp on the server
@@ -95,8 +232,7 @@
                 //saveJson();
                 if (Office.context.requirements.isSetSupported('HtmlCoercion')) {
                     saveJson();
-                }
-                else {
+                } else {
                     //app.showNotification('You can only "Publish" with Office Desktop (PC/MAC).')
                 }
             });
@@ -105,8 +241,11 @@
             $(document).on("click", "#link-project-page", function () {
                 document.getElementById("product-description-page").innerHTML = "";
                 document.getElementById("login").innerHTML = "";
+
                 $("#project-page").append(projectPage);
+
                 loadListProjects();
+
                 document.getElementById("product-description-page").innerHTML = "";
             });
 
@@ -135,8 +274,7 @@
                 if (x.length == 0) {
                     $("#expList").html('');
                     getProductDescriptionList("");
-                }
-                else {
+                } else {
                     var dataEmail = {
                         "category": {
                             "All": true,
@@ -172,7 +310,8 @@
                         "parentid": null,
                         "sortField": "title",
                         "sortOrder": "ASC"
-                    }
+                    };
+
                     $.ajax({
                         type: "POST",
                         url: host + "/api/productdescription/Search",
@@ -180,13 +319,13 @@
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(dataEmail),
                     })
-              .done(function (str) {
-                  $("#expList").html('');
-                  for (var i = 0; i < str.length; i++) {
-                      var dummy = '<li id="' + str[i].Id + '" "style = "height: 35px"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a></li>';
-                      $("#expList").append(dummy);
-                  }
-              });
+                    .done(function (str) {
+                        $("#expList").html('');
+                        for (var i = 0; i < str.length; i++) {
+                            var dummy = '<li id="' + str[i].Id + '" "style = "height: 35px"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a></li>';
+                            $("#expList").append(dummy);
+                        }
+                    });
                 };
             });
 
@@ -199,24 +338,15 @@
                     //var child = window.open("http://www.w3schools.com/jsref/prop_nav_useragent.asp");
                     var timer = setInterval(checkChild, 500);
                 } else {
-                    window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
-                   
+                    //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
+                    //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprince-word.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
+
                     ////app.showNotification(navigator.userAgent);
-                }
-                function checkChild() {
-                    if (localStorage.getItem("loggedIn") == 'true') {
-                        //$("#closed").append('closed');
-                        clearInterval(timer);
-
-                        document.getElementById("login").innerHTML = "";
-                        document.body.style.backgroundColor = "white";
-                        $("#project-page").append(projectPage);
-                        loadListProjects();
-                        ////app.showNotification(navigator.userAgent);
-                    }
+                    //loadListProjects('');
+                    dummyLogin();
                 }
 
-            })
+            });
         });
     };
 
@@ -250,24 +380,24 @@
             //contentType: "application/json; charset=utf-8",
             headers: { "Authorization": authorization }
         })
-          .done(function (str) {
-              document.getElementById("login").innerHTML = "";
-              document.body.style.backgroundColor = "white";
-              var email = str.user.mail;
-              localStorage.setItem("email", email);
-              //window.location.href = "project-page.html"
-              $("#project-page").append(projectPage);
-              loadListProjects("");
-              var userId = str.user.uid;
-              localStorage.setItem("uId", userId);
-              localStorage.setItem('loggedIn', 'true')
-              self.close();
-          })
-         .fail(function (jqXHR, textStatus, errorType) {
-             ////app.showNotification(textStatus + ' ' + errorType);
-             //myWindow.close();
-             //self.close();
-         });
+        .done(function (str) {
+            document.getElementById("login").innerHTML = "";
+            document.body.style.backgroundColor = "white";
+            var email = str.user.mail;
+            localStorage.setItem("email", email);
+            //window.location.href = "project-page.html"
+            $("#project-page").append(projectPage);
+            loadListProjects("");
+            var userId = str.user.uid;
+            localStorage.setItem("uId", userId);
+            localStorage.setItem('loggedIn', 'true')
+            self.close();
+        })
+        .fail(function (jqXHR, textStatus, errorType) {
+            ////app.showNotification(textStatus + ' ' + errorType);
+            //myWindow.close();
+            //self.close();
+        });
     };
 
     function logOut() {
@@ -285,16 +415,18 @@
             headers: { "Authorization": authorization },
             data: { uid: uId }
         })
-          .done(function (str) {
-              if (str.success) {
-                  ////app.showNotification("success");
-                  window.location.href = "https://document.uprince.com/1.1/home/home.html"
-                  localStorage.setItem("loggedIn", 'false');
-                  localStorage.setItem("email", '');
-                  localStorage.setItem("uId", '');
-              }
-              //else //app.showNotification("Log out failed, please try again.");
-          })
+        .done(function (str) {
+            if (str.success) {
+                ////app.showNotification("success");
+                //window.location.href = "https://document.uprince.com/1.1/home/home.html"
+                window.location.href = 'https://localhost:44301/1.1/home/home.html';
+
+                localStorage.setItem("loggedIn", 'false');
+                localStorage.setItem("email", '');
+                localStorage.setItem("uId", '');
+            }
+            //else //app.showNotification("Log out failed, please try again.");
+        })
         .fail(function (jqXHR, textStatus, errorType) {
             ////app.showNotification('Log out failed. Please check your internet connection and try again.')
             //alert(textStatus + ' ' + errorType);
@@ -303,7 +435,6 @@
 
     function setHeader(projectName) {
         Word.run(function (context) {
-
             // Create a proxy object for the sections collection.
             var sections = context.document.sections;
 
@@ -329,10 +460,10 @@
                         showMessage('Success! Removed Header and Footer.');
                     });
                 });
-        })
+        });
+
         // Run a batch operation against the Word object model.
         Word.run(function (context) {
-
             // Create a proxy object for the sections collection.
             var sections = context.document.sections;
 
@@ -342,7 +473,6 @@
             // Synchronize the document state by executing the queued commands, 
             // and return a promise to indicate task completion.
             return context.sync().then(function () {
-
                 // Insert content into the header.
                 var headerSection = sections.items[0].getHeader('primary');
                 headerSection.insertText(projectName, Word.InsertLocation.end);
@@ -360,6 +490,7 @@
         })
         .catch(function (error) {
             console.log('Error: ' + JSON.stringify(error));
+
             if (error instanceof OfficeExtension.Error) {
                 console.log('Debug info: ' + JSON.stringify(error.debugInfo));
             }
@@ -374,10 +505,22 @@
         return url.substring(start, eind);
     }
 
+    function dummyLogin() {
+        document.getElementById('login').innerHTML = '';
+        document.body.style.backgroundColor = 'white';
+        $('#project-page').append(projectPage);
+
+        localStorage.setItem('email', 'afi@exilesoft.com');
+        localStorage.setItem('uId', 7);
+        localStorage.setItem('loggedIn', 'true');
+
+        //accessUser();
+        loadListProjects('');
+    }
 
     //load projects in to projectpage from server
     function loadListProjects(projectSearch) {
-        var email = localStorage.getItem('email')
+        var email = localStorage.getItem('email');
         var dataEmail = {
             "customer": "",
             "email": email,
@@ -402,6 +545,7 @@
                 "WithinTolerance": false
             }
         };
+
         $.ajax({
             type: "POST",
             url: host + "/api/project/GetProjectList",
@@ -409,24 +553,29 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(dataEmail),
         })
-          .done(function (str) {
-              document.getElementById("listProjects").innerHTML = "";
-              var test = str;
-              var length = Object.keys(str).length;
-              $("#listProjects").append('<ul id="listProjects" class="nav nav-pills nav-stacked">');
-              for (var i = 0; i < length; i++) {
-                  var dummy = "<li id='".concat(str[i].id, "'><a href='#'>", str[i].title, "</a></li>");
-                  $("#listProjects").append(dummy);
-              }
-          })
+        .done(function (str) {
+            console.log(str)
+            document.getElementById("listProjects").innerHTML = "";
+
+            var test = str;
+            var length = Object.keys(str).length;
+
+            $("#listProjects").append('<ul id="listProjects" class="nav nav-pills nav-stacked">');
+
+            for (var i = 0; i < length; i++) {
+                var dummy = "<li id='".concat(str[i].id, "'><a href='#'>", str[i].title, "</a></li>");
+
+                $("#listProjects").append(dummy);
+            }
+        })
 
 
     };
 
     //load all the product descrip from server
     function loadList() {
-        var projectName = localStorage.getItem('projectName');
-        $("#projectName").html(projectName);
+        //var projectName = localStorage.getItem('projectName');
+        //$("#projectName").html(projectName);
         $("#listProductDescription").html('');
         var projectId = localStorage.getItem('projectId'); //when using the login-screen
         //var projectId = '22050'; //to test just this page
@@ -532,9 +681,9 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(dataEmail),
         })
-          .done(function (str) {
-              organizeListPD(str);
-          });
+        .done(function (str) {
+            organizeListPD(str);
+        });
     };
 
     function organizeListPD(str) {
@@ -643,10 +792,375 @@
           .children('ul').hide();
     };
 
+    ///////////////////////////////////////
+
+    // functions for setting project canvas
+
+    function getDataObject(url, projectId) {
+        var projectParam = '?projectId=' + projectId;
+
+        return {
+            type: 'GET',
+            url: host + url + projectParam,
+            dataType: 'json',
+            jsonp: false,
+            xhrFields: {
+                withCredentials: false
+            }
+        };
+    }
+
+    function getPlanDataObject(url, planId) {
+        var planParam = '?planId=' + planId;
+
+        return {
+            type: 'GET',
+            url: host + url + planParam,
+            dataType: 'json',
+            jsonp: false,
+            xhrFields: {
+                withCredentials: false
+            }
+        };
+    }
+
+    function getPostDataObject(url, payload) {
+        return {
+            type: 'POST',
+            url: host + url,
+            data: JSON.stringify(payload),
+            dataType: 'json',
+            contentType: 'application/json'
+            //jsonp: false,
+            //xhrFields: {
+            //    withCredentials: false
+            //},
+            //processData: false
+        };
+    }
+
+    function getRisksFilter(projectId) {
+        return {
+            projectId: projectId,
+            identifier: '',
+            title: '',
+            riskStatus: {
+                All: true,
+                New: false,
+                Active: false,
+                Closed: false
+            },
+            riskType: {
+                All: true,
+                Threat: false,
+                Opportunity: false
+            },
+            dateRegistered: '',
+            riskOwner: '',
+            sortField: 'title',
+            sortOrder: 'ASC'
+        };
+    }
+
+    function getTeamMembersFilter(projectId) {
+        return {
+            sortOrder: 'ASC',
+            sortField: 'firstname',
+            projectId: projectId,
+            firstName: ''
+        };
+    }
+
+    // async service calls to get project canvas document data
+    function getProjectCanvas() {
+        var projectId = localStorage.getItem('projectId');
+
+        $.when(
+            $.ajax(getDataObject('/api/ProjectBrief/GetProjectDefinition', projectId)).done(function (data) {
+                projectCanvas.projectDefinition = data;
+            }),
+            $.ajax(getDataObject('/api/ProjectProductDescription/GetProjectProductDescription', projectId)).done(function (data) {
+                projectCanvas.ppd = data;
+            }),
+            $.ajax(getDataObject('/api/Benefits/GetBenefitsItemRegister', projectId)).done(function (data) {
+                projectCanvas.benefits = data;
+            }),
+            $.ajax(getDataObject('/api/BusinessCase/GetBusinessCase', projectId)).done(function (data) {
+                projectCanvas.businessCase = data;
+            }),
+            $.ajax(getDataObject('/api/productdescription/GetAllProductDescription', projectId)).done(function (data) {
+                projectCanvas.products = data;
+            }),
+            $.ajax(getDataObject('/api/ProjectCharter/GetProjectCharter', projectId)).done(function (data) {
+                projectCanvas.projectCharter = data;
+            }),
+            $.ajax(getPostDataObject('/api/RiskRegister/GetRiskRegister', getRisksFilter(projectId))).done(function (data) {
+                projectCanvas.risks = data;
+            }),
+            $.ajax(getPostDataObject('/api/TeamMember/GetTeamMemberList', getTeamMembersFilter(projectId))).done(function (data) {
+                projectCanvas.teamMembers = data;
+            })
+        ).then(function () {
+            $.ajax(getPlanDataObject('/api/Plan/GetPlan', projectCanvas.projectCharter.projectPlan)).done(function (projectPlanData) {
+                projectCanvas.projectPlan = projectPlanData;
+
+                setProjectCanvas(projectCanvas);
+            });
+        });
+    }
+
+    // uses project product description data (accpetance object)
+    function getRequirementsTable(requirements) {    
+        var table =
+        '<table id="requirements-table">' +
+            // '<thead>' +
+                '<tr>' +
+                    '<th>Acceptance Criteria</th>' +
+                    '<th>Quality Tolerance</th>' +
+                    '<th>Acceptance Method</th>' +
+                    '<th>Acceptance Responsibilities</th>'
+                '</tr>';
+            // '</thead>';
+
+        // table += '<tbody>';
+
+        if (requirements) {
+            requirements.forEach(function (requirement) {
+                table +=
+                '<tr>' +
+                    '<td id="requirement-' + requirement.id + '">' + requirement.acceptanceCriteria + '</td>' +
+                    '<td>' + requirement.qualityTolerance + '</td>' +
+                    '<td>' + requirement.acceptanceMethod + '</td>' +
+                    '<td>' + requirement.acceptanceResponsibilities + '</td>' +
+                '</tr>';
+            });
+        }
+
+        // table += '</tbody>';
+        table += '</table>';
+
+        return table;
+    }
+
+    function getDeliverablesTable(products) {
+        var table =
+        '<table id="deliverables-table">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th>Title</th>' +
+                    '<th>Status</th>' +
+                    '<th>Type</th>' +
+                    '<th>Version</th>'
+                '</tr>' +
+            '</thead>';
+
+        table += '<tbody>';
+
+        if (products) {
+            products.forEach(function (product) {
+                table +=
+                '<tr>' +
+                    '<td id="product-' + product.Id + '">' + product.Title + '</td>' +
+                    '<td>' + product.Status + '</td>' +
+                    '<td>' + product.ProductCategory + '</td>' +
+                    '<td>' + product.Version + '</td>' +
+                '</tr>';
+            });
+        }
+
+        table += '</tbody>';
+        table += '</table>';
+
+        return table;
+    }
+
+    // uses benefits data
+    function getSmartGoalsTable(smartGoals) {
+        var table =
+        '<table id="smart-goals-table">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th>Title</th>' +
+                    '<th>Status</th>' +
+                    '<th>Owner</th>' +
+                    '<th>Version</th>'
+                '</tr>' +
+            '</thead>';
+
+        table += '<tbody>';
+
+        if (smartGoals) {
+            smartGoals.forEach(function (smartGoal) {
+                table +=
+                '<tr>' +
+                    '<td id="smart-goal-' + smartGoal.Id + '">' + smartGoal.title + '</td>' +
+                    '<td>' + smartGoal.status + '</td>' +
+                    '<td>' + smartGoal.owner + '</td>' +
+                    '<td>' + smartGoal.version + '</td>' +
+                '</tr>';
+            });
+        }
+
+        table += '</tbody>';
+        table += '</table>';
+
+        return table;
+    }
+
+    function getRisksTable(risks) {
+        var table =
+        '<table id="risks-table">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th>Title</th>' +
+                    '<th>Status</th>' +
+                    '<th>Type</th>' +
+                    '<th>Type</th>'
+                '</tr>' +
+            '</thead>';
+
+        table += '<tbody>';
+
+        if (risks) {
+            risks.forEach(function (risk) {
+                table +=
+                '<tr>' +
+                    '<td id="risk-' + risk.id + '">' + risk.title + '</td>' +
+                    '<td>' + risk.riskStatus + '</td>' +
+                    '<td>' + risk.riskType + '</td>' +
+                    '<td>' + risk.riskOwner + '</td>'
+                '</tr>';
+            });
+        }
+
+        table += '</tbody>';
+        table += '</table>';
+
+        return table;
+    }
+
+    function setProjectCanvas(projectCanvas) {
+        var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
+        var header = '<p class=MsoTitle>Project Canvas</p>';
+
+        setHeader('Project Canvas');
+
+        var worldContext = '<h1 id="the-world-title">1. The World</h1>';
+        var worldContextJson = projectCanvas.projectDefinition.background;
+
+        var businessContext = '<h1 id="business-context-title">2. Business Context (Background)</h1>';
+        var businessContextJson = projectCanvas.projectDefinition.buisinessContext;
+
+        var project = '<h1 id="project-title">3. Project</h1>';
+        var projectPurpose = '<h2 id="project-purpose-title">3.1 Project Purpose</h2>';
+        var projectPurposeJson = projectCanvas.ppd.purpose;
+        
+        var projectScope = '<h2 id="project-scope-title">3.2 Project Scope</h2>';
+        var projectScopeJson = projectCanvas.projectDefinition.projectScope;
+
+        var qualityExpectations = '<h2 id="quality-expectations-title">3.3 Quality Expectations</h2>';
+        var qualityExpectationsJson = projectCanvas.ppd.qualityExpectation;
+
+        var products = '<h1 id="products-title">4. Products</h1>';
+        var requirements = '<h2 id="requirements-title">4.1 Requirements</h2>';
+        var requirementsTable = getRequirementsTable(projectCanvas.ppd.acceptance);
+
+        var deliverables = '<h2 id="deliverables-title">4.2 Deliverables</h2>';
+        var deliverablesTable = getDeliverablesTable(projectCanvas.products);
+
+        var human = '<h1 id="human-title">5. Human</h1>';
+        var smartGoals = '<h2 id="smart-goals-title">5.1 Smart Goals</h2>';
+        var smartGoalsTable = getSmartGoalsTable(projectCanvas.benefits);
+
+        var userBenefits = '<h2 id="user-benefits-title">5.2 User Benefits</h2>';
+        var userBenefitsJson = projectCanvas.businessCase.benefits;
+
+        var userDisbenefits = '<h2 id="user-disbenefits-title">5.3 User Disbenefits</h2>';
+        var userDisbenefitsJson = projectCanvas.businessCase.disbenefits;
+
+        var timeCost = '<h1 id="time-and-cost-title">6.Time and Cost</h1>';
+        var investmentAppraisal = '<h2 id="investment-appraisal-title">6.1 Investment Appraisal</h2>';
+        var investmentAppraisalJson = projectCanvas.businessCase.investmentAppraisal;
+
+        var cost = '<h2 id="cost-title">6.2 Cost</h2>';
+        var costJson = projectCanvas.projectPlan.budgets;
+
+        var schedule = '<h2 id="schedule-title">6.3 Schedule</h2>';
+        var scheduleJson = projectCanvas.projectPlan.schedule;
+
+        var stakeholders = '<h1 id="stakeholders-title">7. Stakeholders</h1>';
+        var usersOtherParties = '<h2 id="users-and-other-title">7.1 Users and Other Interested</h2>';
+        var usersOtherPartiesJson = projectCanvas.projectDefinition.usersOtherParties;
+
+        var pmts = '<h2 id="pmts-title">7.2 PMTS</h2>';
+        var pmtsJson = '';
+
+        var risks = '<h1 id="risks-title">8. Risks</h1>';
+        var risksJson = getRisksTable(projectCanvas.risks);
+
+        var assumptions = '<h1 id="assumptions-title">9. Assumptions and Constraints</h1>';
+        var assumptionsJson = projectCanvas.projectDefinition.constraints;
+
+        var endOfDocument = '<h2>End of Document...</h2>';
+
+        var div = $("<div>").append(
+                layout, header, 
+                worldContext, worldContextJson,
+                businessContext, businessContextJson, 
+                project, 
+                projectPurpose, projectPurposeJson, 
+                projectScope, projectScopeJson,
+                qualityExpectations, qualityExpectationsJson,
+                products,
+                requirements, requirementsTable,
+                deliverables, deliverablesTable,
+                human,
+                smartGoals, smartGoalsTable,
+                userBenefits, userBenefitsJson,
+                userDisbenefits, userDisbenefitsJson,
+                timeCost,
+                investmentAppraisal, investmentAppraisalJson,
+                cost, costJson,
+                schedule, scheduleJson,
+                stakeholders,
+                usersOtherParties, usersOtherPartiesJson,
+                pmts, pmtsJson,
+                risks, risksJson,
+                assumptions, assumptionsJson,
+                endOfDocument
+            );
+
+        // insert HTML into Word document
+        // Run a batch operation against the Word object model.
+        Word.run(function (context) {
+            // Create a proxy object for the document body.
+            var body = context.document.body;
+
+            // Queue a commmand to insert HTML into the beginning of the body.
+            body.insertHtml(div.html(), Word.InsertLocation.replace);
+
+            // Synchronize the document state by executing the queued commands,
+            // and return a promise to indicate task completion.
+            return context.sync().then(function () {
+                console.log('HTML added to the beginning of the document body.');
+            });
+        })
+        .catch(function (error) {
+            console.log('Error: ' + JSON.stringify(error));
+
+            if (error instanceof OfficeExtension.Error) {
+                console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+            }
+        });
+    }
+
+    ////////////////////////////////////////////////////
+
     //uses ajax to get JSON file with productdescription
     function getProductDescription() {
         var productDescriptionId = localStorage.getItem('productDescriptionId');
         var urlid = host + "/api/productdescription?id=" + productDescriptionId;
+
         $.ajax({
             type: 'GET',
             url: urlid,
@@ -656,10 +1170,11 @@
                 withCredentials: false
             }
         }).done(function (str) {
-
             var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
             var header = "<p class=MsoTitle>Product Description: ".concat(str.Title, "</p>");
+
             setHeader(localStorage.getItem('projectName'));
+
             //purpose
             var purpose = "<h1>Purpose</h1>";
             var purposeJson = str.Purpose;
@@ -677,7 +1192,13 @@
 
             //qualityCriteria
             var qualityCriteria = "<h1>Quality Criteria</h1>";
-            var tableQC = "<table style='width:100%' id='table5' > <tr> <th>Quality Criteria </th> <th>Quality Tolerance </th> <th>Quality Method </th> <th>Quality Skills Required </th> </tr>";
+            var tableQC = '<table style="width:100%" id="table5">' +
+                            '<tr>' +
+                                '<th>Quality Criteria</th>' +
+                                '<th>Quality Tolerance</th>' +
+                                '<th>Quality Method</th>' +
+                                '<th>Quality Skills Required</th>' +
+                            '</tr>';
             //checks how many criterias there are, write them out in table form
             qualityCriteriaId = [str.QualityCriteria.length];
             for (var i = 0; i < str.QualityCriteria.length; i++) {
@@ -778,10 +1299,253 @@
         });
     };
 
+    //////////////////////////////////////
+
+    // functions for saving project canvas
+    function getFieldPostObject(url, type, content) {
+        var projectId = localStorage.getItem('projectId');
+
+        return {
+            type: "POST",
+            url: host + url,
+            contentType: 'application/json;charset=UTF-8',
+            dataType: "json",
+            data: JSON.stringify({
+                "projectId": +projectId,
+                "type": +type,
+                "content": content
+            }),
+            processData: false
+        };
+    }
+
+    function getFieldPayloadObject(type, content) {
+        var projectId = localStorage.getItem('projectId');
+
+        return {
+            projectId: +projectId,
+            type: +type,
+            content: content
+        };
+    }
+
+    function getPlanPayloadObject(type, content) {
+        var planId = +projectCanvas.projectPlan.identifier;
+
+        return {
+            projectPlanId: +planId,
+            type: +type,
+            content: content
+        };
+    }
+
+    function saveProjectDefinitionFields(html) {
+        var url = '/api/ProjectBrief/PostProjectDefinition';
+
+        var worldContext = extractChapter(html, '>1. The World', '>2. Business Context (Background)');
+        var businessContext = extractChapter(html, '>2. Business Context (Background)', '>3. Project');
+        var projectScope = extractChapter(html, '>3.2 Project Scope', '>3.3 Quality Expectations');
+        var usersOtherParties = extractChapter(html, '>7.1 Users and Other Interested', '>7.2 PMTS');
+        var assumptions = extractChapter(html, '>9. Assumptions', '>End of Document...');
+
+        $.ajax(getFieldPostObject(url, 1, worldContext));
+        $.ajax(getFieldPostObject(url, 9, businessContext));
+        $.ajax(getFieldPostObject(url, 4, projectScope));
+        $.ajax(getFieldPostObject(url, 7, usersOtherParties));
+        $.ajax(getFieldPostObject(url, 5, assumptions));
+    }
+
+    function savePPDFields(html) {
+        var url = '/api/ProjectProductDescription/PostPPDescriptionDetails';
+
+        var projectPurpose = extractChapter(html, '>3.1 Project Purpose', '>3.2 Project Scope');
+        var qualityExpectations = extractChapter(html, '>3.3 Quality Expectations', '>4. Products');
+
+        $.ajax(getPostDataObject(url, getFieldPayloadObject(2, projectPurpose)));
+        $.ajax(getPostDataObject(url, getFieldPayloadObject(6, qualityExpectations)));
+    }
+
+    function saveBusinessCaseFields(html) {
+        var url = '/api/BusinessCase/PostBusinessCase';
+
+        var investmentAppraisal = extractChapter(html, '>6.1 Investment Appraisal', '>6.2 Cost');
+        var userBenefits = extractChapter(html, '>5.2 User Benefits', '>5.3 User Disbenefits');
+        var userDisbenefits = extractChapter(html, '>5.3 User Disbenefits', '>6. Time and Cost');
+
+        $.ajax(getPostDataObject(url, getFieldPayloadObject(8, investmentAppraisal)));
+        $.ajax(getPostDataObject(url, getFieldPayloadObject(4, userBenefits)));
+        $.ajax(getPostDataObject(url, getFieldPayloadObject(5, userDisbenefits)));
+    }
+
+    function saveProjectPlanFields(html) {
+        var url = '/api/Plan/PostPlanDetail';
+
+        var cost = extractChapter(html, '>6.2 Cost', '>6.3 Schedule');
+        var schedule = extractChapter(html, '>6.3 Schedule', '>7. Stakeholders');
+
+        $.ajax(getPostDataObject(url, getPlanPayloadObject(7, cost)));
+        $.ajax(getPostDataObject(url, getPlanPayloadObject(9, schedule)));
+    }
+
+    function extractTable(html, type) {
+        // var heading, propTotal, pattern, idPrefix;
+
+        // switch (type) {
+        //     case 'requirements':
+        //         heading = 'Requirements';
+        //         propTotal = 4;
+        //         pattern = /(requirement-\d*)/g;
+        //         idPrefix = 'requirement-';
+        //         break;
+        //     case 'deliverables':
+        //         heading = 'Deliverables';
+        //         propTotal = 3;
+        //         pattern = /(deliverable-\d*)/g;
+        //         idPrefix = 'deliverable-';
+        //         break;
+        //     case 'smartGoals':
+        //         heading = 'Smart Goals';
+        //         propTotal = 3;
+        //         pattern = /(smart-goal-\d*)/g;
+        //         idPrefix = 'smart-goal-';
+        //         break;
+        //     case 'risks':
+        //         heading = 'Risks';
+        //         propTotal = 3;
+        //         pattern = /(risk-\d*)/g;
+        //         idPrefix = 'risk-';
+        //         break;
+        // }
+
+        if (html.indexOf('>Acceptance Responsibilities') != -1) {
+            var start = str.indexOf('>Acceptance Responsibilities');
+            var flag1 = str.indexOf('>Acceptance Responsibilities');
+            var flag2 = str.indexOf('>Acceptance Responsibilities');
+            var rows = 0;
+
+            // increment each time a tr is spotted
+            while (str.indexOf('<tr>', flag1) < str.indexOf('</table>', start)) {
+                rows++;
+                flag1 = str.indexOf('<tr>', flag1) + 3;
+            }
+
+            var records = new Array(rows);
+
+            for (var j = 0; j < rows; j++) {
+                // allow an extra index for the ID
+                records[j] = new Array(5);
+
+                for (var i = 0; i <= 4; i++) {
+                    records[j][i] = '';
+                }
+            }
+
+            for (var i = 0; i < rows; i++) {
+                var flag3 = str.indexOf("<td", flag2);
+                var flag4 = str.indexOf(">", flag3) + 1;
+                var flag5 = str.indexOf("</td>", flag4);
+
+                var id = str.substring(flag3, flag4)
+                            .match(/(requirement-\d*)/g)
+                            .replace('requirement-', '');
+
+                records[i][0] = id;
+                records[i][1] = str.substring(flag4, flag5);
+
+                flag3 = str.indexOf("<td", flag5);
+                flag4 = str.indexOf(">", flag3) + 1;
+                flag5 = str.indexOf("</td>", flag4);
+                records[i][2] = str.substring(flag4, flag5);
+
+                flag3 = str.indexOf("<td", flag5);
+                flag4 = str.indexOf(">", flag3) + 1;
+                flag5 = str.indexOf("</td>", flag4);
+                records[i][3] = str.substring(flag4, flag5);
+
+                // if (propTotal === 4) {
+                flag3 = str.indexOf("<td", flag5);
+                flag4 = str.indexOf(">", flag3) + 1;
+                flag5 = str.indexOf("</td>", flag4);
+                records[i][4] = str.substring(flag4, flag5);
+                // }
+
+                flag2 = flag5;
+            }
+
+            return records;
+        } else {
+            return null;
+        }
+    }
+
+    function saveRequirementsTable(html) {
+        var projectId = localStorage.getItem('projectId');
+        var url = '/api/ProjectProductDescription/PostPPDAcceptance';
+        var requirements = extractTable(html, 'requirements');
+
+        if (requirements) {
+            requirements.forEach(function (record) {
+                $.ajax({
+                    type: 'POST',
+                    url: host + url,
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({
+                        projectId: projectId,
+                        projectProductDescriptionAcceptanceId: record[0],
+                        acceptanceCriteria: record[1],
+                        acceptanceMethod: record[2],
+                        acceptanceResponsibilities: record[3],
+                        qualityTolerance: record[4]
+                    }),
+                    dataType: 'json',
+                    processData: false
+                });
+            });
+        }
+    }
+
+    function saveProjectCanvas() {
+        Word.run(function (ctx) {
+            var projectId = localStorage.getItem('projectId');
+
+            // Create a proxy object for the document body.
+            var body = ctx.document.body;
+
+            // Queue a commmand to get the HTML contents of the body.
+            var bodyHTML = body.getHtml();
+            
+            // Synchronize the document state by executing the queued-up commands, 
+            // and return a promise to indicate task completion.
+            return ctx.sync().then(function () {
+                var html = bodyHTML.value;
+                html = html.replace(/\s\s+/g, ' ');
+
+                $(document).find('#saveBtnCanvas').prop('disabled', true);
+
+                var border = html.indexOf("<div style='bord");
+
+                while (border !== -1) {
+                    var endBorder = html.indexOf(">", border);
+
+                    html = html.substring(0, border) + html.substring(endBorder + 1);
+                    border = html.indexOf("<div style='bord");
+                }
+
+                saveProjectDefinitionFields(html);
+                savePPDFields(html);
+                saveBusinessCaseFields(html);
+                saveProjectPlanFields(html);
+
+                // saveRequirementsTable(html);
+            });
+        });
+    }
+
+    //////////////////////////////////////////
+
     //adapt the JSON file with the latest info
     function saveJson() {
         Word.run(function (ctx) {
-
             // Create a proxy object for the document body.
             var body = ctx.document.body;
 
@@ -1007,9 +1771,9 @@
 
             });
         })
-.catch(function (error) {
-    console.log("Error: " + JSON.stringify(error));
-});
+        .catch(function (error) {
+            console.log("Error: " + JSON.stringify(error));
+        });
 
     };
 

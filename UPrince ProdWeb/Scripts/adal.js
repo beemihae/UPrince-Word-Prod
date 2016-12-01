@@ -606,7 +606,7 @@ var AuthenticationContext = (function () {
                 logout = 'post_logout_redirect_uri=' + encodeURIComponent(this.config.postLogoutRedirectUri);
             }
 
-            urlNavigate = this.instance + tenant + '/oauth2/logout?' + logout;
+            urlNavigate = this.instance + tenant + '/oauth2/v2.0/logout?' + logout;
         }
 
         this.info('Logout navigate to: ' + urlNavigate);
@@ -693,6 +693,8 @@ var AuthenticationContext = (function () {
                     user.userName = parsedJson.upn;
                 } else if (parsedJson.hasOwnProperty('email')) {
                     user.userName = parsedJson.email;
+                } else if (parsedJson.hasOwnProperty('emails')) {
+                    user.userName = parsedJson.emails[0];
                 }
             } else {
                 this.warn('IdToken has invalid aud field');
@@ -999,7 +1001,8 @@ var AuthenticationContext = (function () {
             tenant = this.config.tenant;
         }
 
-        var urlNavigate = this.instance + tenant + '/oauth2/authorize' + this._serialize(responseType, this.config, resource) + this._addLibMetadata();
+        // var urlNavigate = this.instance + tenant + '/oauth2/authorize' + this._serialize(responseType, this.config, resource) + this._addLibMetadata();
+        var urlNavigate = this.instance + tenant + '/oauth2/v2.0/authorize' + this._serialize(responseType, this.config, resource) + this._addLibMetadata();
         this.info('Navigate url:' + urlNavigate);
         return urlNavigate;
     };

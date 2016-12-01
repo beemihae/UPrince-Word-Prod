@@ -75,11 +75,12 @@
             // accessUser();
 
             var authContext = new AuthenticationContext({
-                tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
-                instance: 'https://login.microsoftonline.com/',
-                clientId: '087c4687-c9c2-460b-acb6-307bdcc4b4f4',
+                // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
+                tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+                clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
                 redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-                postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+                extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
+                // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
                 cacheLocation: 'localStorage'
             });
 
@@ -314,7 +315,7 @@
             //go back from prod descrp page to project page
             $(document).on("click", "#link-project-page", function () {
                 document.getElementById("product-description-page").innerHTML = "";
-                document.getElementById("login").innerHTML = "";
+                // document.getElementById("login").innerHTML = "";
 
                 $("#project-page").append(projectPage);
 
@@ -427,7 +428,7 @@
             //$("#closed").append('closed');
             clearInterval(timer);
 
-            document.getElementById("login").innerHTML = "";
+            // document.getElementById("login").innerHTML = "";
             document.body.style.backgroundColor = "white";
             $("#project-page").append(projectPage);
             loadListProjects();
@@ -1900,21 +1901,29 @@
         } else return '';
     }
 
+    function replaceBetween(start, end, replacement, str) {
+        return str.substring(0, start) + replacement + str.substring(end);
+    }
+
     function checkListItems(str) {
-        var paragraphPattern = /(<p.+?<\/p>)/g;
-        var classPattern = /(<p class="MsoListParagraph.+?>)/;
-        // var paragraphs = str.match(pargraphPattern);
+        // replace MS Word paragraph opening tag for lists with li opening tag
+        var pattern = /(<p class=MsoListParagraph.+?>)/g;
+        var newStr = str.replace(pattern, '<li>');
 
-        // paragraphs.forEach(function (paragraph) {
-        //     if (paragraph.test(classPattern)) {
-        //         paragraph.replace(classPattern, '<li>');
-        //         paragraph.replace('</p>', '</li>');
-        //     }
-        // });
+        // replace MS Word paragraph closing tag for lists with li closing tag
+        var flag = 0;
+        var start = 0;
+        var end = 0;
 
-        // return paragraphs;
+        while (newStr.lastIndexOf('<li>') > flag) {
+            flag = newStr.indexOf('<li>', flag);
+            start = newStr.indexOf('</p>', flag);
+            end = start + 4;
 
-        // use a replace function like showed in MDN
+            newStr = replaceBetween(start, end, '</li>', newStr);
+        }
+
+        return newStr;
     }
 
     //extract a chapter from the HTML code
@@ -1924,32 +1933,29 @@
 
         if (startChapter === '>Assumptions and Constraints') {
             var begin = str.indexOf("</h", flag) + 5;
+
             chapter = str.substring(begin);
-
-            return chapter;
-        }
-
-        if (flag != -1 && str.indexOf(stopChapter) != -1) {
+        } else if (flag != -1 && str.indexOf(stopChapter) != -1) {
             var begin = str.indexOf("</h", flag) + 5;
             var flag2 = str.indexOf(stopChapter);
             var end = str.lastIndexOf('<h', flag2);
 
             chapter = str.substring(begin, end);
-            // checkListItems(chapter);
-
-            return chapter;
-        } else if (flag === -1) return '';
-        else {
+        } else if (flag === -1) {
+            chapter = '';
+        } else {
             var begin = str.indexOf("</h", flag) + 5;
             var end = str.indexOf('<h', begin);
 
-            if (end < begin) end = str.length - 1;
+            if (end < begin) {
+                end = str.length - 1;
+            }
 
             chapter = str.substring(begin, end);
-            // checkListItems(chapter);
-            
-            return chapter;
         }
+
+        // chapter = checkListItems(chapter);
+        return chapter;
     }
 
     //extract responsibilities and returns a list 

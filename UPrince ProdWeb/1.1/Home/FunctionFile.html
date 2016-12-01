@@ -54,12 +54,24 @@
         var myWindow;
         var previous = 0;
 
+        // var authContext = new AuthenticationContext({
+        //     // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58'
+        //     // tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+        //     instance: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_pm_word-signing-signup',
+        //     // localLoginUrl: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_pm_word-signing-signup',
+        //     clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
+        //     redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+        //     postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+        //     cacheLocation: 'localStorage'
+        // });
+
         var authContext = new AuthenticationContext({
-            tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58'
-            instance: 'https://login.microsoftonline.com/',
-            clientId: '087c4687-c9c2-460b-acb6-307bdcc4b4f4',
+            // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
+            tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+            clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
             redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-            postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+            extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
+            // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
             cacheLocation: 'localStorage'
         });
 
@@ -78,6 +90,7 @@
 
                 loadListProjects('');
             } else {
+                localStorage.clear();
                 authContext.login();
             }
         };
@@ -777,9 +790,9 @@
 
                 });
             })
-    .catch(function (error) {
-        console.log("Error: " + JSON.stringify(error));
-    });
+            .catch(function (error) {
+                console.log("Error: " + JSON.stringify(error));
+            });
 
         };
 
@@ -796,19 +809,37 @@
         //extract a chapter from the HTML code
         function extractChapter(str, startChapter, stopChapter) {
             var flag = str.indexOf(startChapter);
+            var chapter;
+
+            if (startChapter === '>Assumptions and Constraints') {
+                var begin = str.indexOf("</h", flag) + 5;
+                chapter = str.substring(begin);
+
+                return chapter;
+            }
+
             if (flag != -1 && str.indexOf(stopChapter) != -1) {
                 var begin = str.indexOf("</h", flag) + 5;
                 var flag2 = str.indexOf(stopChapter);
                 var end = str.lastIndexOf('<h', flag2);
-                return str.substring(begin, end);
+
+                chapter = str.substring(begin, end);
+                // checkListItems(chapter);
+
+                return chapter;
             } else if (flag === -1) return '';
             else {
                 var begin = str.indexOf("</h", flag) + 5;
                 var end = str.indexOf('<h', begin);
+
                 if (end < begin) end = str.length - 1;
-                return str.substring(begin, end);
+
+                chapter = str.substring(begin, end);
+                // checkListItems(chapter);
+                
+                return chapter;
             }
-        };
+        }
 
         //extract responsibilities and returns a list 
         function extractResponsibilities(str) {
@@ -1349,8 +1380,6 @@
         var assumptions = '<h1 id="assumptions-title">Assumptions and Constraints</h1>';
         var assumptionsJson = projectCanvas.projectDefinition.constraints;
 
-        var endOfDocument = '<h2>End of Document...</h2>';
-
         var div = $("<div>").append(
                 layout, header, 
                 worldContext, worldContextJson,
@@ -1374,8 +1403,7 @@
                 usersOtherParties, usersOtherPartiesJson,
                 teamMembers, teamMembersTable,
                 risks, risksJson,
-                assumptions, assumptionsJson,
-                endOfDocument
+                assumptions, assumptionsJson
             );
 
         // insert HTML into Word document
@@ -1502,7 +1530,7 @@
                 var businessContext = extractChapter(html, '>Business Context (Background)', '>Project<');
                 var projectScope = extractChapter(html, '>Project Scope', '>Quality Expectations');
                 var usersOtherParties = extractChapter(html, '>Users and Other Interested', '>PMTS');
-                var assumptions = extractChapter(html, '>Assumptions', '>End of Document...');
+                var assumptions = extractChapter(html, '>Assumptions', '');
                 // var assumptions = extractChapter(html, '>9. Assumptions', '');
 
                 var ppdUrl = '/api/ProjectProductDescription/PostPPDescriptionDetails';

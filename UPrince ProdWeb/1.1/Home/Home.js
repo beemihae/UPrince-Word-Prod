@@ -1,11 +1,9 @@
 /// <reference path="../App.js" />
 /// <reference path="Home.js" />
-(function () {
-    "use strict";
+
     var qualityCriteriaId;
     var projectId;
     var ProductDescriptionId;
-    //var host = 'https://uprincecoreprodapi.azurewebsites.net';
     var host = 'https://pmstudiocoredevapi.azurewebsites.net';
     var projectCanvas = {};
 
@@ -13,7 +11,7 @@
                         '<header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top">' +
                             '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height">' +
                                 '<div class="header-sub header-glyph full-height">' +
-                                    '<p title="UPrince.Projects">' +
+                                    '<p title="PM Studio.Projects">' +
                                         '<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>' +
                                     '</p>' +
                                 '</div>' +
@@ -36,43 +34,115 @@
 
     var myWindow;
     var previous = 0;
+
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
             app.initialize();
             localStorage.setItem("loggedIn", 'false');
 
-            accessUser();
+            // var urlParameterExtraction = new (function () { 
+            //     function splitQueryString(queryStringFormattedString) { 
+            //         var split = queryStringFormattedString.split('&'); 
 
-            //after log in go to project page, clicking sign in button
-            /*$(document).on("click", "#btnSignIn", function () {
-                ////app.showNotification(JSON.stringify(bowser, null, '    '));
-                var x = document.getElementById("email");
-                var email = x.elements[0].value;
-                if (email.length != 0) {
-                    localStorage.setItem("email", email);
-                    //window.location.href = "../project-page.html"
-                    document.getElementById("login").innerHTML = "";
-                    document.body.style.backgroundColor = "white";
-                    $("#project-page").append(projectPage);
-                    loadListProjects();
-                }
-                else {
-                    //app.showNotification('Please enter login');
-                }
-            });*/
+            //         // If there are no parameters in URL, do nothing.
+            //         if (split == "") {
+            //         return {};
+            //         } 
 
-            //after log in go to project page, enter in emailfield
-            /* $(document).submit("#email", function (event) {
-                 document.body.style.backgroundColor = "white";
-                 var x = document.getElementById("email");
-                 var email = x.elements[0].value;
-                 localStorage.setItem("email", email);
-                 //window.location.href = "project-page.html"
-                 document.getElementById("login").innerHTML = "";
-                 $("#project-page").append(projectPage);
-                 loadListProjects();
-             })*/
+            //         var results = {}; 
+
+            //         // If there are parameters in URL, extract key/value pairs. 
+            //         for (var i = 0; i < split.length; ++i) { 
+            //         var p = split[i].split('=', 2); 
+            //         if (p.length == 1) 
+            //             results[p[0]] = ""; 
+            //         else 
+            //             results[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " ")); 
+            //         } 
+
+            //         return results; 
+            //     }
+
+            //     // Split the query string (after removing preceding '#'). 
+            //     this.queryStringParameters = splitQueryString(window.location.hash.substr(1)); 
+            // })();
+
+            // // Extract token from urlParameterExtraction object.
+            // var token = urlParameterExtraction.queryStringParameters['access_token'];
+            // localStorage.setItem('accessToken', token);
+
+            // accessUser();
+
+            var authContext = new AuthenticationContext({
+                tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
+                instance: 'https://login.microsoftonline.com/',
+                clientId: '087c4687-c9c2-460b-acb6-307bdcc4b4f4',
+                redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+                postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+                cacheLocation: 'localStorage'
+            });
+
+            authContext.handleWindowCallback();
+
+            var user = authContext.getCachedUser();
+
+            if (user) {  //successfully logged in
+                //call rest endpoint
+                // authContext.acquireToken(resource, function (error, token) {
+                //     if (error || !token) {
+                //         jQuery("#loginMessage").text('ADAL Error Occurred: ' + error);
+                //         return;
+                //     }
+
+                //     $.ajax({
+                //         type: 'GET',
+                //         url: endpoint,
+                //         headers: {
+                //             'Accept': 'application/json',
+                //             'Authorization': 'Bearer ' + token,
+                //         },
+                //     }).done(function (data) {
+                //         jQuery("#loginMessage").text('The name of the SharePoint site is: ' + data.Title);
+                //     }).fail(function (err) {
+                //         jQuery("#loginMessage").text('Error calling REST endpoint: ' + err.statusText);
+                //     }).always(function () {
+                //     });
+                // });
+                
+                $('#status').append('');
+                $('#project-page').append(projectPage);
+                
+                document.getElementById('login').innerHTML = '';
+                document.body.style.backgroundColor = 'white';
+
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('email', user.userName);
+                // localStorage.setItem('uid', user.userInfo);;
+
+                loadListProjects('');
+
+                // $.ajax({
+                //     type: 'GET',
+                //     url: 'https://graph.microsoft.com/v1.0/me/',
+                //     headers: {
+                //         'Accept': 'application/json',
+                //         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                //     }
+                // }).done(function (data) {
+                //     localStorage.setItem('email', data.userPrincipalName);
+                //     localStorage.setItem('uid', data.id);
+
+                //     loadListProjects('');
+                // });
+            } else {
+                authContext.login();
+            }
+
+            function logOut() {
+                localStorage.clear();
+                authContext.logOut();
+            }
 
             //go to product description page, after clicking a project
             $(document).on('click', "#listProjects li", function () {
@@ -95,7 +165,7 @@
                             '<header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top">' +
                                 '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height">' +
                                     '<div id="link-project-page" class="header-sub header-glyph full-height">' +
-                                        '<p class="fake-link" title="UPrince.Projects">' +
+                                        '<p class="fake-link" title="PM Studio.Projects">' +
                                             '<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>' +
                                         '</p>' +
                                    '</div>' +
@@ -139,7 +209,7 @@
                             '<header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top">' +
                                 '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height">' +
                                     '<div id="link-project-page" class="header-sub header-glyph full-height">' +
-                                        '<p class="fake-link" title="UPrince.Projects">' +
+                                        '<p class="fake-link" title="PM Studio.Projects">' +
                                             '<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>' +
                                         '</p>' +
                                     '</div>' +
@@ -188,6 +258,7 @@
                 var div = $('div');
 
                 $('#saveBtnCanvas').attr('disabled', false);
+
                 getProjectCanvas();
             });
 
@@ -220,6 +291,8 @@
 
             // save project canvas
             $(document).on("click", "#saveBtnCanvas", function (e) {
+                e.stopPropagation();
+
                 if (Office.context.requirements.isSetSupported('HtmlCoercion')) {
                     saveProjectCanvas();
                 } else {
@@ -251,7 +324,9 @@
 
             //log out function, forget the email and go back to log out screen
             $(document).on('click', "#logOut", function () {
-                logOut();
+                // logOut();
+                localStorage.clear();
+                authContext.logOut();
             });
 
             $(document).on('input', '#projectSearch', function () {
@@ -271,6 +346,7 @@
             $(document).on('input', '#productSearch', function () {
                 var projectId = localStorage.getItem("projectId");
                 var x = document.getElementById("productSearch").value;
+
                 if (x.length == 0) {
                     $("#expList").html('');
                     getProductDescriptionList("");
@@ -332,16 +408,12 @@
             $(document).on('click', "#btnSignIn", function () {
                 if ((navigator.userAgent.indexOf('iPad') != -1) /*|| !(Office.context.requirements.isSetSupported('HtmlCoercion'))*/) { //iPad
                     // var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fios.html", "");
-                    var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fpmstudioofficedev.azurewebsites.net%2F1.1%2Fhome%2Fios.html", "");                   
-                    //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fuprincewordprod.azurewebsites.net%2F1.1%2Fhome%2Fios.html"
 
                     ////app.showNotification(navigator.userAgent);
                     //var child = window.open("http://www.w3schools.com/jsref/prop_nav_useragent.asp");
                     var timer = setInterval(checkChild, 500);
                 } else {
-                    //window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fhome.html"
-                    window.location.href = "https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fpmstudioofficedev.azurewebsites.net%2F1.1%2Fhome%2Fhome.html"
-
+                    authContext.login();
                     // dummyLogin();
                 }
 
@@ -363,74 +435,43 @@
     }
 
     //perform this function on the pop-up screen
-    function accessUser() {
-        //var code = $_GET('access_token');
-        var code = getToken();
-        localStorage.setItem('accessToken', code)
-        $("#status").append('');
-        var url = "https://plaza.uprince.com/api/system/connect"
-        var authorization = "Bearer " + code;
+    // function accessUser() {
+    //     //var code = $_GET('access_token');
+    //     var code = getToken();
+    //     localStorage.setItem('accessToken', code);
+        
+    //     $("#status").append('');
+    //     // var url = "https://plaza.uprince.com/api/system/connect";
+    //     var url = 'https://login.microsoftonline.com';
+    //     var authorization = "Bearer " + code;
 
-        //JQuery
-        $.ajax({
-            type: "POST",
-            url: url,
-            dataType: "json",
-            //contentType: "application/json; charset=utf-8",
-            headers: { "Authorization": authorization }
-        })
-        .done(function (str) {
-            document.getElementById("login").innerHTML = "";
-            document.body.style.backgroundColor = "white";
-            var email = str.user.mail;
-            localStorage.setItem("email", email);
-            //window.location.href = "project-page.html"
-            $("#project-page").append(projectPage);
-            loadListProjects("");
-            var userId = str.user.uid;
-            localStorage.setItem("uId", userId);
-            localStorage.setItem('loggedIn', 'true')
-            self.close();
-        })
-        .fail(function (jqXHR, textStatus, errorType) {
-            ////app.showNotification(textStatus + ' ' + errorType);
-            //myWindow.close();
-            //self.close();
-        });
-    };
-
-    function logOut() {
-        var code = localStorage.getItem('accessToken');
-        var uId = localStorage.getItem('uId');
-        var url = "https://plaza.uprince.com/api/core/logout_user";
-        var authorization = "Bearer " + code;
-
-        //JQuery
-        $.ajax({
-            type: "POST",
-            url: url,
-            dataType: "json",
-            contentType: "application/x-www-form-urlencoded",
-            headers: { "Authorization": authorization },
-            data: { uid: uId }
-        })
-        .done(function (str) {
-            if (str.success) {
-                ////app.showNotification("success");
-                //window.location.href = "https://document.uprince.com/1.1/home/home.html"
-                window.location.href = 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html';
-
-                localStorage.setItem("loggedIn", 'false');
-                localStorage.setItem("email", '');
-                localStorage.setItem("uId", '');
-            }
-            //else //app.showNotification("Log out failed, please try again.");
-        })
-        .fail(function (jqXHR, textStatus, errorType) {
-            ////app.showNotification('Log out failed. Please check your internet connection and try again.')
-            //alert(textStatus + ' ' + errorType);
-        });
-    }
+    //     //JQuery
+    //     $.ajax({
+    //         type: "POST",
+    //         url: url,
+    //         dataType: "json",
+    //         //contentType: "application/json; charset=utf-8",
+    //         headers: { "Authorization": authorization }
+    //     })
+    //     .done(function (str) {
+    //         document.getElementById("login").innerHTML = "";
+    //         document.body.style.backgroundColor = "white";
+    //         var email = str.user.mail;
+    //         localStorage.setItem("email", email);
+    //         //window.location.href = "project-page.html"
+    //         $("#project-page").append(projectPage);
+    //         loadListProjects("");
+    //         var userId = str.user.uid;
+    //         localStorage.setItem("uId", userId);
+    //         localStorage.setItem('loggedIn', 'true');
+    //         self.close();
+    //     })
+    //     .fail(function (jqXHR, textStatus, errorType) {
+    //         ////app.showNotification(textStatus + ' ' + errorType);
+    //         //myWindow.close();
+    //         //self.close();
+    //     });
+    // }
 
     function setHeader(projectName) {
         Word.run(function (context) {
@@ -566,10 +607,8 @@
 
                 $("#listProjects").append(dummy);
             }
-        })
-
-
-    };
+        });
+    }
 
     //load all the product descrip from server
     function loadList() {
@@ -591,13 +630,14 @@
           .done(function (str) {
               organizeList(str);
           })*/
-    };
+    }
 
     //lay out from prod descpr page
     function organizeList(str) {
         var length = str.length;
         var count = 0;
         var id = [];
+
         for (var i = 0; i < length; i++) {
             if (str[i].ParentId == null) {
                 //var dummy = '<li id="' + str[i].Id + '"style = "height: 38px; padding-left: 5px;text-indent: 5px;"><a href="javascript: void(0);" class="p-l-30">' + str[i].Title + '</a> ';
@@ -613,6 +653,7 @@
                 id.push("" + str[i].Id)
             }
         };
+
         while (count < length) {
             for (var i = 0; i < length; i++) {
                 if ((id.indexOf("" + str[i].Id) == -1) && (id.indexOf("" + str[i].ParentId) != -1)) {
@@ -633,7 +674,7 @@
         };
         //prepareList();
 
-    };
+    }
 
     function getProductDescriptionList(parentId) {
         var projectId = localStorage.getItem('projectId');
@@ -683,7 +724,7 @@
         .done(function (str) {
             organizeListPD(str);
         });
-    };
+    }
 
     function organizeListPD(str) {
         for (var i = 0; i < str.length; i++) {
@@ -705,7 +746,7 @@
 
 
         };
-    };
+    }
 
     function appendChildren(parentId) {
         var projectId = localStorage.getItem('projectId');
@@ -745,6 +786,7 @@
             "sortField": "title",
             "sortOrder": "ASC"
         };
+
         $.ajax({
             type: "POST",
             url: host + "/api/productdescription/GetProductDescriptionList",
@@ -752,9 +794,9 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(dataEmail),
         })
-          .done(function (str) {
-              organizeChild(str, parentId);
-          });
+        .done(function (str) {
+            organizeChild(str, parentId);
+        });
     };
 
     function organizeChild(str, parentId) {
@@ -769,7 +811,8 @@
                 $("#L" + parentId).append(dummy);
             }
         }
-    };
+    }
+
     //expand and colllapse list, not in use
     function prepareList() {
         $('#expList').find('li:has(ul)')
@@ -789,7 +832,7 @@
           })
           .addClass('collapsed')
           .children('ul').hide();
-    };
+    }
 
     ///////////////////////////////////////
 
@@ -1135,60 +1178,60 @@
 
         setHeader('Project Canvas');
 
-        var worldContext = '<h1 id="the-world-title">1. The World</h1>';
+        var worldContext = '<h1 id="the-world-title">The World</h1>';
         var worldContextJson = projectCanvas.projectDefinition.background;
 
-        var businessContext = '<h1 id="business-context-title">2. Business Context (Background)</h1>';
+        var businessContext = '<h1 id="business-context-title">Business Context (Background)</h1>';
         var businessContextJson = projectCanvas.projectDefinition.buisinessContext;
 
-        var project = '<h1 id="project-title">3. Project</h1>';
-        var projectPurpose = '<h2 id="project-purpose-title">3.1 Project Purpose</h2>';
+        var project = '<h1 id="project-title">Project</h1>';
+        var projectPurpose = '<h2 id="project-purpose-title">Project Purpose</h2>';
         var projectPurposeJson = projectCanvas.ppd.purpose;
         
-        var projectScope = '<h2 id="project-scope-title">3.2 Project Scope</h2>';
+        var projectScope = '<h2 id="project-scope-title">Project Scope</h2>';
         var projectScopeJson = projectCanvas.projectDefinition.projectScope;
 
-        var qualityExpectations = '<h2 id="quality-expectations-title">3.3 Quality Expectations</h2>';
+        var qualityExpectations = '<h2 id="quality-expectations-title">Quality Expectations</h2>';
         var qualityExpectationsJson = projectCanvas.ppd.qualityExpectation;
 
-        var products = '<h1 id="products-title">4. Products</h1>';
-        var requirements = '<h2 id="requirements-title">4.1 Requirements</h2>';
+        var products = '<h1 id="products-title">Products</h1>';
+        var requirements = '<h2 id="requirements-title">Requirements</h2>';
         var requirementsTable = getRequirementsTable(projectCanvas.ppd.acceptance);
 
-        var deliverables = '<h2 id="deliverables-title">4.2 Deliverables</h2>';
+        var deliverables = '<h2 id="deliverables-title">Deliverables</h2>';
         var deliverablesTable = getDeliverablesTable(projectCanvas.products);
 
-        var human = '<h1 id="human-title">5. Human</h1>';
-        var smartGoals = '<h2 id="smart-goals-title">5.1 Smart Goals</h2>';
+        var human = '<h1 id="human-title">Human</h1>';
+        var smartGoals = '<h2 id="smart-goals-title">Smart Goals</h2>';
         var smartGoalsTable = getSmartGoalsTable(projectCanvas.benefits);
 
-        var userBenefits = '<h2 id="user-benefits-title">5.2 User Benefits</h2>';
+        var userBenefits = '<h2 id="user-benefits-title">User Benefits</h2>';
         var userBenefitsJson = projectCanvas.businessCase.benefits;
 
-        var userDisbenefits = '<h2 id="user-disbenefits-title">5.3 User Disbenefits</h2>';
+        var userDisbenefits = '<h2 id="user-disbenefits-title">User Disbenefits</h2>';
         var userDisbenefitsJson = projectCanvas.businessCase.disbenefits;
 
-        var timeCost = '<h1 id="time-and-cost-title">6.Time and Cost</h1>';
-        var investmentAppraisal = '<h2 id="investment-appraisal-title">6.1 Investment Appraisal</h2>';
+        var timeCost = '<h1 id="time-and-cost-title">Time and Cost</h1>';
+        var investmentAppraisal = '<h2 id="investment-appraisal-title">Investment Appraisal</h2>';
         var investmentAppraisalJson = projectCanvas.businessCase.investmentAppraisal;
 
-        var cost = '<h2 id="cost-title">6.2 Cost</h2>';
+        var cost = '<h2 id="cost-title">Cost</h2>';
         var costJson = projectCanvas.projectPlan.budgets;
 
-        var schedule = '<h2 id="schedule-title">6.3 Schedule</h2>';
+        var schedule = '<h2 id="schedule-title">Schedule</h2>';
         var scheduleJson = projectCanvas.projectPlan.schedule;
 
-        var stakeholders = '<h1 id="stakeholders-title">7. Stakeholders</h1>';
-        var usersOtherParties = '<h2 id="users-and-other-title">7.1 Users and Other Interested</h2>';
+        var stakeholders = '<h1 id="stakeholders-title">Stakeholders</h1>';
+        var usersOtherParties = '<h2 id="users-and-other-title">Users and Other Interested</h2>';
         var usersOtherPartiesJson = projectCanvas.projectDefinition.usersOtherParties;
 
-        var teamMembers = '<h2 id="pmts-title">7.2 PMTS</h2>';
+        var teamMembers = '<h2 id="pmts-title">PMTS</h2>';
         var teamMembersTable = getTeamMembersTable(projectCanvas.teamMembers);
 
-        var risks = '<h1 id="risks-title">8. Risks</h1>';
+        var risks = '<h1 id="risks-title">Risks</h1>';
         var risksJson = getRisksTable(projectCanvas.risks);
 
-        var assumptions = '<h1 id="assumptions-title">9. Assumptions and Constraints</h1>';
+        var assumptions = '<h1 id="assumptions-title">Assumptions and Constraints</h1>';
         var assumptionsJson = projectCanvas.projectDefinition.constraints;
 
         var endOfDocument = '<h2>End of Document...</h2>';
@@ -1429,85 +1472,7 @@
         };
     }
 
-    function saveProjectDefinitionFields(html) {
-        var url = '/api/ProjectBrief/PostProjectDefinition';
-
-        var worldContext = extractChapter(html, '>1. The World', '>2. Business Context (Background)');
-        var businessContext = extractChapter(html, '>2. Business Context (Background)', '>3. Project');
-        var projectScope = extractChapter(html, '>3.2 Project Scope', '>3.3 Quality Expectations');
-        var usersOtherParties = extractChapter(html, '>7.1 Users and Other Interested', '>7.2 PMTS');
-        var assumptions = extractChapter(html, '>9. Assumptions', '>End of Document...');
-        // var assumptions = extractChapter(html, '>9. Assumptions', '');
-
-        $.ajax(getFieldPostObject(url, 1, worldContext));
-        $.ajax(getFieldPostObject(url, 9, businessContext));
-        $.ajax(getFieldPostObject(url, 4, projectScope));
-        $.ajax(getFieldPostObject(url, 7, usersOtherParties));
-        $.ajax(getFieldPostObject(url, 5, assumptions));
-    }
-
-    function savePPDFields(html) {
-        var url = '/api/ProjectProductDescription/PostPPDescriptionDetails';
-
-        var projectPurpose = extractChapter(html, '>3.1 Project Purpose', '>3.2 Project Scope');
-        var qualityExpectations = extractChapter(html, '>3.3 Quality Expectations', '>4. Products');
-
-        $.ajax(getPostDataObject(url, getFieldPayloadObject(2, projectPurpose)));
-        $.ajax(getPostDataObject(url, getFieldPayloadObject(6, qualityExpectations)));
-    }
-
-    function saveBusinessCaseFields(html) {
-        var url = '/api/BusinessCase/PostBusinessCase';
-
-        var investmentAppraisal = extractChapter(html, '>6.1 Investment Appraisal', '>6.2 Cost');
-        var userBenefits = extractChapter(html, '>5.2 User Benefits', '>5.3 User Disbenefits');
-        var userDisbenefits = extractChapter(html, '>5.3 User Disbenefits', '>6. Time and Cost');
-
-        $.ajax(getPostDataObject(url, getFieldPayloadObject(8, investmentAppraisal)));
-        $.ajax(getPostDataObject(url, getFieldPayloadObject(4, userBenefits)));
-        $.ajax(getPostDataObject(url, getFieldPayloadObject(5, userDisbenefits)));
-    }
-
-    function saveProjectPlanFields(html) {
-        var url = '/api/Plan/PostPlanDetail';
-
-        var cost = extractChapter(html, '>6.2 Cost', '>6.3 Schedule');
-        var schedule = extractChapter(html, '>6.3 Schedule', '>7. Stakeholders');
-
-        $.ajax(getPostDataObject(url, getPlanPayloadObject(7, cost)));
-        $.ajax(getPostDataObject(url, getPlanPayloadObject(9, schedule)));
-    }
-
     function extractTable(html, type) {
-        // var heading, propTotal, pattern, idPrefix;
-
-        // switch (type) {
-        //     case 'requirements':
-        //         heading = 'Requirements';
-        //         propTotal = 4;
-        //         pattern = /(requirement-\d*)/g;
-        //         idPrefix = 'requirement-';
-        //         break;
-        //     case 'deliverables':
-        //         heading = 'Deliverables';
-        //         propTotal = 3;
-        //         pattern = /(deliverable-\d*)/g;
-        //         idPrefix = 'deliverable-';
-        //         break;
-        //     case 'smartGoals':
-        //         heading = 'Smart Goals';
-        //         propTotal = 3;
-        //         pattern = /(smart-goal-\d*)/g;
-        //         idPrefix = 'smart-goal-';
-        //         break;
-        //     case 'risks':
-        //         heading = 'Risks';
-        //         propTotal = 3;
-        //         pattern = /(risk-\d*)/g;
-        //         idPrefix = 'risk-';
-        //         break;
-        // }
-
         if (html.indexOf('>Acceptance Responsibilities') != -1) {
             var start = str.indexOf('>Acceptance Responsibilities');
             var flag1 = str.indexOf('>Acceptance Responsibilities');
@@ -1596,6 +1561,8 @@
     }
 
     function saveProjectCanvas() {
+        // checkListItems();
+
         Word.run(function (ctx) {
             var projectId = localStorage.getItem('projectId');
 
@@ -1604,6 +1571,11 @@
 
             // Queue a commmand to get the HTML contents of the body.
             var bodyHTML = body.getHtml();
+
+            var sections = ctx.document.sections;
+            ctx.load(sections, 'body/style');
+
+            // bodyHTML = checkListItems(bodyHtml);
             
             // Synchronize the document state by executing the queued-up commands, 
             // and return a promise to indicate task completion.
@@ -1622,12 +1594,62 @@
                     border = html.indexOf("<div style='bord");
                 }
 
-                saveProjectDefinitionFields(html);
-                savePPDFields(html);
-                saveBusinessCaseFields(html);
-                saveProjectPlanFields(html);
+                var projectDefinitionUrl = '/api/ProjectBrief/PostProjectDefinition';
 
-                // saveRequirementsTable(html);
+
+                // var worldContext = sections.items[1].getHeader('primary');
+                // $.ajax(getFieldPostObject(projectDefinitionUrl, 1, worldContext))
+
+                // return context.sync().then(function () {
+                //     app.showNotification('Saved Successfully', 'Project Canvas document changes have been saved');
+                // });
+
+                var worldContext = extractChapter(html, '>The World', '>Business Context (Background)');                
+                var businessContext = extractChapter(html, '>Business Context (Background)', '>Project<');
+                var projectScope = extractChapter(html, '>Project Scope', '>Quality Expectations');
+                var usersOtherParties = extractChapter(html, '>Users and Other Interested', '>PMTS');
+                var assumptions = extractChapter(html, '>Assumptions', '>End of Document...');
+                // var assumptions = extractChapter(html, '>9. Assumptions', '');
+
+                var ppdUrl = '/api/ProjectProductDescription/PostPPDescriptionDetails';
+
+                var projectPurpose = extractChapter(html, '>Project Purpose', '>Project Scope');
+                var qualityExpectations = extractChapter(html, '>Quality Expectations', '>Products');
+
+                var businessCaseUrl = '/api/BusinessCase/PostBusinessCase';
+
+                var investmentAppraisal = extractChapter(html, '>Investment Appraisal', '>Cost');
+                var userBenefits = extractChapter(html, '>User Benefits', '>User Disbenefits');
+                var userDisbenefits = extractChapter(html, '>User Disbenefits', '>Time and Cost');
+
+                var planUrl = '/api/Plan/PostPlanDetail';
+
+                var cost = extractChapter(html, '>Cost', '>Schedule');
+                var schedule = extractChapter(html, '>Schedule', '>Stakeholders');
+
+                $.when(
+                    $.ajax(getFieldPostObject(projectDefinitionUrl, 1, worldContext)),
+                    $.ajax(getFieldPostObject(projectDefinitionUrl, 9, businessContext)),
+                    $.ajax(getFieldPostObject(projectDefinitionUrl, 4, projectScope)),
+                    $.ajax(getFieldPostObject(projectDefinitionUrl, 7, usersOtherParties)),
+                    $.ajax(getFieldPostObject(projectDefinitionUrl, 5, assumptions)),
+
+                    $.ajax(getPostDataObject(ppdUrl, getFieldPayloadObject(2, projectPurpose))),
+                    $.ajax(getPostDataObject(ppdUrl, getFieldPayloadObject(6, qualityExpectations))),
+
+                    $.ajax(getPostDataObject(businessCaseUrl, getFieldPayloadObject(8, investmentAppraisal))),
+                    $.ajax(getPostDataObject(businessCaseUrl, getFieldPayloadObject(4, userBenefits))),
+                    $.ajax(getPostDataObject(businessCaseUrl, getFieldPayloadObject(5, userDisbenefits))),
+
+                    $.ajax(getPostDataObject(planUrl, getPlanPayloadObject(7, cost))),
+                    $.ajax(getPostDataObject(planUrl, getPlanPayloadObject(9, schedule)))
+                ).then(function () {
+                    app.showNotification('Saved Successfully', 'Project Canvas document changes have been saved');
+
+                    $(document).find('#saveBtnCanvas').prop('disabled', false);
+                    getProjectCanvas();
+                    ctx.sync();
+                });
             });
         });
     }
@@ -1866,7 +1888,7 @@
             console.log("Error: " + JSON.stringify(error));
         });
 
-    };
+    }
 
     //extract title from the document
     function extractTitle(str) {
@@ -1876,24 +1898,52 @@
             var end = str.indexOf("</", flag);
             return str.substring(begin, end);
         } else return '';
-    };
+    }
+
+    function checkListItems(str) {
+        var paragraphPattern = /(<p.+?<\/p>)/g;
+        var classPattern = /(<p class="MsoListParagraph.+?>)/;
+        // var paragraphs = str.match(pargraphPattern);
+
+        // paragraphs.forEach(function (paragraph) {
+        //     if (paragraph.test(classPattern)) {
+        //         paragraph.replace(classPattern, '<li>');
+        //         paragraph.replace('</p>', '</li>');
+        //     }
+        // });
+
+        // return paragraphs;
+
+        // use a replace function like showed in MDN
+    }
 
     //extract a chapter from the HTML code
     function extractChapter(str, startChapter, stopChapter) {
         var flag = str.indexOf(startChapter);
+        var chapter;
+
         if (flag != -1 && str.indexOf(stopChapter) != -1) {
             var begin = str.indexOf("</h", flag) + 5;
             var flag2 = str.indexOf(stopChapter);
             var end = str.lastIndexOf('<h', flag2);
-            return str.substring(begin, end);
+
+            chapter = str.substring(begin, end);
+            // checkListItems(chapter);
+
+            return chapter;
         } else if (flag === -1) return '';
         else {
             var begin = str.indexOf("</h", flag) + 5;
             var end = str.indexOf('<h', begin);
+
             if (end < begin) end = str.length - 1;
-            return str.substring(begin, end);
+
+            chapter = str.substring(begin, end);
+            // checkListItems(chapter);
+            
+            return chapter;
         }
-    };
+    }
 
     //extract responsibilities and returns a list 
     function extractResponsibilities(str) {
@@ -1956,7 +2006,7 @@
             respons[2] = '';
             return respons
         }
-    };
+    }
 
     //extract Development Skills and returns a matrix
     function extractDevSkills(str) {
@@ -2006,14 +2056,14 @@
             }
             return devSkills;
         } else return null
-    };
+    }
 
     //test for completion of request
     function testForSuccess(asyncResult) {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
             ////app.showNotification('Error', asyncResult.error.message);
         }
-    };
+    }
 
     //
     function adaptQualityCriteria(str, devSkills) {
@@ -2030,5 +2080,4 @@
             str.QualityCriteria.push(criteria);
         }
 
-    };
-})();
+    }

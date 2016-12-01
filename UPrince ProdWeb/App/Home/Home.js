@@ -543,7 +543,7 @@
                       }
                       /* $.ajax({
                            type: 'GET',
-                           url: "http://pmstudiocoredevapi.azurewebsites.net/api/productdescription?id=" + sessionStorage.getItem('productDescriptionId'),
+                           url: "http://uprincecoredevapi.azurewebsites.net/api/productdescription?id=" + sessionStorage.getItem('productDescriptionId'),
                            dataType: "json",
                            jsonp: false,
                            xhrFields: {

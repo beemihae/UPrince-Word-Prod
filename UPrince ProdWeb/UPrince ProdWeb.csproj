@@ -296,6 +296,7 @@
     <None Include="Properties\PublishProfiles\uprinceWordprod - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\uprinceWordprod - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\adal.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />

@@ -4,7 +4,7 @@
     var qualityCriteriaId;
     var projectId;
     var ProductDescriptionId;
-    var host = 'https://pmstudiocoredevapi.azurewebsites.net';
+    var host = 'https://uprincecoredevapi.azurewebsites.net';
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
@@ -41,7 +41,7 @@
                 };
                 $.ajax({
                     type: "POST",
-                    url: "https://pmstudiocoredevapi.azurewebsites.net/api/project/GetProjectList",
+                    url: "https://uprincecoredevapi.azurewebsites.net/api/project/GetProjectList",
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(dataEmail),

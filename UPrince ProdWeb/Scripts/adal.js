@@ -606,7 +606,7 @@ var AuthenticationContext = (function () {
                 logout = 'post_logout_redirect_uri=' + encodeURIComponent(this.config.postLogoutRedirectUri);
             }
 
-            urlNavigate = this.instance + tenant + '/oauth2/v2.0/logout?' + logout;
+            urlNavigate = this.instance + tenant + '/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&' + logout;
         }
 
         this.info('Logout navigate to: ' + urlNavigate);

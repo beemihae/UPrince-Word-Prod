@@ -80,7 +80,7 @@
                 clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
                 redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
                 extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
-                // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+                postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
                 cacheLocation: 'localStorage'
             });
 

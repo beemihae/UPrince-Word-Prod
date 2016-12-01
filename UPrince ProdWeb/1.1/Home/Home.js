@@ -113,7 +113,7 @@
                 $('#status').append('');
                 $('#project-page').append(projectPage);
                 
-                document.getElementById('login').innerHTML = '';
+                // document.getElementById('login').innerHTML = '';
                 document.body.style.backgroundColor = 'white';
 
                 localStorage.setItem('loggedIn', 'true');
@@ -136,6 +136,7 @@
                 //     loadListProjects('');
                 // });
             } else {
+                localStorage.clear();
                 authContext.login();
             }
 
@@ -546,7 +547,7 @@
     }
 
     function dummyLogin() {
-        document.getElementById('login').innerHTML = '';
+        // document.getElementById('login').innerHTML = '';
         document.body.style.backgroundColor = 'white';
         $('#project-page').append(projectPage);
 
@@ -1234,7 +1235,7 @@
         var assumptions = '<h1 id="assumptions-title">Assumptions and Constraints</h1>';
         var assumptionsJson = projectCanvas.projectDefinition.constraints;
 
-        var endOfDocument = '<h2>End of Document...</h2>';
+        // var endOfDocument = '<h2>End of Document...</h2>';
 
         var div = $("<div>").append(
                 layout, header, 
@@ -1259,8 +1260,7 @@
                 usersOtherParties, usersOtherPartiesJson,
                 teamMembers, teamMembersTable,
                 risks, risksJson,
-                assumptions, assumptionsJson,
-                endOfDocument
+                assumptions, assumptionsJson
             );
 
         // insert HTML into Word document
@@ -1608,7 +1608,7 @@
                 var businessContext = extractChapter(html, '>Business Context (Background)', '>Project<');
                 var projectScope = extractChapter(html, '>Project Scope', '>Quality Expectations');
                 var usersOtherParties = extractChapter(html, '>Users and Other Interested', '>PMTS');
-                var assumptions = extractChapter(html, '>Assumptions', '>End of Document...');
+                var assumptions = extractChapter(html, '>Assumptions and Constraints', '');
                 // var assumptions = extractChapter(html, '>9. Assumptions', '');
 
                 var ppdUrl = '/api/ProjectProductDescription/PostPPDescriptionDetails';
@@ -1921,6 +1921,13 @@
     function extractChapter(str, startChapter, stopChapter) {
         var flag = str.indexOf(startChapter);
         var chapter;
+
+        if (startChapter === '>Assumptions and Constraints') {
+            var begin = str.indexOf("</h", flag) + 5;
+            chapter = str.substring(begin);
+
+            return chapter;
+        }
 
         if (flag != -1 && str.indexOf(stopChapter) != -1) {
             var begin = str.indexOf("</h", flag) + 5;

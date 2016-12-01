@@ -3,23 +3,23 @@
   <!-- BeginBasicSettings: Add-in metadata, used for all versions of Office unless override provided -->
 
   <!--IMPORTANT! Id must be unique for your add-in, if you clone this manifest ensure that you change this id to your own GUID -->
-  <Id>ed757a00-4e53-44c5-9711-946e0ed1b766</Id>
+  <Id>ed757a00-4e53-44c5-9711-946e0ed1b770</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change -->
-  <Version>4.0.0.0</Version>
-  <ProviderName>PMStudio Online</ProviderName>
+  <Version>1.0.0.0</Version>
+  <ProviderName>PM Studio Online Canvas Add-in</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various placed of the Office UI such as the add-ins dialog -->
-  <DisplayName DefaultValue="PMStudio Online: Manage PRINCE2 Products" />
-  <Description DefaultValue="The easiest way to edit PRINCE2 Product Descriptions in Word"/>
+  <DisplayName DefaultValue="PM Studio Online" />
+  <Description DefaultValue="Getting Projects Done with the PM Studio System"/>
 
   <!--Icon for your add-in. Used on installation screens and the add-ins dialog -->
   <IconUrl DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/ico_uprince_32.jpg" />
   <AppDomains>
     <AppDomain>https://pmstudioofficedev.azurewebsites.net</AppDomain>
-    <AppDomain>https://plaza.uprince.com/oauth2/authorize</AppDomain>
-    <AppDomain>https://plaza.uprince.com/user/login</AppDomain>
+    <AppDomain>https://login.microsoftonline.com</AppDomain>
     <AppDomain>https://www.linkedin.com/uas/oauth/authorize</AppDomain>
+    <AppDomain>https://graph.microsoft.com</AppDomain>
   </AppDomains>
   <!--Todo: Add requirement sets and remove  commenting of high res icon -->
   <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
@@ -56,14 +56,14 @@
             Ensure you have build 16.0.6769 or above for GetStarted section to work-->
           <GetStarted>
             <!--Title of the Getting Started callout. resid points to a ShortString resource -->
-            <Title resid="UPrince.GetStarted.Title"/>
+            <Title resid="PMStudio.GetStarted.Title"/>
 
             <!--Description of the Getting Started callout. resid points to a LongString resource -->
-            <Description resid="UPrince.GetStarted.Description"/>
+            <Description resid="PMStudio.GetStarted.Description"/>
 
             <!--Not used right now but you need to provide a valid resource. We will add code in the future to consume this URL. 
 							resid points to a Url resource -->
-            <LearnMoreUrl resid="UPrince.GetStarted.LearnMoreUrl"/>
+            <LearnMoreUrl resid="PMStudio.GetStarted.LearnMoreUrl"/>
           </GetStarted>
 
           <!--Function file is an html page that includes the javascript where functions for ExecuteAction will be called. 
@@ -78,15 +78,15 @@
             <!-- Documentation includes all the IDs currently tested to work -->
             <OfficeTab id="TabHome">
               <!--Group. Ensure you provide a unique id. Recommendation for any IDs is to namespace using your companyname-->
-              <Group id="UPrince.Citations.Group1Id1">
+              <Group id="PMStudio.Citations.Group1Id1">
                 <!--Label for your group. resid must point to a ShortString resource -->
                 <Label resid="residLabel4" />
                 <!--Icons. Required sizes 16,31,80, optional 20, 24, 40, 48, 64. Strongly recommended to provide all sizes for great UX -->
                 <!--Use PNG icons and remember that all URLs on the resources section must use HTTPS -->
                 <Icon>
-                  <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
-                  <bt:Image size="32" resid="UPrince.Login.Icon.32" />
-                  <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
+                  <bt:Image size="16" resid="PMStudio.TaskpaneButton.Icon.16" />
+                  <bt:Image size="32" resid="PMStudio.Login.Icon.32" />
+                  <bt:Image size="80" resid="PMStudio.TaskpaneButton.Icon.80" />
                 </Icon>
                 <!--Control. It can be of type "Button" or "Menu" -->
                 <Control xsi:type="Button" id="Button3Id1">
@@ -99,9 +99,9 @@
                     <Description resid="residToolTip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
-                    <bt:Image size="32" resid="UPrince.Login.Icon.32" />
-                    <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
+                    <bt:Image size="16" resid="PMStudio.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="PMStudio.Login.Icon.32" />
+                    <bt:Image size="80" resid="PMStudio.TaskpaneButton.Icon.80" />
                   </Icon>
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ShowTaskpane">
@@ -119,9 +119,9 @@
                     <Description resid="residToolTip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
-                    <bt:Image size="32" resid="UPrince.Publish.Icon.32" />
-                    <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
+                    <bt:Image size="16" resid="PMStudio.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="PMStudio.Publish.Icon.32" />
+                    <bt:Image size="80" resid="PMStudio.TaskpaneButton.Icon.80" />
                   </Icon>
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ExecuteFunction">
@@ -138,9 +138,9 @@
                     <Description resid="residToolTip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="UPrince.TaskpaneButton.Icon.16" />
-                    <bt:Image size="32" resid="UPrince.Logout.Icon.32" />
-                    <bt:Image size="80" resid="UPrince.TaskpaneButton.Icon.80" />
+                    <bt:Image size="16" resid="PMStudio.TaskpaneButton.Icon.16" />
+                    <bt:Image size="32" resid="PMStudio.Logout.Icon.32" />
+                    <bt:Image size="80" resid="PMStudio.TaskpaneButton.Icon.80" />
                   </Icon>
                   <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ExecuteFunction">
@@ -155,13 +155,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="UPrince.TaskpaneButton.Icon.16" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_16.png" />
-        <bt:Image id="UPrince.TaskpaneButton.Icon.32" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_32.png" />
-        <bt:Image id="UPrince.TaskpaneButton.Icon.80" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_80.png" />
-        <bt:Image id="UPrince.Login.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-161-log-in3x.png" />
-        <bt:Image id="UPrince.Publish.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-170-export3x.png" />
-        <bt:Image id="UPrince.Logout.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-163-log-out3x.png" />
-        <bt:Image id="UPrince.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
+        <bt:Image id="PMStudio.TaskpaneButton.Icon.16" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_16.png" />
+        <bt:Image id="PMStudio.TaskpaneButton.Icon.32" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_32.png" />
+        <bt:Image id="PMStudio.TaskpaneButton.Icon.80" DefaultValue="https://uprinceworddev.azurewebsites.net/Images/ico_uprince_80.png" />
+        <bt:Image id="PMStudio.Login.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-161-log-in3x.png" />
+        <bt:Image id="PMStudio.Publish.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-170-export3x.png" />
+        <bt:Image id="PMStudio.Logout.Icon.32" DefaultValue="https://pmstudioofficedev.azurewebsites.net/Images/halflings-163-log-out3x.png" />
+        <bt:Image id="PMStudio.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
         <bt:Url id="residDesktopFuncUrl" DefaultValue="https://pmstudioofficedev.azurewebsites.net/1.1/Home/functionfile.html">
@@ -169,7 +169,7 @@
         <bt:Url id="residUnitConverterUrl" DefaultValue="https://pmstudioofficedev.azurewebsites.net/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
-        <bt:Url id="UPrince.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
+        <bt:Url id="PMStudio.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
         </bt:Url>
       </bt:Urls>
       <bt:ShortStrings>
@@ -182,7 +182,7 @@
         <bt:String id="residLabel3" DefaultValue="Login">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
-        <bt:String id="residLabel4" DefaultValue="UPrince">
+        <bt:String id="residLabel4" DefaultValue="PM Studio">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
         <bt:String id="residLabel5" DefaultValue="Another Command">
@@ -194,7 +194,7 @@
         <bt:String id="residLabel7" DefaultValue="Logout">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons" />
         </bt:String>
-        <bt:String id="UPrince.GetStarted.Title" DefaultValue="UPrince Loaded Successfully">
+        <bt:String id="PMStudio.GetStarted.Title" DefaultValue="PM Studio Loaded Successfully">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:ShortStrings>
@@ -202,7 +202,7 @@
         <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="UPrince.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
+        <bt:String id="PMStudio.GetStarted.Description" DefaultValue="">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

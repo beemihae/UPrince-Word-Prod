@@ -4,7 +4,10 @@
     var qualityCriteriaId;
     var projectId;
     var ProductDescriptionId;
+
+    // var host = 'https://pmstudiocoredevapi.azurewebsites.net';
     var host = 'https://pmstudiocoreprodapi.azurewebsites.net';
+
     var projectCanvas = {};
 
     var projectPage = '<div class="main-wrapper">' +
@@ -135,15 +138,15 @@
                                     '<input class="form-control" id="productSearch">' +
                                     '<span class="glyphicon form-control-filter glyphicon-filter" aria-hidden="true"></span>' +
                                 '</div>' +
-                                '<div class="col-sm-12 row-projects bg-ash alignleft" id="canvasTab" style="cursor:pointer; border-top:1px solid #ccc;border-bottom:1px solid #ccc;">' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft" id="canvasTab" style="cursor:pointer; position:relative; border-top:1px solid #ccc;border-bottom:1px solid #ccc;">' +
                                     '<span class="glyphicons sun" style="font-size:0.99em; margin-right:5px;"></span>' +
                                     '<strong>Project Canvas</strong>' +
-                                    '<button id="saveBtnCanvas" class="saveButton" disabled>Publish</button>' +
+                                    '<button id="saveBtnCanvas" class="saveButton" style="position:absolute;right:10px;top:6px;" disabled>Publish</button>' +
                                 '</div>' +
-                                '<div class="col-sm-12 row-projects bg-ash alignleft" style="border-bottom:1px solid #ccc;">' +
+                                '<div class="col-sm-12 row-projects bg-ash alignleft" style="border-bottom:1px solid #ccc;position:relative;">' +
                                     '<span class="icon-icon_ProductDescription" style="margin-right:5px;"></span>' +
                                     '<strong>Product Descriptions</strong>' +
-                                    '<button id="saveBt" class="saveButton">Publish</button>' +
+                                    '<button id="saveBt" class="saveButton" style="position:absolute;right:10px;top:6px;">Publish</button>' +
                                 '</div>' +
                                 '<!-- filter -->' +
                                 '<!-- menu starts -->' +

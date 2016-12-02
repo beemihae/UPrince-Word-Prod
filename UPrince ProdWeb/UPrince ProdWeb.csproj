@@ -293,6 +293,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\PMStudioOfficeDev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\PMStudioOfficeDev - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\PMStudioOfficeProd - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\PMStudioOfficeProd - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\uprinceWordprod - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\uprinceWordprod - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />

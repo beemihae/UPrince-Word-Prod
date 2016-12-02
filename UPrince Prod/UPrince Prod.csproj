@@ -21,7 +21,6 @@
     <SqlPackagePartId>{e8fd1db0-88dc-4250-96db-9f3ad10aa56e}</SqlPackagePartId>
     <ProjectMode>OfficeApp</ProjectMode>
     <NuGetPackageImportStamp>f0bfd351</NuGetPackageImportStamp>
-    <ActivePublishProfile>PMStudioOfficeDev - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

@@ -18,7 +18,7 @@
     <script>
         // The initialize function must be run each time a new page is loaded
         (function () {
-            var host = 'https://pmstudiocoreprodapi.azurewebsites.net';
+            var host = 'https://pmstudiocoredevapi.azurewebsites.net';
 
             Office.initialize = function (reason) {
                 //app.initialize();
@@ -49,23 +49,29 @@
         var qualityCriteriaId;
         var projectId;
         var ProductDescriptionId;
-
-        // var host = 'https://pmstudiocoredevapi.azurewebsites.net';
-        var host = 'https://pmstudiocoreprodapi.azurewebsites.net';
-        
+        var host = 'https://pmstudiocoredevapi.azurewebsites.net';
         var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
         var myWindow;
         var previous = 0;
 
+        // var authContext = new AuthenticationContext({
+        //     // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58'
+        //     // tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+        //     instance: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_pm_word-signing-signup',
+        //     // localLoginUrl: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_pm_word-signing-signup',
+        //     clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
+        //     redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+        //     postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+        //     cacheLocation: 'localStorage'
+        // });
+
         var authContext = new AuthenticationContext({
+            // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
             tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
-            // clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
-            clientId: '6c10f715-94f7-4466-9de4-5866eff3abb1',
-            // redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-            redirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
+            clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
+            redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
             extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
-            // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-            postLogoutRedirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
+            postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
             cacheLocation: 'localStorage'
         });
 
@@ -75,6 +81,7 @@
                 $('#status').append('');
                 $('#project-page').append(projectPage);
                 
+                // document.getElementById('login').innerHTML = '';
                 document.body.style.backgroundColor = 'white';
 
                 localStorage.setItem('loggedIn', 'true');

@@ -4,10 +4,7 @@
     var qualityCriteriaId;
     var projectId;
     var ProductDescriptionId;
-
-    // var host = 'https://pmstudiocoredevapi.azurewebsites.net';
-    var host = 'https://pmstudiocoreprodapi.azurewebsites.net';
-
+    var host = 'https://pmstudiocoredevapi.azurewebsites.net';
     var projectCanvas = {};
 
     var projectPage = '<div class="main-wrapper">' +
@@ -38,54 +35,86 @@
     var myWindow;
     var previous = 0;
 
-    var currentDocument = '';    
-
-    var authContext = new AuthenticationContext({
-        tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
-        // clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
-        clientId: '6c10f715-94f7-4466-9de4-5866eff3abb1',
-        // redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-        redirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
-        extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
-        // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-        postLogoutRedirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
-        cacheLocation: 'localStorage'
-    });
-
-    function accessUser() {
-        localStorage.clear();
-        authContext.login();
-    }
-
-    function logOut() {
-        localStorage.clear();
-        authContext.logOut();
-    }
-
-    function publish(event) {
-        if (currentDocument === 'product-description') {
-            saveJson();
-        } else if (currentDocument === 'project-canvas') {
-            saveProjectCanvas();
-        }
-
-        event.completed();
-    }
-
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
             app.initialize();
             localStorage.setItem("loggedIn", 'false');
 
+            // var urlParameterExtraction = new (function () { 
+            //     function splitQueryString(queryStringFormattedString) { 
+            //         var split = queryStringFormattedString.split('&'); 
+
+            //         // If there are no parameters in URL, do nothing.
+            //         if (split == "") {
+            //         return {};
+            //         } 
+
+            //         var results = {}; 
+
+            //         // If there are parameters in URL, extract key/value pairs. 
+            //         for (var i = 0; i < split.length; ++i) { 
+            //         var p = split[i].split('=', 2); 
+            //         if (p.length == 1) 
+            //             results[p[0]] = ""; 
+            //         else 
+            //             results[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " ")); 
+            //         } 
+
+            //         return results; 
+            //     }
+
+            //     // Split the query string (after removing preceding '#'). 
+            //     this.queryStringParameters = splitQueryString(window.location.hash.substr(1)); 
+            // })();
+
+            // // Extract token from urlParameterExtraction object.
+            // var token = urlParameterExtraction.queryStringParameters['access_token'];
+            // localStorage.setItem('accessToken', token);
+
+            // accessUser();
+
+            var authContext = new AuthenticationContext({
+                // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
+                tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+                clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
+                redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+                extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
+                postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+                cacheLocation: 'localStorage'
+            });
+
             authContext.handleWindowCallback();
 
             var user = authContext.getCachedUser();
 
             if (user) {  //successfully logged in
+                //call rest endpoint
+                // authContext.acquireToken(resource, function (error, token) {
+                //     if (error || !token) {
+                //         jQuery("#loginMessage").text('ADAL Error Occurred: ' + error);
+                //         return;
+                //     }
+
+                //     $.ajax({
+                //         type: 'GET',
+                //         url: endpoint,
+                //         headers: {
+                //             'Accept': 'application/json',
+                //             'Authorization': 'Bearer ' + token,
+                //         },
+                //     }).done(function (data) {
+                //         jQuery("#loginMessage").text('The name of the SharePoint site is: ' + data.Title);
+                //     }).fail(function (err) {
+                //         jQuery("#loginMessage").text('Error calling REST endpoint: ' + err.statusText);
+                //     }).always(function () {
+                //     });
+                // });
+                
                 $('#status').append('');
                 $('#project-page').append(projectPage);
                 
+                // document.getElementById('login').innerHTML = '';
                 document.body.style.backgroundColor = 'white';
 
                 localStorage.setItem('loggedIn', 'true');
@@ -93,11 +122,29 @@
                 // localStorage.setItem('uid', user.userInfo);;
 
                 loadListProjects('');
+
+                // $.ajax({
+                //     type: 'GET',
+                //     url: 'https://graph.microsoft.com/v1.0/me/',
+                //     headers: {
+                //         'Accept': 'application/json',
+                //         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                //     }
+                // }).done(function (data) {
+                //     localStorage.setItem('email', data.userPrincipalName);
+                //     localStorage.setItem('uid', data.id);
+
+                //     loadListProjects('');
+                // });
             } else {
                 localStorage.clear();
                 authContext.login();
             }
 
+            function logOut() {
+                localStorage.clear();
+                authContext.logOut();
+            }
 
             //go to product description page, after clicking a project
             $(document).on('click', "#listProjects li", function () {
@@ -268,6 +315,7 @@
             //go back from prod descrp page to project page
             $(document).on("click", "#link-project-page", function () {
                 document.getElementById("product-description-page").innerHTML = "";
+                // document.getElementById("login").innerHTML = "";
 
                 $("#project-page").append(projectPage);
 
@@ -384,8 +432,48 @@
             document.body.style.backgroundColor = "white";
             $("#project-page").append(projectPage);
             loadListProjects();
+            ////app.showNotification(navigator.userAgent);
         }
     }
+
+    //perform this function on the pop-up screen
+    // function accessUser() {
+    //     //var code = $_GET('access_token');
+    //     var code = getToken();
+    //     localStorage.setItem('accessToken', code);
+        
+    //     $("#status").append('');
+    //     // var url = "https://plaza.uprince.com/api/system/connect";
+    //     var url = 'https://login.microsoftonline.com';
+    //     var authorization = "Bearer " + code;
+
+    //     //JQuery
+    //     $.ajax({
+    //         type: "POST",
+    //         url: url,
+    //         dataType: "json",
+    //         //contentType: "application/json; charset=utf-8",
+    //         headers: { "Authorization": authorization }
+    //     })
+    //     .done(function (str) {
+    //         document.getElementById("login").innerHTML = "";
+    //         document.body.style.backgroundColor = "white";
+    //         var email = str.user.mail;
+    //         localStorage.setItem("email", email);
+    //         //window.location.href = "project-page.html"
+    //         $("#project-page").append(projectPage);
+    //         loadListProjects("");
+    //         var userId = str.user.uid;
+    //         localStorage.setItem("uId", userId);
+    //         localStorage.setItem('loggedIn', 'true');
+    //         self.close();
+    //     })
+    //     .fail(function (jqXHR, textStatus, errorType) {
+    //         ////app.showNotification(textStatus + ' ' + errorType);
+    //         //myWindow.close();
+    //         //self.close();
+    //     });
+    // }
 
     function setHeader(projectName) {
         Word.run(function (context) {
@@ -460,6 +548,7 @@
     }
 
     function dummyLogin() {
+        // document.getElementById('login').innerHTML = '';
         document.body.style.backgroundColor = 'white';
         $('#project-page').append(projectPage);
 
@@ -467,13 +556,12 @@
         localStorage.setItem('uId', 7);
         localStorage.setItem('loggedIn', 'true');
 
+        //accessUser();
         loadListProjects('');
     }
 
     //load projects in to projectpage from server
     function loadListProjects(projectSearch) {
-        currentDocument = '';
-
         var email = localStorage.getItem('email');
         var dataEmail = {
             "customer": "",
@@ -1087,12 +1175,10 @@
     }
 
     function setProjectCanvas(projectCanvas) {
-        var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;padding:8px;padding-bottom:0;width:100%;} table, tr, th, td {border: 1px solid #333 !important; text-align: 'left'; font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
+        var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
         var header = '<p class=MsoTitle>Project Canvas</p>';
 
         setHeader('Project Canvas');
-
-        currentDocument = 'project-canvas';
 
         var worldContext = '<h1 id="the-world-title">The World</h1>';
         var worldContextJson = projectCanvas.projectDefinition.background;
@@ -1208,8 +1294,6 @@
     function getProductDescription() {
         var productDescriptionId = localStorage.getItem('productDescriptionId');
         var urlid = host + "/api/productdescription?id=" + productDescriptionId;
-        
-        currentDocument = 'product-description';
 
         $.ajax({
             type: 'GET',
@@ -1526,6 +1610,7 @@
                 var projectScope = extractChapter(html, '>Project Scope', '>Quality Expectations');
                 var usersOtherParties = extractChapter(html, '>Users and Other Interested', '>PMTS');
                 var assumptions = extractChapter(html, '>Assumptions and Constraints', '');
+                // var assumptions = extractChapter(html, '>9. Assumptions', '');
 
                 var ppdUrl = '/api/ProjectProductDescription/PostPPDescriptionDetails';
 

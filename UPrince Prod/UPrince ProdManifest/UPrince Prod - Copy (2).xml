@@ -6,15 +6,15 @@
   <Id>ed757a00-4e53-44c5-9711-946e0ed1b778</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change -->
-  <Version>1.0.0.0</Version>
-  <ProviderName>PM Studio Online</ProviderName>
+  <Version>1.0.0.1</Version>
+  <ProviderName>PM Studio Online Canvas Add-in</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various placed of the Office UI such as the add-ins dialog -->
   <DisplayName DefaultValue="PM Studio Online" />
   <Description DefaultValue="Getting Projects Done with the PM Studio System"/>
 
   <!--Icon for your add-in. Used on installation screens and the add-ins dialog -->
-  <IconUrl DefaultValue="https://office.pmstudio.online/Images/pmstudio-icons/ico_pmstudio_32.png" />
+  <IconUrl DefaultValue="https://office.pmstudio.online/Images/ico_uprince_32.jpg" />
   <AppDomains>
     <AppDomain>https://office.pmstudio.online</AppDomain>
     <AppDomain>https://login.microsoftonline.com</AppDomain>
@@ -155,18 +155,18 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="PMStudio.TaskpaneButton.Icon.16" DefaultValue="https://office.pmstudio.online/Images/pmstudio-icons/ico_pmstudio_16.png" />
-        <bt:Image id="PMStudio.TaskpaneButton.Icon.32" DefaultValue="https://office.pmstudio.online/Images//pmstudio-icons/ico_pmstudio_32.png" />
-        <bt:Image id="PMStudio.TaskpaneButton.Icon.80" DefaultValue="https://office.pmstudio.online/Images/pmstudio/ico_pmstudio_80.png" />
+        <bt:Image id="PMStudio.TaskpaneButton.Icon.16" DefaultValue="https://office.pmstudio.online/Images/ico_uprince_16.png" />
+        <bt:Image id="PMStudio.TaskpaneButton.Icon.32" DefaultValue="https://office.pmstudio.online/Images/ico_uprince_32.png" />
+        <bt:Image id="PMStudio.TaskpaneButton.Icon.80" DefaultValue="https://office.pmstudio.online/Images/ico_uprince_80.png" />
         <bt:Image id="PMStudio.Login.Icon.32" DefaultValue="https://office.pmstudio.online/Images/halflings-161-log-in3x.png" />
         <bt:Image id="PMStudio.Publish.Icon.32" DefaultValue="https://office.pmstudio.online/Images/halflings-170-export3x.png" />
         <bt:Image id="PMStudio.Logout.Icon.32" DefaultValue="https://office.pmstudio.online/Images/halflings-163-log-out3x.png" />
         <bt:Image id="PMStudio.FunctionButton.Icon" DefaultValue="https://i.imgur.com/qDujiX0.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://office.pmstudio.online/1.1/Home/FunctionFile.html">
+        <bt:Url id="residDesktopFuncUrl" DefaultValue="https://office.pmstudio.online/1.1/Home/functionfile.html">
         </bt:Url>
-        <bt:Url id="residUnitConverterUrl" DefaultValue="https://office.pmstudio.online/1.1/Home/Home.html">
+        <bt:Url id="residUnitConverterUrl" DefaultValue="https://office.pmstudio.online/1.1/Home/home.html">
         </bt:Url>
         <!--LearnMore URL currently not used -->
         <bt:Url id="PMStudio.GetStarted.LearnMoreUrl" DefaultValue="https://odsample.azurewebsites.net/Pages/GetStarted.html">
@@ -202,7 +202,7 @@
         <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="PMStudio.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
+        <bt:String id="PMStudio.GetStarted.Description" DefaultValue="">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

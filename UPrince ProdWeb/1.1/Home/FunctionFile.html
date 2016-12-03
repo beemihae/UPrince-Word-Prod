@@ -12,13 +12,14 @@
     <title></title>
 
     <script src="../../Scripts/jquery-1.9.1.js" type="text/javascript"></script>
-
+    <script src="../../Scripts/adal.js" type="text/javascript"></script>
+    <script src="../App.js" type="text/javascript"></script>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
 
     <script>
         // The initialize function must be run each time a new page is loaded
         (function () {
-            var host = 'https://pmstudiocoredevapi.azurewebsites.net';
+            var host = 'https://pmstudiocoreprodapi.azurewebsites.net';
 
             Office.initialize = function (reason) {
                 //app.initialize();
@@ -28,9 +29,51 @@
 
         //Notice function needs to be in global namespace
         // var host = 'https://pmstudiocoredevapi.azurewebsites.net';
-        var currentDocument = '';
+
+        var qualityCriteriaId;
+        var projectId;
+        var ProductDescriptionId;
+        var host = 'https://pmstudiocoreprodapi.azurewebsites.net';
+        var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
+        var myWindow;
+        var previous = 0;
+
+        // var authContext = new AuthenticationContext({
+        //     // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
+        //     tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+        //     // clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
+        //     clientId: '6c10f715-94f7-4466-9de4-5866eff3abb1',
+        //     // redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+        //     redirectUri: 'https://office.pmstudio.online/1.1/home/home.html',        
+        //     extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
+        //     // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+        //     postLogoutRedirectUri: 'https://office.pmstudio.online/1.1/home/home.html',        
+        //     cacheLocation: 'localStorage'
+        // });
+
+        //perform this function on the pop-up screen
+        // function accessUser() {
+        //     if (user) {
+        //         $('#status').append('');
+        //         $('#project-page').append(projectPage);
+                
+        //         // document.getElementById('login').innerHTML = '';
+        //         document.body.style.backgroundColor = 'white';
+
+        //         localStorage.setItem('loggedIn', 'true');
+        //         localStorage.setItem('email', user.userName);
+        //         // localStorage.setItem('uid', user.userInfo);;
+
+        //         loadListProjects('');
+        //     } else {
+        //         localStorage.clear();
+        //         authContext.login();
+        //     }
+        // }
 
         function publish(event) {
+            var currentDocument = localStorage.getItem('currentDocument');
+            
             if (currentDocument === 'product-description') {
                 saveJson();
             } else if (currentDocument === 'project-canvas') {
@@ -42,58 +85,12 @@
 
         function logOut(event) {
             localStorage.clear();
-            authContext.logout();
-            event.completed();
+            localStorage.setItem('loggedIn', 'false');
+            // authContext.logout();
+            window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
+            
+            // event.completed();
         }
-
-        var qualityCriteriaId;
-        var projectId;
-        var ProductDescriptionId;
-        var host = 'https://pmstudiocoredevapi.azurewebsites.net';
-        var projectPage = '<div class="main-wrapper"> <header class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header-top"> <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding full-height"> <div class="header-sub header-glyph full-height"> <p title="UPrince.Projects"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> </div> <div class="header-sub h1-div"> <h1 class="roboto-light">Projects</h1> </div> <div class="header-sub" style="position:absolute;right:15px"><p class="fake-link" id="logOut" style="font-size:12px;font-weight: 100; vertical-align: middle"> Log Out</p> </div></div> </header> <section class="col-lg-12 col-md-12 col-sm-12 col-xs-12 modal-div relationship container no-padding"><div class="col-sm-12 row-projects"><input class=form-control id=projectSearch> <span class="glyphicon form-control-filter glyphicon-filter"aria-hidden=true></span></div> <div id="listProjects" class="nav nav-pills nav-stacked"></div> </section>  </div>'
-        var myWindow;
-        var previous = 0;
-
-        // var authContext = new AuthenticationContext({
-        //     // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58'
-        //     // tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
-        //     instance: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_pm_word-signing-signup',
-        //     // localLoginUrl: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_pm_word-signing-signup',
-        //     clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
-        //     redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-        //     postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-        //     cacheLocation: 'localStorage'
-        // });
-
-        var authContext = new AuthenticationContext({
-            // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
-            tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
-            clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
-            redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-            extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
-            postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-            cacheLocation: 'localStorage'
-        });
-
-        //perform this function on the pop-up screen
-        function accessUser() {
-            if (user) {
-                $('#status').append('');
-                $('#project-page').append(projectPage);
-                
-                // document.getElementById('login').innerHTML = '';
-                document.body.style.backgroundColor = 'white';
-
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('email', user.userName);
-                // localStorage.setItem('uid', user.userInfo);;
-
-                loadListProjects('');
-            } else {
-                localStorage.clear();
-                authContext.login();
-            }
-        };
 
         function setHeader(projectName) {
             Word.run(function (context) {
@@ -173,6 +170,8 @@
         function loadListProjects(projectSearch) {
             var email = localStorage.getItem('email');
             var currentPage = '';
+
+            localStorage.setItem('currentDocument', '');
             
             var dataEmail = {
                 "customer": "",
@@ -218,6 +217,14 @@
 
 
         };
+
+        //log out function, forget the email and go back to log out screen
+        $(document).on('click', "#logOut", function () {
+            // logOut();
+            localStorage.clear();
+            
+            window.location.href = 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html';
+        });
 
         //load all the product descrip from server
         function loadList() {
@@ -444,7 +451,7 @@
             var productDescriptionId = localStorage.getItem('productDescriptionId');
             var urlid = host + "/api/productdescription?id=" + productDescriptionId;
 
-            currentDocument = 'product-description';
+            localStorage.setItem('currentDocument', 'product-description');
 
             $.ajax({
                 type: 'GET',
@@ -456,7 +463,7 @@
                 }
             }).done(function (str) {
 
-                var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
+                var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;padding:8px;padding-bottom:0;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
                 var header = "<p class=MsoTitle>Product Description: ".concat(str.Title, "</p>");
                 setHeader(localStorage.getItem('projectName'));
                 //purpose
@@ -813,32 +820,29 @@
 
             if (startChapter === '>Assumptions and Constraints') {
                 var begin = str.indexOf("</h", flag) + 5;
+
                 chapter = str.substring(begin);
-
-                return chapter;
-            }
-
-            if (flag != -1 && str.indexOf(stopChapter) != -1) {
+            } else if (flag != -1 && str.indexOf(stopChapter) != -1) {
                 var begin = str.indexOf("</h", flag) + 5;
                 var flag2 = str.indexOf(stopChapter);
                 var end = str.lastIndexOf('<h', flag2);
 
                 chapter = str.substring(begin, end);
-                // checkListItems(chapter);
-
-                return chapter;
-            } else if (flag === -1) return '';
-            else {
+            } else if (flag === -1) {
+                chapter = '';
+            } else {
                 var begin = str.indexOf("</h", flag) + 5;
                 var end = str.indexOf('<h', begin);
 
-                if (end < begin) end = str.length - 1;
+                if (end < begin) {
+                    end = str.length - 1;
+                }
 
                 chapter = str.substring(begin, end);
-                // checkListItems(chapter);
-                
-                return chapter;
             }
+
+            // chapter = checkListItems(chapter);
+            return chapter;
         }
 
         //extract responsibilities and returns a list 
@@ -1317,7 +1321,7 @@
     }
 
     function setProjectCanvas(projectCanvas) {
-        var currentDocument = 'project-canvas';
+        localStorage.setItem('currentDocument', 'project-canvas');
 
         var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
         var header = '<p class=MsoTitle>Project Canvas</p>';
@@ -1482,7 +1486,7 @@
             }
         });
 
-        function saveProjectCanvas() {
+    function saveProjectCanvas() {
         // checkListItems();
 
         Word.run(function (ctx) {
@@ -1530,7 +1534,7 @@
                 var businessContext = extractChapter(html, '>Business Context (Background)', '>Project<');
                 var projectScope = extractChapter(html, '>Project Scope', '>Quality Expectations');
                 var usersOtherParties = extractChapter(html, '>Users and Other Interested', '>PMTS');
-                var assumptions = extractChapter(html, '>Assumptions', '');
+                var assumptions = extractChapter(html, '>Assumptions and Constraints', '');
                 // var assumptions = extractChapter(html, '>9. Assumptions', '');
 
                 var ppdUrl = '/api/ProjectProductDescription/PostPPDescriptionDetails';

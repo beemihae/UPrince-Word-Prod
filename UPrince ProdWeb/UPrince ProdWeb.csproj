@@ -296,6 +296,12 @@
     <None Include="Properties\PublishProfiles\uprinceWordprod - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\uprinceWordprod - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Images\pmstudio-icons\ico_pmstudio.ico" />
+    <Content Include="Images\pmstudio-icons\ico_pmstudio_16.png" />
+    <Content Include="Images\pmstudio-icons\ico_pmstudio_32.png" />
+    <Content Include="Images\pmstudio-icons\ico_pmstudio_64.png" />
+    <Content Include="Images\pmstudio-icons\ico_pmstudio_80.png" />
+    <Content Include="Images\pmstudio-icons\ico_pmstudio_96.png" />
     <Content Include="Scripts\adal.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
@@ -599,7 +605,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -38,8 +38,6 @@
     var myWindow;
     var previous = 0;
 
-    var currentDocument = '';
-
     var authContext = new AuthenticationContext({
         // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
         tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
@@ -49,35 +47,55 @@
         redirectUri: 'https://office.pmstudio.online/1.1/home/home.html',        
         extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
         // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
-        postLogoutRedirectUri: 'https://office.pmstudio.online/1.1/home/home.html',        
+        postLogoutRedirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
         cacheLocation: 'localStorage'
     });
 
-    function logOut() {
+    if (localStorage.getItem('loggedIn') == 'false') {
         localStorage.clear();
-        authContext.logOut();
+
+        // authContext.logout();
+        // window.location.href = 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html';
+        window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
     }
 
-    function accessUser() {
-        localStorage.clear();
-        authContext.login();
-    }
+    // function logOut(event) {
+    //     localStorage.clear();
+    //     authContext.logOut();
 
-    function publish(event) {
-        if (currentDocument === 'product-description') {
-            saveJson();
-        } else if (currentDocument === 'project-canvas') {
-            saveProjectCanvas();
-        }
+    //     if (event) {
+    //         event.completed();
+    //     }
+    // }
 
-        event.completed();
-    }
+    // function accessUser(event) {
+    //     localStorage.clear();
+    //     authContext.login();
+
+    //     if (event) {
+    //         event.completed();
+    //     }
+    // }
+
+    // function publish(event) {
+    //     var currentDocument = localStorage.getItem('currentDocument');
+
+    //     if (currentDocument === 'product-description') {
+    //         saveJson();
+    //     } else if (currentDocument === 'project-canvas') {
+    //         saveProjectCanvas();
+    //     }
+
+    //     if (event) {
+    //         event.completed();
+    //     }
+    // }
 
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
             app.initialize();
-            localStorage.setItem("loggedIn", 'false');
+            // localStorage.setItem("loggedIn", 'false');
 
             authContext.handleWindowCallback();
 
@@ -282,7 +300,12 @@
             $(document).on('click', "#logOut", function () {
                 // logOut();
                 localStorage.clear();
-                authContext.logOut();
+                // authContext.logOut();
+
+                localStorage.setItem('loggedIn', 'false');
+                window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
+
+                // window.location.href = 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html';
             });
 
             $(document).on('input', '#projectSearch', function () {
@@ -477,7 +500,7 @@
 
     //load projects in to projectpage from server
     function loadListProjects(projectSearch) {
-        currentDocument = '';
+        localStorage.setItem('currentDocument', '');
 
         var email = localStorage.getItem('email');
         var dataEmail = {
@@ -902,10 +925,10 @@
         '<table id="requirements-table">' +
             // '<thead>' +
                 '<tr>' +
-                    '<th>Acceptance Criteria</th>' +
-                    '<th>Quality Tolerance</th>' +
-                    '<th>Acceptance Method</th>' +
-                    '<th>Acceptance Responsibilities</th>'
+                    '<td><b>Acceptance Criteria</b></td>' +
+                    '<td><b>Quality Tolerance</b></td>' +
+                    '<td><b>Acceptance Method</b></td>' +
+                    '<td><b>Acceptance Responsibilities</b></td>'
                 '</tr>';
             // '</thead>';
 
@@ -932,16 +955,16 @@
     function getDeliverablesTable(products) {
         var table =
         '<table id="deliverables-table">' +
-            '<thead>' +
+            // '<thead>' +
                 '<tr>' +
-                    '<th>Title</th>' +
-                    '<th>Status</th>' +
-                    '<th>Type</th>' +
-                    '<th>Version</th>'
-                '</tr>' +
-            '</thead>';
+                    '<td><b>Title</b></td>' +
+                    '<td><b>Status</b></td>' +
+                    '<td><b>Type</b></td>' +
+                    '<td><b>Version</b></td>'
+                '</tr>';
+            // '</thead>';
 
-        table += '<tbody>';
+        // table += '<tbody>';
 
         if (products) {
             products.forEach(function (product) {
@@ -955,7 +978,7 @@
             });
         }
 
-        table += '</tbody>';
+        // table += '</tbody>';
         table += '</table>';
 
         return table;
@@ -965,16 +988,16 @@
     function getSmartGoalsTable(smartGoals) {
         var table =
         '<table id="smart-goals-table">' +
-            '<thead>' +
+            // '<thead>' +
                 '<tr>' +
-                    '<th>Title</th>' +
-                    '<th>Status</th>' +
-                    '<th>Owner</th>' +
-                    '<th>Version</th>'
-                '</tr>' +
-            '</thead>';
+                    '<td><b>Title</b></td>' +
+                    '<td><b>Status</b></td>' +
+                    '<td><b>Owner</b></td>' +
+                    '<td><b>Version</b></td>'
+                '</tr>';
+            // '</thead>';
 
-        table += '<tbody>';
+        // table += '<tbody>';
 
         if (smartGoals) {
             smartGoals.forEach(function (smartGoal) {
@@ -988,7 +1011,7 @@
             });
         }
 
-        table += '</tbody>';
+        // table += '</tbody>';
         table += '</table>';
 
         return table;
@@ -997,16 +1020,16 @@
     function getRisksTable(risks) {
         var table =
         '<table id="risks-table">' +
-            '<thead>' +
+            // '<thead>' +
                 '<tr>' +
-                    '<th>Title</th>' +
-                    '<th>Status</th>' +
-                    '<th>Type</th>' +
-                    '<th>Type</th>'
-                '</tr>' +
-            '</thead>';
+                    '<td><b>Title</b></td>' +
+                    '<td><b>Status</b></td>' +
+                    '<td><b>Type</b></td>' +
+                    '<td><b>Owner</b></td>'
+                '</tr>';
+            // '</thead>';
 
-        table += '<tbody>';
+        // table += '<tbody>';
 
         if (risks) {
             risks.forEach(function (risk) {
@@ -1020,7 +1043,7 @@
             });
         }
 
-        table += '</tbody>';
+        // table += '</tbody>';
         table += '</table>';
 
         return table;
@@ -1044,6 +1067,8 @@
                 }
             });
         }
+
+        row += '&nbsp;';
             
         row += '</td>';
         row += '</tr>';
@@ -1054,12 +1079,12 @@
     function getTeamMembersTable(teamMembers) {
         var table =
         '<table id="team-members-table">' +
-            '<thead>' +
+            // '<thead>' +
                 '<tr>' +
-                    '<th>Role</th>' +
-                    '<th>Responsible Members</th>' +
-                '</tr>' +
-            '</thead>';
+                    '<td><b>Role</b></td>' +
+                    '<td><b>Responsible Members</b></td>' +
+                '</tr>';
+            // '</thead>';
 
         // project manager
         table += getMemberRow('projectManager', 'Project Manager');
@@ -1092,9 +1117,11 @@
     }
 
     function setProjectCanvas(projectCanvas) {
-        currentDocument = 'project-canvas';
+        localStorage.setItem('currentDocument', 'project-canvas');
 
-        var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;padding:8px; padding-bottom:0;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
+        // var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;padding:8px; padding-bottom:0;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
+
+        var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;width:100%;padding:8px; padding-bottom:0;} table, th, td {border: 1px solid black;text-align: 'left';} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
         var header = '<p class=MsoTitle>Project Canvas</p>';
 
         setHeader('Project Canvas');
@@ -1214,7 +1241,7 @@
         var productDescriptionId = localStorage.getItem('productDescriptionId');
         var urlid = host + "/api/productdescription?id=" + productDescriptionId;
 
-        currentDocument = 'product-description';
+        localStorage.setItem('currentDocument', 'product-description');
 
         $.ajax({
             type: 'GET',
@@ -1225,7 +1252,7 @@
                 withCredentials: false
             }
         }).done(function (str) {
-            var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;} table, th, td {border: 1px solid black;text-align: 'left';  font-family: 'Calibri', 'sans-serif'} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
+            var layout = "<head><style>p.MsoTitle, li.MsoTitle, div.MsoTitle{mso-style-link:'Title Char';margin:0in;margin-bottom:.0001pt;font-size:28.0pt;font-family:'Calibri Light',sans-serif;letter-spacing:-.5pt;},table {border-collapse: collapse;} table, th, td {border: 1px solid black;text-align: 'left';} p,ol,ul{ font-family: 'Calibri', 'sans-serif'}</style></head>";
             var header = "<p class=MsoTitle>Product Description: ".concat(str.Title, "</p>");
 
             setHeader(localStorage.getItem('projectName'));
@@ -1249,10 +1276,10 @@
             var qualityCriteria = "<h1>Quality Criteria</h1>";
             var tableQC = '<table style="width:100%" id="table5">' +
                             '<tr>' +
-                                '<th>Quality Criteria</th>' +
-                                '<th>Quality Tolerance</th>' +
-                                '<th>Quality Method</th>' +
-                                '<th>Quality Skills Required</th>' +
+                                '<td><b>Quality Criteria</b></td>' +
+                                '<td><b>Quality Tolerance</b></td>' +
+                                '<td><b>Quality Method</b></td>' +
+                                '<td><b>Quality Skills Required</b></td>' +
                             '</tr>';
             //checks how many criterias there are, write them out in table form
             qualityCriteriaId = [str.QualityCriteria.length];
@@ -1284,10 +1311,10 @@
             var responsibilities = "<h1>Quality Responsibilities</h1>"
             var reviewers; var producer; var approvers;
             if (str.QualityResponsibility === null) {
-                var tableResponsibility = "<table style='width:100%'> <tr><th>Role</th><th>Responsible Individuals</th></tr><tr><th>Product Producer</th><td><p>"
-                  .concat("", "</p></td></tr><tr><th>Product Reviewer(s)</th><td>",
+                var tableResponsibility = "<table style='width:100%'> <tr><td><b>Role</b></td><td><b>Responsible Individuals</b></td></tr><tr><td><b>Product Producer</b></td><td><p>"
+                  .concat("", "</p></td></tr><tr><td><b>Product Reviewer(s)</b></td><td>",
                     "",
-                    "</td></tr><tr><th>Product Approver(s)</th><td>",
+                    "</td></tr><tr><td><b>Product Approver(s)</b></td><td>",
                     "", "</td></tr>");
                 tableResponsibility = tableResponsibility.concat("</table>");
             } else {
@@ -1526,7 +1553,7 @@
                 //     app.showNotification('Saved Successfully', 'Project Canvas document changes have been saved');
                 // });
 
-                var worldContext = extractChapter(html, '>The World', '>Business Context (Background)');                
+                var worldContext = extractChapter(html, '>The World', '>Business Context (Background)');
                 var businessContext = extractChapter(html, '>Business Context (Background)', '>Project<');
                 var projectScope = extractChapter(html, '>Project Scope', '>Quality Expectations');
                 var usersOtherParties = extractChapter(html, '>Users and Other Interested', '>PMTS');
@@ -1594,7 +1621,7 @@
                 $(document).find('#saveBt').prop('disabled', true);
                 var ID = localStorage.getItem('productDescriptionId');
                 html = html.replace(/\s\s+/g, ' ');
-                if (html.indexOf(">Puprose") == -1 &&
+                if (html.indexOf(">Purpose") == -1 &&
                    html.indexOf(">Composition") == -1 &&
                    html.indexOf(">Derivation") == -1 &&
                    html.indexOf(">Format and Presentation") == -1 &&

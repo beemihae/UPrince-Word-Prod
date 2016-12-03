@@ -128,13 +128,10 @@
                     <FunctionName>publish</FunctionName>
                   </Action>
                 </Control>
-                <Control xsi:type="Button" id="Button7Id1">
-                  <!--Label for your button. resid must point to a ShortString resource -->
+                <!--<Control xsi:type="Button" id="Button7Id1">
                   <Label resid="residLabel7" />
                   <Supertip>
-                    <!--ToolTip title. resid must point to a ShortString resource -->
                     <Title resid="residLabel" />
-                    <!--ToolTip description. resid must point to a LongString resource -->
                     <Description resid="residToolTip" />
                   </Supertip>
                   <Icon>
@@ -142,11 +139,10 @@
                     <bt:Image size="32" resid="PMStudio.Logout.Icon.32" />
                     <bt:Image size="80" resid="PMStudio.TaskpaneButton.Icon.80" />
                   </Icon>
-                  <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
                   <Action xsi:type="ExecuteFunction">
                     <FunctionName>logOut</FunctionName>
                   </Action>
-                </Control>
+                </Control>-->
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -202,7 +198,7 @@
         <bt:String id="residToolTip" DefaultValue="Multiple Buttons Tooltip">
           <bt:Override Locale="ja-jp" Value="JA-JP Multiple Buttons Tooltip" />
         </bt:String>
-        <bt:String id="PMStudio.GetStarted.Description" DefaultValue="Get going by opening the REFERENCES tab on the Ribbon then click WEB CITATIONS>SEARCH CITATION button">
+        <bt:String id="PMStudio.GetStarted.Description" DefaultValue="Get going by opening the HOME tab on the Ribbon then click on the Login button">
           <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />
         </bt:String>
       </bt:LongStrings>

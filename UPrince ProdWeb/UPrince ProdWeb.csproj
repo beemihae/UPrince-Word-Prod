@@ -148,6 +148,7 @@
     <Content Include="1.1\Home\Home.css" />
     <Content Include="1.1\Home\Home.html" />
     <Content Include="1.1\Home\Home.js" />
+    <Content Include="1.1\Home\redirectFrame.html" />
     <Content Include="1.1\project-page.html" />
     <Content Include="1.1\project-page.js" />
     <Content Include="Content\angular-loading-bar\loading-bar.css" />

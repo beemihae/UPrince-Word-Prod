@@ -51,71 +51,38 @@
         cacheLocation: 'localStorage'
     });
 
-    if (localStorage.getItem('loggedIn') == 'false') {
-        localStorage.clear();
-
-        // authContext.logout();
-        // window.location.href = 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html';
-        window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
-    }
-
-    // function logOut(event) {
-    //     localStorage.clear();
-    //     authContext.logOut();
-
-    //     if (event) {
-    //         event.completed();
-    //     }
-    // }
-
-    // function accessUser(event) {
-    //     localStorage.clear();
-    //     authContext.login();
-
-    //     if (event) {
-    //         event.completed();
-    //     }
-    // }
-
-    // function publish(event) {
-    //     var currentDocument = localStorage.getItem('currentDocument');
-
-    //     if (currentDocument === 'product-description') {
-    //         saveJson();
-    //     } else if (currentDocument === 'project-canvas') {
-    //         saveProjectCanvas();
-    //     }
-
-    //     if (event) {
-    //         event.completed();
-    //     }
-    // }
-
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
             app.initialize();
-            // localStorage.setItem("loggedIn", 'false');
 
             authContext.handleWindowCallback();
 
-            var user = authContext.getCachedUser();
-
-            if (user) {  //successfully logged in
-                // $('#status').append('');
-                $('#project-page').append(projectPage);
-                
-                // document.getElementById('login').innerHTML = '';
-                document.body.style.backgroundColor = 'white';
-
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('email', user.userName);
-                // localStorage.setItem('uid', user.userInfo);;
-
-                loadListProjects('');
-            } else {
+            if (localStorage.getItem('loggedIn') == 'false') {
                 localStorage.clear();
+                document.getElementById('project-page').innerHTML = '';
+                document.getElementById('product-description-page').innerHTML = '';
+
                 authContext.login();
+
+                // document.getElementById('login').innerHTML = '<h2>You have been signed out.</h2><p><button id="btnSignIn">Sign in again</button></p>';
+            } else {
+                document.getElementById('login').innerHTML = '';
+
+                var user = authContext.getCachedUser();
+
+                if (user) {  //successfully logged in
+                    $('#project-page').append(projectPage);
+
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('email', user.userName);
+                    // localStorage.setItem('uid', user.userInfo);;
+
+                    loadListProjects('');
+                } else if (localStorage.getItem('loggedIn') != 'false') {
+                    localStorage.clear();
+                    authContext.login();
+                }
             }
 
             //go to product description page, after clicking a project
@@ -298,14 +265,18 @@
 
             //log out function, forget the email and go back to log out screen
             $(document).on('click', "#logOut", function () {
-                // logOut();
                 localStorage.clear();
-                // authContext.logOut();
+                authContext.logOut();
 
-                localStorage.setItem('loggedIn', 'false');
-                window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
-
-                // window.location.href = 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html';
+                // $.ajax({
+                //     type: 'GET',
+                //     url: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html'
+                //     // dataType: "json",
+                //     // contentType: "application/json; charset=utf-8",
+                //     // data: JSON.stringify(dataEmail),
+                // }).done(function () {
+                //     window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
+                // });
             });
 
             $(document).on('input', '#projectSearch', function () {
@@ -385,16 +356,18 @@
             });
 
             $(document).on('click', "#btnSignIn", function () {
-                if ((navigator.userAgent.indexOf('iPad') != -1) /*|| !(Office.context.requirements.isSetSupported('HtmlCoercion'))*/) { //iPad
-                    // var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fios.html", "");
+                // if ((navigator.userAgent.indexOf('iPad') != -1) /*|| !(Office.context.requirements.isSetSupported('HtmlCoercion'))*/) { //iPad
+                //     // var child = window.open("https://plaza.uprince.com/oauth2/authorize?client_id=thoa4iaGh9aidei8aeb9AiyeesohghaicieGipua6jie1Sai6AiquiegheiZowah&scope=profile&state=CSFR&response_type=token&redirect_uri=https%3A%2F%2Fdocument.uprince.com%2F1.1%2Fhome%2Fios.html", "");
 
-                    ////app.showNotification(navigator.userAgent);
-                    //var child = window.open("http://www.w3schools.com/jsref/prop_nav_useragent.asp");
-                    var timer = setInterval(checkChild, 500);
-                } else {
-                    authContext.login();
-                    // dummyLogin();
-                }
+                //     ////app.showNotification(navigator.userAgent);
+                //     //var child = window.open("http://www.w3schools.com/jsref/prop_nav_useragent.asp");
+                //     var timer = setInterval(checkChild, 500);
+                // } else {
+                //     authContext.login();
+                //     // dummyLogin();
+                // }
+
+                authContext.login();
 
             });
         });
@@ -1883,6 +1856,9 @@
             var begin = str.indexOf("</h", flag) + 5;
 
             chapter = str.substring(begin);
+            // chapter = chapter.replace('<p class=MsoNormal>&nbsp;</p> ', '');
+            chapter = chapter.replace('<p class=MsoNormal>&nbsp;</p> </div> </body> </html>', '');
+            chapter = $.trim(chapter);
         } else if (flag != -1 && str.indexOf(stopChapter) != -1) {
             var begin = str.indexOf("</h", flag) + 5;
             var flag2 = str.indexOf(stopChapter);

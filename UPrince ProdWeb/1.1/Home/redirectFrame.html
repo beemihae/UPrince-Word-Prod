@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title></title>
+    <script src="../../Scripts/adal.js" type="text/javascript"></script>
+    <script>
+        // window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
+
+        var authContext = new AuthenticationContext({
+            // tenant: 'b57560ee-bbd3-445b-8859-bea9f0e1ae58',
+            tenant: 'pmstudiousermanagementprod.onmicrosoft.com',
+            // clientId: 'ba68cae1-fdad-48b3-a49a-f95a1c845556',
+            clientId: '6c10f715-94f7-4466-9de4-5866eff3abb1',
+            // redirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+            redirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
+            extraQueryParameter: 'p=b2c_1_pm-sigin-signup&scope=openid',
+            // postLogoutRedirectUri: 'https://pmstudioofficedev.azurewebsites.net/1.1/home/home.html',
+            postLogoutRedirectUri: 'https://office.pmstudio.online/1.1/home/home.html',
+            cacheLocation: 'localStorage'
+        });
+
+        authContext.login();
+    </script>
+</head>
+
+<body>
+    
+</body>
+
+</html>

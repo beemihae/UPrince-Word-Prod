@@ -87,9 +87,18 @@
             localStorage.clear();
             localStorage.setItem('loggedIn', 'false');
             // authContext.logout();
-            window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
-            
-            // event.completed();
+            // window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
+            window.location.href = 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html';
+
+            // $.ajax({
+            //     type: 'GET',
+            //     url: 'https://login.microsoftonline.com/pmstudiousermanagementprod.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_pm-sigin-signup&post_logout_redirect_uri=https%3A%2F%2Foffice.pmstudio.online%2F1.1%2Fhome%2Fhome.html'
+            //     // dataType: "json",
+            //     // contentType: "application/json; charset=utf-8",
+            //     // data: JSON.stringify(dataEmail),
+            // }).done(function () {
+            //     window.location.href = 'https://office.pmstudio.online/1.1/home/home.html';
+            // });
         }
 
         function setHeader(projectName) {
@@ -822,6 +831,9 @@
                 var begin = str.indexOf("</h", flag) + 5;
 
                 chapter = str.substring(begin);
+                // chapter = chapter.replace('<p class=MsoNormal>&nbsp;</p> ', '');
+                chapter = chapter.replace('<p class=MsoNormal>&nbsp;</p> </div> </body> </html>', '');
+                chapter = $.trim(chapter);
             } else if (flag != -1 && str.indexOf(stopChapter) != -1) {
                 var begin = str.indexOf("</h", flag) + 5;
                 var flag2 = str.indexOf(stopChapter);
